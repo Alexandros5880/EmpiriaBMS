@@ -96,8 +96,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private string? _teamsObjectId;
-    public string? TeamsObjectId
+    private string _teamsObjectId;
+    public string TeamsObjectId
     {
         get => _teamsObjectId;
         set
@@ -161,8 +161,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private int? _clientId;
-    public int? ClientId
+    private long? _clientId;
+    public long? ClientId
     {
         get => _clientId;
         set
@@ -187,8 +187,8 @@ public class UserVM : BaseVM
         }
     }
 
-    private int? _subConstructorId;
-    public int? SubConstructorId
+    private long? _subConstructorId;
+    public long? SubConstructorId
     {
         get => _subConstructorId;
         set
@@ -213,33 +213,33 @@ public class UserVM : BaseVM
         }
     }
 
-    public ICollection<Email>? Emails { get; set; }
+    public ICollection<Email> Emails { get; set; }
 
-    public ICollection<Project>? PMProjects { get; set; }
+    public ICollection<Project> PMProjects { get; set; }
 
-    public ICollection<Discipline>? Disciplines { get; set; }
+    public ICollection<Discipline> Disciplines { get; set; }
 
-    public ICollection<UserRole>? UserRoles { get; set; }
+    public ICollection<UserRole> UserRoles { get; set; }
 
-    public ICollection<DeliverableEmployee>? DeliverablesEmployees { get; set; }
+    public ICollection<DeliverableEmployee> DeliverablesEmployees { get; set; }
 
-    public ICollection<SupportiveWorkEmployee>? SupportiveWorksEmployees { get; set; }
+    public ICollection<SupportiveWorkEmployee> SupportiveWorksEmployees { get; set; }
 
-    public ICollection<DisciplineEngineer>? DisciplinesEngineers { get; set; }
+    public ICollection<DisciplineEngineer> DisciplinesEngineers { get; set; }
 
-    public ICollection<DailyTime>? DailyTime { get; set; }
+    public ICollection<DailyTime> DailyTime { get; set; }
 
-    public ICollection<DailyTime>? PersonalTime { get; set; }
+    public ICollection<DailyTime> PersonalTime { get; set; }
 
-    public ICollection<DailyTime>? TrainingTime { get; set; }
+    public ICollection<DailyTime> TrainingTime { get; set; }
 
-    public ICollection<DailyTime>? CorporateEventTime { get; set; }
+    public ICollection<DailyTime> CorporateEventTime { get; set; }
 
-    public ICollection<Issue>? MyIssues { get; set; }
+    public ICollection<Issue> MyIssues { get; set; }
 
     [NotMapped]
     public string FullName => $"{LastName} {MidName} {FirstName}";
 
     [NotMapped]
-    public ICollection<int>? MyRolesIds { get; set; }
+    public ICollection<long> MyRolesIds { get; set; }
 }

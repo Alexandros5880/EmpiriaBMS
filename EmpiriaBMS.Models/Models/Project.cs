@@ -16,7 +16,7 @@ public class Project : Entity
 
     public long EstimatedHours { get; set; }
 
-    public int StageId { get; set; }
+    public long StageId { get; set; }
     public ProjectStage? Stage { get; set; }
 
     public bool Active { get; set; }
@@ -29,13 +29,13 @@ public class Project : Entity
     [Column(TypeName = "datetime2")]
     public DateTime? DeadLine { get; set; }
 
-    public int? ProjectManagerId { get; set; }
+    public long? ProjectManagerId { get; set; }
     public User? ProjectManager { get; set; }
 
-    public int? OfferId { get; set; }
+    public long? OfferId { get; set; }
     public Offer? Offer { get; set; }
 
-    public int? AddressId { get; set; }
+    public long? AddressId { get; set; }
     public Address? Address { get; set; }
 
     public ICollection<Invoice>? Invoices { get; set; }

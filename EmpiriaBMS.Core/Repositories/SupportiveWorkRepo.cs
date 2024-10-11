@@ -14,7 +14,7 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public new async Task<SupportiveWorkDto?> Get(int id)
+    public new async Task<SupportiveWorkDto?> Get(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -183,7 +183,7 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
         }
     }
 
-    public async Task<long> GetMenHoursAsync(int otherId)
+    public async Task<long> GetMenHoursAsync(long otherId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -195,7 +195,7 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
         }
     }
 
-    public long GetMenHours(int otherId)
+    public long GetMenHours(long otherId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {

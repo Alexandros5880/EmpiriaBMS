@@ -85,7 +85,7 @@ public partial class Invoices : ComponentBase
         await MicrosoftTeams.ScrollToElement("invoice-detailes");
     }
 
-    private bool IsRowSelect(int rowId)
+    private bool IsRowSelect(long rowId)
     {
         return SelectedRecord?.Id == rowId;
     }
@@ -181,7 +181,7 @@ public partial class Invoices : ComponentBase
     #region Filters
     private string _filterProjectString = string.Empty;
     private string _filterNumberString = string.Empty;
-    IQueryable<InvoiceVM>? FilteredItems => 
+    IQueryable<InvoiceVM> FilteredItems => 
         _invoices?.AsQueryable().Where(i => _filterOnQuery(i));
 
     private void HandleProjectFilter(ChangeEventArgs args)

@@ -2584,7 +2584,7 @@ public class AppDbContext : DbContext
             foreach (var item in ProjectSubCatsNameCat)
             {
                 string subCatName = item.Key;
-                int catId = item.Value.Id;
+                long catId = item.Value.Id;
 
                 var project_sub_category_id = random.Next(123456789, 999999999) + 33;
                 ProjectSubCategory project_sub_category = new ProjectSubCategory()

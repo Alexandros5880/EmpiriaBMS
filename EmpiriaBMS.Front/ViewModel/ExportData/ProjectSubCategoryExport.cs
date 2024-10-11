@@ -11,7 +11,7 @@ public class ProjectSubCategoryExport : IInport<ProjectSubCategoryVM>
 
     public bool CanAssignePM { get; set; }
 
-    public int CategoryId { get; set; }
+    public long CategoryId { get; set; }
 
     public string CategoryName { get; set; }
 

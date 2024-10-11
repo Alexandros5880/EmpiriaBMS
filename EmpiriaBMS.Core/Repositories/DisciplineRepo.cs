@@ -156,7 +156,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<List<DeliverableDto>> GetDraws(int id)
+    public async Task<List<DeliverableDto>> GetDraws(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -174,7 +174,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<List<DeliverableDto>> GetDraws(int id, int userId, bool all)
+    public async Task<List<DeliverableDto>> GetDraws(long id, long userId, bool all)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -217,7 +217,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<List<SupportiveWorkDto>> GetOthers(int id)
+    public async Task<List<SupportiveWorkDto>> GetOthers(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -235,7 +235,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<List<SupportiveWorkDto>> GetOthers(int id, int userId, bool all)
+    public async Task<List<SupportiveWorkDto>> GetOthers(long id, long userId, bool all)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -279,7 +279,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<float> GetEstimatedCompleted(int id)
+    public async Task<float> GetEstimatedCompleted(long id)
     {
         try
         {
@@ -334,7 +334,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<float> GetDeclaredCompleted(int id)
+    public async Task<float> GetDeclaredCompleted(long id)
     {
         try
         {
@@ -369,7 +369,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<long> GetMenHoursAsync(int disciplineId)
+    public async Task<long> GetMenHoursAsync(long disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -381,7 +381,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public long GetMenHours(int disciplineId)
+    public long GetMenHours(long disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -393,7 +393,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<ICollection<UserDto>> GetEngineers(int disciplineId)
+    public async Task<ICollection<UserDto>> GetEngineers(long disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -408,7 +408,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task<ICollection<int>> GetEngineersIds(int disciplineId)
+    public async Task<ICollection<long>> GetEngineersIds(long disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -422,7 +422,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
-    public async Task AddEngineers(int disciplineId, ICollection<UserDto> engineers)
+    public async Task AddEngineers(long disciplineId, ICollection<UserDto> engineers)
     {
         try
         {
@@ -462,11 +462,11 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On DisciplineRepo.AddEngineers(int disciplineId, ICollection<UserDto> engineers): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On DisciplineRepo.AddEngineers(long disciplineId, ICollection<UserDto> engineers): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 
-    public async Task RemoveEngineers(int disciplineId, ICollection<int> engineersIds)
+    public async Task RemoveEngineers(long disciplineId, ICollection<long> engineersIds)
     {
         try
         {
@@ -492,7 +492,7 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Exception On DisciplineRepo.RemoveEngineers(int disciplineId, ICollection<int> engineersIds): {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            _logger.LogError($"Exception On DisciplineRepo.RemoveEngineers(long disciplineId, ICollection<long> engineersIds): {ex.Message}, \nInner: {ex.InnerException?.Message}");
         }
     }
 

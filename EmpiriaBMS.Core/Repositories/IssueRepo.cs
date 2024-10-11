@@ -14,7 +14,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<IssueDto?> Get(int id)
+    public async new Task<IssueDto?> Get(long id)
     {
         if (id == 0)
             return null;
@@ -238,7 +238,7 @@ public class IssueRepo : Repository<IssueDto, Issue>
         }
     }
 
-    public async Task<ICollection<DocumentDto>> GetMyDocuments(int issuesId)
+    public async Task<ICollection<DocumentDto>> GetMyDocuments(long issuesId)
     {
         if (issuesId == 0)
             return new List<DocumentDto>();

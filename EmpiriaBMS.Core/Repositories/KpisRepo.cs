@@ -223,7 +223,7 @@ public class KpisRepo : IDisposable
     }
 
     public async Task<List<ProjectDto>> GetActiveDelayedProjects(
-        int userId,
+        long userId,
         DateTime? start = null,
         DateTime? end = null
     ) {
@@ -333,7 +333,7 @@ public class KpisRepo : IDisposable
     }
 
     public async Task<Dictionary<string, int>> GetActiveDelayedProjectTypesCountByType(
-        int userId,
+        long userId,
         DateTime? start = null,
         DateTime? end = null
     ) {
@@ -445,7 +445,7 @@ public class KpisRepo : IDisposable
     }
 
     public async Task<Dictionary<string, double>> GetProfitPerProject(
-        int userId,
+        long userId,
         DateTime? start = null,
         DateTime? end = null
     ) {

@@ -6,6 +6,6 @@ public class Document : Entity
     public string? ContentType { get; set; }
     public byte[]? Content { get; set; }
 
-    public int IssueId { get; set; }
+    public long IssueId { get; set; }
     public Issue? Issue { get; set; }
 }

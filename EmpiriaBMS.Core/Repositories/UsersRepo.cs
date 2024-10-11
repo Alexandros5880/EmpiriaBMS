@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace EmpiriaBMS.Core.Repositories;
-public class UsersRepo : Repository<UserDto, User>
+public class UsersRepo : Repository<UserDto, User>, IDisposable
 {
+    private bool disposedValue;
 
     private readonly EmailRepo _emailRepo;
     public UsersRepo(
@@ -36,7 +37,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public new async Task<UserDto?> Get(int id)
+    public new async Task<UserDto?> Get(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));
@@ -202,7 +203,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<ICollection<RoleDto>> GetRoles(int userId)
+    public async Task<ICollection<RoleDto>> GetRoles(long userId)
     {
         if (userId == 0)
             return new List<RoleDto>();
@@ -224,7 +225,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task UpdateRoles(int userId, ICollection<int> rolesids)
+    public async Task UpdateRoles(long userId, ICollection<long> rolesids)
     {
         if (userId == 0)
             throw new NullReferenceException($"No User Id Specified!");
@@ -356,7 +357,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<double> GetUserTotalHoursThisMonth(int userId)
+    public async Task<double> GetUserTotalHoursThisMonth(long userId)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -385,7 +386,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<double> GetUserSumHours(int userId)
+    public async Task<double> GetUserSumHours(long userId)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -400,7 +401,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<double> GetUserLastWeekHours(int userId, DateTime date)
+    public async Task<double> GetUserLastWeekHours(long userId, DateTime date)
     {
         if (userId == 0)
             throw new ArgumentException(nameof(userId));
@@ -420,7 +421,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<UserTimes> GetTime(int userId, DateTime date)
+    public async Task<UserTimes> GetTime(long userId, DateTime date)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -479,7 +480,7 @@ public class UsersRepo : Repository<UserDto, User>
     }
 
     #region Issues
-    public async Task<ICollection<IssueDto>> GetOpenIssues(int userId)
+    public async Task<ICollection<IssueDto>> GetOpenIssues(long userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -504,7 +505,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<int> CountOpenIssues(int userId)
+    public async Task<int> CountOpenIssues(long userId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -558,7 +559,7 @@ public class UsersRepo : Repository<UserDto, User>
     }
 
     #region Email
-    public async Task<ICollection<Email>> GetEmails(int userId = 0)
+    public async Task<ICollection<Email>> GetEmails(long userId = 0)
     {
         if (userId == 0)
             return new List<Email>();
@@ -570,7 +571,7 @@ public class UsersRepo : Repository<UserDto, User>
                                  .ToListAsync();
     }
 
-    public async Task UpsertEmails(int userId, List<EmailDto> emails)
+    public async Task UpsertEmails(long userId, List<EmailDto> emails)
     {
         try
         {
@@ -616,7 +617,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task RemoveEmailsAll(int userId, bool definitely = false)
+    public async Task RemoveEmailsAll(long userId, bool definitely = false)
     {
         try
         {
@@ -668,7 +669,7 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
 
-    public async Task<Email> DeleteEmail(int emailId)
+    public async Task<Email> DeleteEmail(long emailId)
     {
         try
         {
@@ -694,4 +695,22 @@ public class UsersRepo : Repository<UserDto, User>
         }
     }
     #endregion
+
+    protected override void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                _emailRepo?.Dispose();
+            }
+            disposedValue = true;
+        }
+    }
+
+    public new void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
 }

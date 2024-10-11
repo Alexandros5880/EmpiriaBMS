@@ -5,11 +5,11 @@ namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
 public class SupportiveWorkExport : IInport<SupportiveWorkVM>
 {
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
 
     public string Type { get; set; }
 
-    public int DisciplineId { get; set; }
+    public long DisciplineId { get; set; }
 
     public string DisciplineType { get; set; }
 

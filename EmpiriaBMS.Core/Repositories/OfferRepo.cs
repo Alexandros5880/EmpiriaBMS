@@ -83,7 +83,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    public new async Task<OfferDto> Get(int id)
+    public new async Task<OfferDto> Get(long id)
     {
         try
         {
@@ -113,10 +113,10 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
     }
 
     public async Task<ICollection<OfferDto>> GetAll(
-        int? projectId = 0,
-        int? stateId = 0,
-        int? typeId = 0,
-        int? clientId = 0,
+        long? projectId = 0,
+        long? stateId = 0,
+        long? typeId = 0,
+        long? clientId = 0,
         OfferResult? result = null)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
@@ -144,7 +144,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    public async Task<ICollection<OfferDto>> GetAllByLead(int clientId = 0)
+    public async Task<ICollection<OfferDto>> GetAllByLead(long clientId = 0)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -163,14 +163,14 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    public async Task<double> GetSumOfPayedFee(int offerId)
+    public async Task<double> GetSumOfPayedFee(long offerId)
     {
         try
         {
             if (offerId == 0)
                 throw new ArgumentNullException(nameof(offerId));
 
-            List<int> projectIds;
+            List<long> projectIds;
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -200,14 +200,14 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    public async Task<double> GetSumOfPotencialFee(int offerId)
+    public async Task<double> GetSumOfPotencialFee(long offerId)
     {
         try
         {
             if (offerId == 0)
                 throw new ArgumentNullException(nameof(offerId));
 
-            List<int> projectIds;
+            List<long> projectIds;
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -237,14 +237,14 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    public async Task<bool> IsClosed(int offerId)
+    public async Task<bool> IsClosed(long offerId)
     {
         try
         {
             if (offerId == 0)
                 throw new ArgumentNullException(nameof(offerId));
 
-            List<int> projectIds;
+            List<long> projectIds;
 
             using (var _context = _dbContextFactory.CreateDbContext())
             {
@@ -275,7 +275,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    protected virtual void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         if (!disposedValue)
         {
@@ -287,7 +287,7 @@ public class OfferRepo : Repository<OfferDto, Offer>, IDisposable
         }
     }
 
-    public void Dispose()
+    public new void Dispose()
     {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);

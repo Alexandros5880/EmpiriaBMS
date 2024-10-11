@@ -159,7 +159,7 @@ public partial class UserDetailed
         Roles = roles.OrderByDescending(p => p.IsSelected).ToList();
     }
 
-    private void _onRoleSelectionChange(int roleId, bool val)
+    private void _onRoleSelectionChange(long roleId, bool val)
     {
         var role = Roles.FirstOrDefault(r => r.Id == roleId);
         var index = Roles.IndexOf(role);

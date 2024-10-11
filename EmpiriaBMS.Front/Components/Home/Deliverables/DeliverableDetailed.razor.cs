@@ -10,7 +10,7 @@ public partial class DeliverableDetailed : ComponentBase, IDisposable
     private bool isNew = false;
 
     [Parameter]
-    public int DisciplineId { get; set; }
+    public long DisciplineId { get; set; }
 
     List<DeliverableTypeDto> _drawingTypes = new List<DeliverableTypeDto>();
     private DeliverableVM _drawing = new DeliverableVM();

@@ -7,13 +7,13 @@ public class IssueDto : EntityDto
 {
     public DateTime ComplaintDate { get; set; }
 
-    public int ProjectId { get; set; }
+    public long ProjectId { get; set; }
     public Project? Project { get; set; }
 
-    public int DisplayedRoleId { get; set; }
+    public long DisplayedRoleId { get; set; }
     public Role? DisplayedRole { get; set; }
 
-    public int _creatorId { get; set; }
+    public long _creatorId { get; set; }
     public User? Creator { get; set; }
 
     public ICollection<Document> Documents { get; set; }

@@ -115,7 +115,7 @@ public partial class Roles
                     return; // Role Exists
             }
 
-            var permissionsChanged = ModelsHellper.ListsChanged<int>(prevPermissionsIds, permissionsIds);
+            var permissionsChanged = ModelsHellper.ListsChanged<long>(prevPermissionsIds, permissionsIds);
             if (permissionsChanged)
                 await DataProvider.Roles.UpdatePermissions(vm.Id, permissionsIds);
 

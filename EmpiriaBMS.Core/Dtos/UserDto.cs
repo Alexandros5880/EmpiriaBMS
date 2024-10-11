@@ -31,10 +31,10 @@ public class UserDto : EntityDto
 
     public string? Description { get; set; }
 
-    public int? ClientId { get; set; }
+    public long? ClientId { get; set; }
     public Client? Client { get; set; }
 
-    public int? SubConstructorId { get; set; }
+    public long? SubConstructorId { get; set; }
     public SubConstructor? SubConstructor { get; set; }
 
     public ICollection<Email>? Emails { get; set; }

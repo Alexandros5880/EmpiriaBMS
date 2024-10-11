@@ -10,12 +10,12 @@ public class PaymentExport : IInport<PaymentVM>
     public string Bank { get; set; }
     public double Fee { get; set; }
     public string Description { get; set; }
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
     public string TypeName { get; set; }
-    public int InvoiceId { get; set; }
+    public long InvoiceId { get; set; }
     public string InvoiceMark { get; set; }
     public string InvoiceType { get; set; }
-    public int ProjectId { get; set; }
+    public long ProjectId { get; set; }
     public string ProjectCode { get; set; }
     public string ProjectName { get; set; }
     public string ProjectPM { get; set; }

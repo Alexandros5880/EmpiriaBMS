@@ -6,22 +6,22 @@ namespace EmpiriaBMS.Core.Dtos;
 
 public class OfferDto : EntityDto
 {
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
     public OfferType Type { get; set; }
 
-    public int StateId { get; set; }
+    public long StateId { get; set; }
     public OfferState State { get; set; }
 
-    public int? CategoryId { get; set; }
+    public long? CategoryId { get; set; }
     public ProjectCategory Category { get; set; }
 
-    public int? SubCategoryId { get; set; }
+    public long? SubCategoryId { get; set; }
     public ProjectSubCategory SubCategory { get; set; }
 
-    public int? ClientId { get; set; }
+    public long? ClientId { get; set; }
     public Client? Client { get; set; }
 
-    public int? ProjectId { get; set; }
+    public long? ProjectId { get; set; }
     public Project? Project { get; set; }
 
     public OfferResult Result { get; set; }

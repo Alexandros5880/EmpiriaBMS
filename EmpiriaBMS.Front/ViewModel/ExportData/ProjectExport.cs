@@ -16,7 +16,7 @@ public class ProjectExport : IInport<ProjectVM>
 
     public long EstimatedHours { get; set; }
 
-    public int StageId { get; set; }
+    public long StageId { get; set; }
 
     public string StageName { get; set; }
 
@@ -26,11 +26,11 @@ public class ProjectExport : IInport<ProjectVM>
 
     public string DeadLine { get; set; }
 
-    public int ProjectManagerId { get; set; }
+    public long ProjectManagerId { get; set; }
 
     public string ProjectManagerName { get; set; }
 
-    public int OfferId { get; set; }
+    public long OfferId { get; set; }
 
     public string OfferCode { get; set; }
 

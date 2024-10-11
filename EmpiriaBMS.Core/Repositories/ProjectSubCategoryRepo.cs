@@ -13,7 +13,7 @@ public class ProjectSubCategoryRepo : Repository<ProjectSubCategoryDto, ProjectS
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<ICollection<ProjectSubCategoryDto>> GetAll(int parentId)
+    public async Task<ICollection<ProjectSubCategoryDto>> GetAll(long parentId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {

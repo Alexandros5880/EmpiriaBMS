@@ -7,7 +7,7 @@ namespace EmpiriaBMS.Front.ViewModel.ExportData;
 
 public class InvoiceExport : IInport<InvoiceVM>
 {
-    public int TypeId { get; set; }
+    public long TypeId { get; set; }
     public string TypeName { get; set; }
     public double Total { get; set; }
     public int Vat { get; set; }
@@ -15,7 +15,7 @@ public class InvoiceExport : IInport<InvoiceVM>
     public string EstimatedDate { get; set; }
     public int InvoiceNumber { get; set; }
     public string Mark { get; set; }
-    public int ProjectId { get; set; }
+    public long ProjectId { get; set; }
     public string ProjectCode { get; set; }
     public string ProjectName { get; set; }
     public string ProjectPM { get; set; }

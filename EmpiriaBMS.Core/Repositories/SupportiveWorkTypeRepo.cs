@@ -13,7 +13,7 @@ public class SupportiveWorkTypeRepo : Repository<SupportiveWorkTypeDto, Supporti
         Logging.LoggerManager logger
     ) : base(DbFactory, logger) { }
 
-    public async Task<List<SupportiveWorkTypeDto>> GetOtherTypesSelections(int disciplineId)
+    public async Task<List<SupportiveWorkTypeDto>> GetOtherTypesSelections(long disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
@@ -55,7 +55,7 @@ public class SupportiveWorkTypeRepo : Repository<SupportiveWorkTypeDto, Supporti
         }
     }
 
-    public async Task<bool> HasOtherTypesSelections(int disciplineId)
+    public async Task<bool> HasOtherTypesSelections(long disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {

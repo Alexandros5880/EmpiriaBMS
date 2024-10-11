@@ -108,8 +108,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private int _typeId { get; set; }
-    public int TypeId
+    private long _typeId { get; set; }
+    public long TypeId
     {
         get => _typeId;
         set
@@ -134,8 +134,8 @@ public class InvoiceVM : BaseVM
         }
     }
 
-    private int? _expensesTypeId { get; set; }
-    public int? ExpensesTypeId
+    private long? _expensesTypeId { get; set; }
+    public long? ExpensesTypeId
     {
         get => _expensesTypeId;
         set
@@ -162,8 +162,8 @@ public class InvoiceVM : BaseVM
 
     public string TypeName => Type != null ? Type.Name : "";
 
-    private int _projectId { get; set; }
-    public int ProjectId
+    private long _projectId { get; set; }
+    public long ProjectId
     {
         get => _projectId;
         set

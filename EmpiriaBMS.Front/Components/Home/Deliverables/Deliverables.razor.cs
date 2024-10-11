@@ -23,7 +23,7 @@ public partial class Deliverables
     [Parameter]
     public bool IsWorkingMode { get; set; }
 
-    private int _disciplineId { get; set; }
+    private long _disciplineId { get; set; }
 
     private ObservableCollection<DeliverableVM> _data = new ObservableCollection<DeliverableVM>();
 
@@ -78,7 +78,7 @@ public partial class Deliverables
         StateHasChanged();
     }
 
-    public async Task GetRecords(int discId)
+    public async Task GetRecords(long discId)
     {
         if (discId == 0)
             return;
@@ -113,10 +113,10 @@ public partial class Deliverables
 
     public void ResetChanges() => _dataChanged.Clear();
 
-    private long GetMenHours(int drawingId) =>
+    private long GetMenHours(long drawingId) =>
         _dataProvider.Deliverables.GetMenHours(drawingId);
 
-    private async Task<int> GetRoleId(string roleName)
+    private async Task<long> GetRoleId(string roleName)
     {
         try
         {

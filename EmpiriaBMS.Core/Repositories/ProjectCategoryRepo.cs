@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmpiriaBMS.Core.Repositories;
 
-public class ProjectCategoryRepo : Repository<ProjectCategoryDto, ProjectCategory>, IDisposable
+public class ProjectCategoryRepo : Repository<ProjectCategoryDto, ProjectCategory>
 {
     public ProjectCategoryRepo(
         IDbContextFactory<AppDbContext> DbFactory,

@@ -97,7 +97,7 @@ public partial class Home
     #region Projects Table Compoment
     private projComp.Projects _projectsComp;
 
-    private async Task OnSelectProject(int projectId)
+    private async Task OnSelectProject(long projectId)
     {
         if (projectId == 0)
             return;
@@ -124,7 +124,7 @@ public partial class Home
         _resetSelectedSupportiveWoprk();
     }
 
-    private async Task _getRecordsProjects(int offerId, bool active = false)
+    private async Task _getRecordsProjects(long offerId, bool active = false)
     {
         if (_projectsComp != null)
             await _projectsComp.GetRecords(offerId, active);
@@ -159,7 +159,7 @@ public partial class Home
     #region Disciplines Table Compoment
     private DiscComp.Disciplines _disciplinesComp;
 
-    private async void OnSelectDiscipline(int disciplineId)
+    private async void OnSelectDiscipline(long disciplineId)
     {
         if (disciplineId == 0)
             return;
@@ -168,7 +168,7 @@ public partial class Home
         await _getRecordsSupportiveWorks(disciplineId);
     }
 
-    private async Task _getRecordsDisciplines(int projectId)
+    private async Task _getRecordsDisciplines(long projectId)
     {
         if (_disciplinesComp != null)
             await _disciplinesComp.GetRecords(projectId);
@@ -196,7 +196,7 @@ public partial class Home
     #region Deliverables Table Compoment
     private DevComp.Deliverables _deliverablesComp;
 
-    private async Task _getRecordsDeliverables(int disciplineId)
+    private async Task _getRecordsDeliverables(long disciplineId)
     {
         if (_deliverablesComp != null)
             await _deliverablesComp.GetRecords(disciplineId);
@@ -224,7 +224,7 @@ public partial class Home
     #region Supportive Works Table Compoment
     private SWComp.SupportiveWorks _supportiveWorksComp;
 
-    private async Task _getRecordsSupportiveWorks(int disciplineId)
+    private async Task _getRecordsSupportiveWorks(long disciplineId)
     {
         if (_supportiveWorksComp != null)
             await _supportiveWorksComp.GetRecords(disciplineId);

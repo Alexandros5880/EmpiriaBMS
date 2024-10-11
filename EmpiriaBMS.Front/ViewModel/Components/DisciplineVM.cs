@@ -58,8 +58,8 @@ public class DisciplineVM : BaseVM
         }
     }
 
-    private int _typeId;
-    public int TypeId
+    private long _typeId;
+    public long TypeId
     {
         get => _typeId;
         set
@@ -86,8 +86,8 @@ public class DisciplineVM : BaseVM
 
     public string TypeName => Type != null ? Type.Name : "";
 
-    private int _projectId;
-    public int ProjectId
+    private long _projectId;
+    public long ProjectId
     {
         get => _projectId;
         set
