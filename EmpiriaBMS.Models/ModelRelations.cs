@@ -276,6 +276,8 @@ public static class ModelRelations
                .HasForeignKey(c => c.TypeId)
                .OnDelete(DeleteBehavior.NoAction);
 
+        // TODO: Think
+        #region Think
         // User DailyTime
         builder.Entity<User>()
                .HasMany(u => u.DailyTime)
@@ -303,6 +305,7 @@ public static class ModelRelations
                .WithOne(d => d.CorporateUser)
                .HasForeignKey(d => d.CorporateUserId)
                .OnDelete(DeleteBehavior.NoAction);
+        #endregion
 
         // Client DailyTime
         builder.Entity<Client>()
