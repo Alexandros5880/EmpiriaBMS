@@ -1,73 +1,83 @@
 {
-	"profiles": {
-		"Localhost-DB": {
-			"commandName": "Project",
-			"launchBrowser": true,
-			"launchUrl": "https://teams.microsoft.com/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
-			"dotnetRunMessages": true,
-			"applicationUrl": "https://localhost:44302;http://localhost:2544",
-			"hotReloadProfile": "aspnetcore",
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development",
-				"ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456;TrustServerCertificate=True;",
-				"VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
-				"AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
-			}
-		},
-		"Staging-DB": {
-			"commandName": "Project",
-			"launchBrowser": true,
-			"launchUrl": "https://teams.microsoft.com/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
-			"dotnetRunMessages": true,
-			"applicationUrl": "https://localhost:44302;http://localhost:2544",
-			"hotReloadProfile": "Staging",
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development",
-				"ConnectionString": "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-staging;User Id=admin-user;Password=!@%369gsdgl^%78n",
-				"VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
-				"AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
-			}
-		},
-		"Production-DB": {
-			"commandName": "Project",
-			"launchBrowser": true,
-			"launchUrl": "https://teams.microsoft.com/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
-			"dotnetRunMessages": true,
-			"applicationUrl": "https://localhost:44302;http://localhost:2544",
-			"hotReloadProfile": "aspnetcore",
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development",
-				"ConnectionString": "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-production;User Id=admin-user;Password=!@%369gsdgl^%78n",
-				"VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
-				"AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
-			}
-		},
-		"WSL": {
-			"commandName": "WSL2",
-			"launchBrowser": true,
-			"launchUrl": "https://teams.microsoft.com/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development",
-				"ASPNETCORE_URLS": "https://localhost:44302;http://localhost:2544",
-				"ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456",
-				"VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
-				"AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
-			},
-			"distributionName": ""
-		},
-		"Microsoft Teams (browser)": {
-			"commandName": "Project",
-			"dotnetRunMessages": true,
-			"launchBrowser": true,
-			"launchUrl": "https://teams.microsoft.com/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
-			"applicationUrl": "https://localhost:44302;http://localhost:2544",
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development",
-				"ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456",
-				"VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
-				"AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
-			},
-			"hotReloadProfile": "aspnetcore"
-		}
-	}
+  "profiles": {
+    "Localhost-DB": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://teams.microsoft.com/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456;TrustServerCertificate=True;",
+        "VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
+        "AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:44302;http://localhost:2544",
+      "hotReloadProfile": "aspnetcore"
+    },
+    "Staging-DB": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://teams.microsoft.com/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionString": "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-staging;User Id=admin-user;Password=!@%369gsdgl^%78n",
+        "VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
+        "AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:44302;http://localhost:2544",
+      "hotReloadProfile": "Staging"
+    },
+    "Production-DB": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://teams.microsoft.com/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionString": "Data Source=tcp:embiriabms-database-server.database.windows.net,1433;Initial Catalog=empiriabms-production;User Id=admin-user;Password=!@%369gsdgl^%78n",
+        "VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
+        "AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:44302;http://localhost:2544",
+      "hotReloadProfile": "aspnetcore"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "launchBrowser": true,
+      "launchUrl": "https://teams.microsoft.com/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:44302;http://localhost:2544",
+        "ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456",
+        "VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
+        "AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
+      },
+      "distributionName": ""
+    },
+    "Microsoft Teams (browser)": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "https://teams.microsoft.com/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionString": "Data Source=127.0.0.1,1433;Initial Catalog=empiriabms;User Id=sa;Password=-Plata123456",
+        "VaultUri": "https://empiriabmsfrontvault.vault.azure.net/",
+        "AZURE_USERNAME": "empiriasoft@empiriasoftplat.onmicrosoft.com"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:44302;http://localhost:2544",
+      "hotReloadProfile": "aspnetcore"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/l/app/072b502f-8a4e-4547-8988-6a250e7a4b58?installAppPackage=true&webjoin=true&appTenantId=4e39c8a0-5539-42ec-93f1-7c486b10a013&login_hint=empiriasoft@empiriasoftplat.onmicrosoft.com",
+      "environmentVariables": {
+        "ASPNETCORE_URLS": "https://+:443;http://+:80"
+      },
+      "publishAllPorts": true,
+      "useSSL": true
+    }
+  }
 }

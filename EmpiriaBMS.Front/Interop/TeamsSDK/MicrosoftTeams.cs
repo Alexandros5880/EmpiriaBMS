@@ -40,6 +40,11 @@ public class MicrosoftTeams : InteropModuleBase
         }
     }
 
+    public Task OpenLink(string link)
+    {
+        return InvokeVoidAsync("openLink", link);
+    }
+
     public Task<ScreenSize> GetScreenSize()
     {
         return InvokeAsync<ScreenSize>("getScreenSize");

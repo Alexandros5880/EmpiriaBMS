@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.CodeAnalysis;
 using Microsoft.Fast.Components.FluentUI;
+using Microsoft.JSInterop;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Home.Header;
@@ -330,6 +331,9 @@ public partial class HomeHeadComp : IDisposable
     bool _backUp_loading = false;
     private async Task BackUpDb()
     {
+        //var fileUrl = _dataProvider.Database.DownloadLink;
+        //await JS.InvokeVoidAsync("window.open", fileUrl, "_blank");
+
         _backUp_loading = true;
         StateHasChanged();
 

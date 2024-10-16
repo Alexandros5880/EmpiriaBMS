@@ -59,7 +59,7 @@ public class ClientRepo : Repository<ClientDto, Client>
         }
     }
 
-    public async Task<ClientDto?> Get(long id)
+    public async new Task<ClientDto?> Get(long id)
     {
         if (id == 0)
             throw new ArgumentNullException(nameof(id));

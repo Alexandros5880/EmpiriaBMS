@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Repositories;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
+using EmpiriaBMS.Core.Repositories.Horizontal;
 
 namespace EmpiriaBMS.Core;
 public class DataProvider : IDataProvider, IDisposable
@@ -37,6 +38,7 @@ public class DataProvider : IDataProvider, IDisposable
     public ReportsRepo Reports { get; set; }
     public ExpensesTypeRepo ExpensesTypes { get; set; }
     public SubConstructorRepo SubConstructors { get; set; }
+    public Database Database { get; set; }
 
     public DataProvider(
         IDbContextFactory<AppDbContext> dbFactory,
@@ -73,6 +75,7 @@ public class DataProvider : IDataProvider, IDisposable
         Reports = new ReportsRepo(dbFactory, logger);
         ExpensesTypes = new ExpensesTypeRepo(dbFactory,logger);
         SubConstructors = new SubConstructorRepo(dbFactory, logger);
+        Database = new Database(dbFactory, logger);
     }
 
     protected virtual void Dispose(bool disposing)
@@ -81,36 +84,37 @@ public class DataProvider : IDataProvider, IDisposable
         {
             if (disposing)
             {
-                Roles.Dispose();
-                Users.Dispose();
-                Projects.Dispose();
-                Disciplines.Dispose();
-                Deliverables.Dispose();
-                SupportiveWorks.Dispose();
-                Invoices.Dispose();
-                ProjectsCategories.Dispose();
-                SupportiveWorksTypes.Dispose();
-                DeliverablesTypes.Dispose();
-                DisciplinesTypes.Dispose();
-                Permissions.Dispose();
-                Issues.Dispose();
-                Payments.Dispose();
-                InvoiceTypes.Dispose();
-                PaymentTypes.Dispose();
-                ProjectStages.Dispose();
-                ProjectsSubCategories.Dispose();
-                Address.Dispose();
-                Clients.Dispose();
+                Roles?.Dispose();
+                Users?.Dispose();
+                Projects?.Dispose();
+                Disciplines?.Dispose();
+                Deliverables?.Dispose();
+                SupportiveWorks?.Dispose();
+                Invoices?.Dispose();
+                ProjectsCategories?.Dispose();
+                SupportiveWorksTypes?.Dispose();
+                DeliverablesTypes?.Dispose();
+                DisciplinesTypes?.Dispose();
+                Permissions?.Dispose();
+                Issues?.Dispose();
+                Payments?.Dispose();
+                InvoiceTypes?.Dispose();
+                PaymentTypes?.Dispose();
+                ProjectStages?.Dispose();
+                ProjectsSubCategories?.Dispose();
+                Address?.Dispose();
+                Clients?.Dispose();
                 OfferTypes.Dispose();
-                OfferStates.Dispose();
-                Offers.Dispose();
-                Emails.Dispose();
-                TeamsRequestedUsers.Dispose();
-                KPIS.Dispose();
-                WorkingTime.Dispose();
-                Reports.Dispose();
-                ExpensesTypes.Dispose();
-                SubConstructors.Dispose();
+                OfferStates?.Dispose();
+                Offers?.Dispose();
+                Emails?.Dispose();
+                TeamsRequestedUsers?.Dispose();
+                KPIS?.Dispose();
+                WorkingTime?.Dispose();
+                Reports?.Dispose();
+                ExpensesTypes?.Dispose();
+                SubConstructors?.Dispose();
+                Database?.Dispose();
             }
             disposedValue = true;
         }

@@ -1,4 +1,5 @@
 ﻿using EmpiriaBMS.Core.Repositories;
+using EmpiriaBMS.Core.Repositories.Horizontal;
 
 namespace EmpiriaBMS.Core
 {
@@ -34,5 +35,8 @@ namespace EmpiriaBMS.Core
         public ReportsRepo Reports { get; set; }
         public ExpensesTypeRepo ExpensesTypes { get; set; }
         public SubConstructorRepo SubConstructors { get; set; }
+        public Database Database { get; set; }
+
+        public void Dispose();
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Fast.Components.FluentUI;
 
-namespace Microsoft.Fast.Components.FluentUI;
+namespace EmpiriaBMS.Front.Horizontal;
 
 // Icons Color: #444791
 
 public static class MyIcons
 {
-    [ExcludeFromCodeCoverage]
     public static class Size10
     {
         public class Auth : Icon

@@ -152,11 +152,11 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    //endpoints.MapControllers();
-    //endpoints.MapControllerRoute(
-    //    name: "default",
-    //    pattern: "mvc/{controller=Home}/{action=Index}/{id?}"
-    //);
+    endpoints.MapControllers();
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "api/{controller=Database}/{action=Index}/{id?}"
+    );
     //endpoints.MapRazorPages();
     //endpoints.MapControllerRoute(
     //    name: "admin",

@@ -16,7 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\azure-kubernetes-service-kustomize.yml = .github\workflows\azure-kubernetes-service-kustomize.yml
 		azure-pipelines.yml = azure-pipelines.yml
 		docker-compose.yml = docker-compose.yml
-		Dockerfile = Dockerfile
 		.github\workflows\EmpiriaBMS-Production.yml = .github\workflows\EmpiriaBMS-Production.yml
 		.github\workflows\EmpiriaBMS-Staging.yml = .github\workflows\EmpiriaBMS-Staging.yml
 		Makefile = Makefile
