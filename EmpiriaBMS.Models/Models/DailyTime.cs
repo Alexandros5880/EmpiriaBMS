@@ -47,7 +47,16 @@ public class DailyTime : Entity
     public long Minutes { get; set; }
 
     public long Seconds { get; set; }
-    #endregion
+
+    public double GetTotalHours()
+    {
+        double totalHours = Days * 24;
+        totalHours += Hours;
+        totalHours += Minutes / 60.0;
+        totalHours += Seconds / 3600.0;
+
+        return totalHours;
+    }
 
     public DailyTime GetDailyTime()
     {
@@ -83,4 +92,5 @@ public class DailyTime : Entity
     {
         return new TimeSpan((int)Days, (int)Hours, (int)Minutes, (int)Seconds);
     }
+    #endregion
 }

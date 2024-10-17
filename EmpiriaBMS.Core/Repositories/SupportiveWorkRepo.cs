@@ -183,15 +183,17 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
         }
     }
 
+    #region Get Men Hours
     public async Task<long> GetMenHoursAsync(long otherId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<DailyTime>()
-                                 .Where(r => !r.IsDeleted)
-                                 .Where(mh => mh.SupportiveWorkId == otherId)
-                                 .Select(mh => mh.Hours)
-                                 .SumAsync();
+            var data = await _context.Set<DailyTime>()
+                               .Where(r => !r.IsDeleted)
+                               .Where(mh => mh.SupportiveWorkId == otherId)
+                               .ToListAsync();
+
+            return data.Select(mh => Convert.ToInt64(mh.GetTotalHours())).Sum();
         }
     }
 
@@ -199,11 +201,13 @@ public class SupportiveWorkRepo : Repository<SupportiveWorkDto, SupportiveWork>,
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return _context.Set<DailyTime>()
-                           .Where(r => !r.IsDeleted)
-                           .Where(mh => mh.SupportiveWorkId == otherId)
-                           .Select(mh => mh.Hours)
-                           .Sum();
+            var data = _context.Set<DailyTime>()
+                               .Where(r => !r.IsDeleted)
+                               .Where(mh => mh.SupportiveWorkId == otherId)
+                               .ToList();
+
+            return data.Select(mh => Convert.ToInt64(mh.GetTotalHours())).Sum();
         }
     }
+    #endregion
 }

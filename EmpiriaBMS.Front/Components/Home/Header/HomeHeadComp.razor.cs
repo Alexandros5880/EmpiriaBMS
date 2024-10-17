@@ -107,7 +107,7 @@ public partial class HomeHeadComp : IDisposable
     TimeSpan elapsedTime = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
     TimeSpan remainingTime = TimeSpan.Zero;
-    private EditUsersHours _editHoursCompoment;
+    private PassWorkedHours _editHoursCompoment;
     
     private void UpdateElapsedTime()
     {
@@ -214,7 +214,7 @@ public partial class HomeHeadComp : IDisposable
         _endWorkDialog.Show();
         _isEndWorkDialogOdepened = true;
 
-        IsWorkingModeChanged.InvokeAsync(IsWorkingMode);
+        await IsWorkingModeChanged.InvokeAsync(IsWorkingMode);
     }
 
     private void _onTimeTimeChanged(TimeSpan timeSpan)

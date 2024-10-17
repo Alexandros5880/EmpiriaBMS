@@ -282,10 +282,9 @@
                   style="--dialog-width: min(max(80vw, 800px), 1000px) !important;
                          --dialog-height: auto !important;">
 
-        <EditUsersHours @ref="@_editHoursCompoment"
-                        RemainingTime="@remainingTime"
-                        IsFromDashboard="true"
-                        OnTimeChanged="@_onTimeTimeChanged" />
+        <PassWorkedHours @ref="@_editHoursCompoment"
+                         RemainingTime="@remainingTime"
+                         OnTimeChanged="@_onTimeTimeChanged" />
 
         <div class="row mt-1">
             <FluentButton Disabled="@_isEndWorkAcceptDialogDisabled"

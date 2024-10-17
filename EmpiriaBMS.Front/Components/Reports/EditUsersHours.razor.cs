@@ -4,21 +4,15 @@ using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Home.Header.Hours;
+namespace EmpiriaBMS.Front.Components.Reports;
 
 public partial class EditUsersHours
 {
-    [Parameter]
-    public bool IsFromDashboard { get; set; } = false;
-
     [Parameter]
     public bool DisplayTitle { get; set; } = true;
 
     [Parameter]
     public TimeSpan RemainingTime { get; set; }
-
-    [Parameter]
-    public UserVM User { get; set; } = null;
 
     [Parameter]
     public EventCallback OnEnd { get; set; }
@@ -88,13 +82,8 @@ public partial class EditUsersHours
 
         if (firstRender)
         {
-            RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
+            RemainingTime = new TimeSpan(300, 0, 0);
             await Refresh();
-
-            if (User != null)
-            {
-                await OnSelectUser(User.Id);
-            }
         }
     }
 
@@ -111,8 +100,7 @@ public partial class EditUsersHours
         _deliverables.Clear();
         _disciplines.Clear();
 
-        if (!IsFromDashboard)
-            await _getUsers();
+        await _getUsers();
 
         if (workOnClients || seeAdmin)
             await _getClients();
@@ -221,7 +209,7 @@ public partial class EditUsersHours
         _deliverables.Clear();
         _supportiveWork.Clear();
 
-        var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+        var userId = _selectedUser?.Id ?? 0;
 
         try
         {
@@ -568,7 +556,7 @@ public partial class EditUsersHours
         _selectedDeliverable = null;
         _selectedSupportiveWork = null;
 
-        var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+        var userId = _selectedUser?.Id ?? 0;
 
         var disciplines = await _dataProvider.Projects.GetDisciplines(project.Id, userId, getAllDisciplines);
 
@@ -587,7 +575,7 @@ public partial class EditUsersHours
 
         _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
-        var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+        var userId = _selectedUser?.Id ?? 0;
 
         var draws = await _dataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, userId, getAllDeliverables);
         var others = await _dataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, userId, true);
@@ -628,13 +616,8 @@ public partial class EditUsersHours
         await _addHours();
 
         // Refresh
-        RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
+        RemainingTime = new TimeSpan(300, 0, 0);
         await Refresh(RemainingTime);
-
-        if (User != null)
-        {
-            await OnSelectUser(User.Id);
-        }
 
         _startLoading = false;
     }
@@ -643,18 +626,10 @@ public partial class EditUsersHours
     {
         try
         {
-            // Validate
-            if (IsFromDashboard)
-            {
-                if (RemainingTime.Hours > 0)
-                    // TODO: Display a message to update his hours.
-                    return;
-            }
-
             // Update Db
             _startLoading = true;
 
-            var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+            var userId = _selectedUser?.Id ?? 0;
 
 
             // Update Clients
