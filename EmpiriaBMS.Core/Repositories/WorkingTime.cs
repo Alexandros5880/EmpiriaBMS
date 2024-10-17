@@ -28,11 +28,8 @@ public class WorkingTime : IDisposable
             {
                 var requests = await _context.Set<DailyTime>()
                                              .Where(r => !r.IsDeleted)
-                                             .Where(r => r.State  == DailyTimeState.AWAITING)
-                                             .Include(r => r.DailyUser)
-                                             .Include(r => r.PersonalUser)
-                                             .Include(r => r.TrainingUser)
-                                             .Include(r => r.CorporateUser)
+                                             .Where(r => r.State  == state)
+                                             .Include(r => r.User)
                                              .Include(r => r.Deliverable)
                                              .ThenInclude(d => d.Type)
                                              .Include(r => r.SupportiveWork)
@@ -48,7 +45,7 @@ public class WorkingTime : IDisposable
 
                 foreach (var request in requests)
                 {
-                    DailyTimeTypes? key = _getGroupingKey(request, _context);
+                    DailyTimeTypes? key = request.Type;
                     if (key == null)
                         continue;
 
@@ -86,171 +83,6 @@ public class WorkingTime : IDisposable
         {
             _logger.LogError($"Exception On WorkingTime.GetDailyTimeRequestsCount: {ex.Message}, \nInner: {ex.InnerException?.Message}");
             return 0;
-        }
-    }
-
-    private DailyTimeTypes? _getGroupingKey(DailyTime request, AppDbContext _context)
-    {
-        try
-        {
-            // DailyUser
-            if (request.DailyUserId.HasValue &&
-                !request.PersonalUserId.HasValue &&
-                !request.TrainingUserId.HasValue &&
-                !request.CorporateUserId.HasValue &&
-                !request.ClientId.HasValue &&
-                !request.OfferId.HasValue &&
-                !request.ProjectId.HasValue &&
-                !request.DisciplineId.HasValue &&
-                !request.DeliverableId.HasValue &&
-                !request.SupportiveWorkId.HasValue)
-            {
-                //var dailyUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.DailyUserId);
-                return DailyTimeTypes.DailyUser;
-            }
-            // PersonalUser
-            else if (request.PersonalUserId.HasValue &&
-                !request.DailyUserId.HasValue &&
-                !request.TrainingUserId.HasValue &&
-                !request.CorporateUserId.HasValue &&
-                !request.ClientId.HasValue &&
-                !request.OfferId.HasValue &&
-                !request.ProjectId.HasValue &&
-                !request.DisciplineId.HasValue &&
-                !request.DeliverableId.HasValue &&
-                !request.SupportiveWorkId.HasValue)
-            {
-                //var personalUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.PersonalUserId);
-                return DailyTimeTypes.PersonalUser;
-            }
-            // TrainingUser
-            else if (request.TrainingUserId.HasValue &&
-                !request.DailyUserId.HasValue &&
-                !request.PersonalUserId.HasValue &&
-                !request.CorporateUserId.HasValue &&
-                !request.ClientId.HasValue &&
-                !request.OfferId.HasValue &&
-                !request.ProjectId.HasValue &&
-                !request.DisciplineId.HasValue &&
-                !request.DeliverableId.HasValue &&
-                !request.SupportiveWorkId.HasValue)
-            {
-                //var trainingUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.TrainingUserId);
-                return DailyTimeTypes.TrainingUser;
-            }
-            // CorporateUser
-            else if (request.CorporateUserId.HasValue &&
-                !request.DailyUserId.HasValue &&
-                !request.PersonalUserId.HasValue &&
-                !request.TrainingUserId.HasValue &&
-                !request.ClientId.HasValue &&
-                !request.OfferId.HasValue &&
-                !request.ProjectId.HasValue &&
-                !request.DisciplineId.HasValue &&
-                !request.DeliverableId.HasValue &&
-                !request.SupportiveWorkId.HasValue)
-            {
-                //var corporateUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == request.CorporateUserId);
-                return DailyTimeTypes.CorporateUser;
-            }
-            // Lead
-            else if (request.ClientId.HasValue &&
-                     request.DailyUserId.HasValue &&
-                    !request.PersonalUserId.HasValue &&
-                    !request.TrainingUserId.HasValue &&
-                    !request.CorporateUserId.HasValue &&
-                    !request.OfferId.HasValue &&
-                    !request.ProjectId.HasValue &&
-                    !request.DisciplineId.HasValue &&
-                    !request.DeliverableId.HasValue &&
-                    !request.SupportiveWorkId.HasValue)
-            {
-                //var lead = await _context.Set<Lead>().FirstOrDefaultAsync(u => u.Id == request.LeadId);
-                return DailyTimeTypes.Lead;
-            }
-            // Offer
-            else if (request.OfferId.HasValue &&
-                     request.DailyUserId.HasValue &&
-                    !request.PersonalUserId.HasValue &&
-                    !request.TrainingUserId.HasValue &&
-                    !request.CorporateUserId.HasValue &&
-                    !request.ClientId.HasValue &&
-                    !request.ProjectId.HasValue &&
-                    !request.DisciplineId.HasValue &&
-                    !request.DeliverableId.HasValue &&
-                    !request.SupportiveWorkId.HasValue)
-            {
-                //var offer = await _context.Set<Offer>().FirstOrDefaultAsync(u => u.Id == request.OfferId);
-                return DailyTimeTypes.Offer;
-            }
-            // Project
-            else if (request.ProjectId.HasValue &&
-                     request.DailyUserId.HasValue &&
-                    !request.PersonalUserId.HasValue &&
-                    !request.TrainingUserId.HasValue &&
-                    !request.CorporateUserId.HasValue &&
-                    !request.ClientId.HasValue &&
-                    !request.OfferId.HasValue &&
-                    !request.DisciplineId.HasValue &&
-                    !request.DeliverableId.HasValue &&
-                    !request.SupportiveWorkId.HasValue)
-            {
-                //var project = await _context.Set<Project>().FirstOrDefaultAsync(u => u.Id == request.ProjectId);
-                return DailyTimeTypes.Project;
-            }
-            // Discipline
-            else if (request.DisciplineId.HasValue &&
-                     request.DailyUserId.HasValue &&
-                     request.ProjectId.HasValue &&
-                     request.DisciplineId.HasValue &&
-                    !request.PersonalUserId.HasValue &&
-                    !request.TrainingUserId.HasValue &&
-                    !request.CorporateUserId.HasValue &&
-                    !request.ClientId.HasValue &&
-                    !request.OfferId.HasValue &&
-                    !request.DeliverableId.HasValue &&
-                    !request.SupportiveWorkId.HasValue)
-            {
-                //var discipline = await _context.Set<Discipline>().FirstOrDefaultAsync(u => u.Id == request.DisciplineId);
-                return DailyTimeTypes.Discipline;
-            }
-            // Drawing
-            else if (request.DeliverableId.HasValue &&
-                     request.DisciplineId.HasValue &&
-                     request.ProjectId.HasValue &&
-                     request.DailyUserId.HasValue &&
-                    !request.PersonalUserId.HasValue &&
-                    !request.TrainingUserId.HasValue &&
-                    !request.CorporateUserId.HasValue &&
-                    !request.ClientId.HasValue &&
-                    !request.OfferId.HasValue &&
-                    !request.SupportiveWorkId.HasValue)
-            {
-                //var deliverable = await _context.Set<Deliverable>().FirstOrDefaultAsync(u => u.Id == request.DeliverableId);
-                return DailyTimeTypes.Deliverable;
-            }
-            // Other
-            else if (request.SupportiveWorkId.HasValue &&
-                     request.DisciplineId.HasValue &&
-                     request.ProjectId.HasValue &&
-                     request.DailyUserId.HasValue &&
-                    !request.PersonalUserId.HasValue &&
-                    !request.TrainingUserId.HasValue &&
-                    !request.CorporateUserId.HasValue &&
-                    !request.ClientId.HasValue &&
-                    !request.OfferId.HasValue &&
-                    !request.DeliverableId.HasValue)
-            {
-                //var supportiveWork = await _context.Set<SupportiveWork>().FirstOrDefaultAsync(u => u.Id == request.SupportiveWorkId);
-                return DailyTimeTypes.SupportiveWork;
-            }
-
-            return null;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Exception On WorkingTime._getGroupingKey: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-            return null;
         }
     }
 
@@ -337,7 +169,6 @@ public class WorkingTime : IDisposable
     }
     #endregion
 
-    // TODO: Think User General Time
     #region User General Time
     public async Task<DailyTime> AddDailyTime(long userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
     {
@@ -362,7 +193,7 @@ public class WorkingTime : IDisposable
                     var yesterdayDate = date.AddDays(-1);
                     var yesterdayDailyHour = await _context.Set<DailyTime>()
                                                        .Where(r => !r.IsDeleted)
-                                                       .Where(u => u.DailyUserId == userId)
+                                                       .Where(u => u.Type == DailyTimeTypes.GeneralUserTime)
                                                        .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
 
                     if (yesterdayDailyHour == null)
@@ -387,7 +218,8 @@ public class WorkingTime : IDisposable
                                                .AddAsync(
                         new DailyTime
                         {
-                            DailyUserId = userId,
+                            Type = DailyTimeTypes.GeneralUserTime,
+                            UserId = userId,
                             Date = date,
                             Days = ts.Days,
                             Hours = ts.Hours,
@@ -427,14 +259,15 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        Type = DailyTimeTypes.GeneralUserTime,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        State = DailyTimeState.AWAITING
+                        State = DailyTimeState.AWAITING,
+                        UserId = userId,
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -471,7 +304,7 @@ public class WorkingTime : IDisposable
                     var yesterdayDate = date.AddDays(-1);
                     var yesterdayDailyHour = await _context.Set<DailyTime>()
                                                        .Where(r => !r.IsDeleted)
-                                                       .Where(u => u.PersonalUserId == userId)
+                                                       .Where(u => u.Type == DailyTimeTypes.PersonalTime)
                                                        .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
                     yesterdayDailyHour.IsEditByAdmin = isEditByAdmin;
 
@@ -495,7 +328,8 @@ public class WorkingTime : IDisposable
                     .AddAsync(
                         new DailyTime
                         {
-                            PersonalUserId = userId,
+                            Type = DailyTimeTypes.PersonalTime,
+                            UserId = userId,
                             Date = date,
                             Days = ts.Days,
                             Hours = ts.Hours,
@@ -535,14 +369,15 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        PersonalUserId = userId,
+                        Type = DailyTimeTypes.PersonalTime,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        State = DailyTimeState.AWAITING
+                        State = DailyTimeState.AWAITING,
+                        UserId = userId,
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -579,7 +414,7 @@ public class WorkingTime : IDisposable
                     var yesterdayDate = date.AddDays(-1);
                     var yesterdayDailyHour = await _context.Set<DailyTime>()
                                                        .Where(r => !r.IsDeleted)
-                                                       .Where(u => u.TrainingUserId == userId)
+                                                       .Where(u => u.Type == DailyTimeTypes.TrainingTime)
                                                        .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
 
                     if (yesterdayDailyHour == null)
@@ -603,7 +438,8 @@ public class WorkingTime : IDisposable
                     .AddAsync(
                         new DailyTime
                         {
-                            TrainingUserId = userId,
+                            Type = DailyTimeTypes.TrainingTime,
+                            UserId = userId,
                             Date = date,
                             Days = ts.Days,
                             Hours = ts.Hours,
@@ -643,14 +479,15 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        TrainingUserId = userId,
+                        Type = DailyTimeTypes.TrainingTime,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        State = DailyTimeState.AWAITING
+                        State = DailyTimeState.AWAITING,
+                        UserId = userId,
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -687,7 +524,7 @@ public class WorkingTime : IDisposable
                     var yesterdayDate = date.AddDays(-1);
                     var yesterdayDailyHour = await _context.Set<DailyTime>()
                                                        .Where(r => !r.IsDeleted)
-                                                       .Where(u => u.CorporateUserId == userId)
+                                                       .Where(u => u.Type == DailyTimeTypes.CorporateTime)
                                                        .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
                     yesterdayDailyHour.IsEditByAdmin = isEditByAdmin;
 
@@ -712,7 +549,8 @@ public class WorkingTime : IDisposable
                     .AddAsync(
                         new DailyTime
                         {
-                            CorporateUserId = userId,
+                            Type = DailyTimeTypes.CorporateTime,
+                            UserId = userId,
                             Date = date,
                             Days = ts.Days,
                             Hours = ts.Hours,
@@ -752,14 +590,15 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        CorporateUserId = userId,
+                        Type = DailyTimeTypes.CorporateTime,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        State = DailyTimeState.AWAITING
+                        State = DailyTimeState.AWAITING,
+                        UserId = userId,
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -789,14 +628,15 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         ClientId = clientId,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
-                        State = DailyTimeState.NOREQUEST
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.ClientTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -825,7 +665,7 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         ClientId = clientId,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
@@ -833,7 +673,8 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        State = DailyTimeState.AWAITING
+                        State = DailyTimeState.AWAITING,
+                        Type = DailyTimeTypes.ClientTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -864,14 +705,15 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         ProjectId = projectId,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
-                        State = DailyTimeState.NOREQUEST
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.ProjectTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -900,7 +742,7 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         ProjectId = projectId,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
@@ -908,7 +750,8 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        State = DailyTimeState.AWAITING
+                        State = DailyTimeState.AWAITING,
+                        Type = DailyTimeTypes.ProjectTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -939,14 +782,15 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         OfferId = offerId,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
                         Minutes = timeSpans[i].Minutes,
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
-                        State = DailyTimeState.NOREQUEST
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.OfferTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -975,7 +819,7 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         OfferId = offerId,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
@@ -983,7 +827,8 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        State = DailyTimeState.AWAITING
+                        State = DailyTimeState.AWAITING,
+                        Type = DailyTimeTypes.OfferTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -1014,7 +859,7 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now,
-                        DailyUserId = userId,
+                        UserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
                         Days = timeSpans[i].Days,
@@ -1022,7 +867,8 @@ public class WorkingTime : IDisposable
                         Minutes = timeSpans[i].Minutes,
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
-                        State = DailyTimeState.NOREQUEST
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.DisciplineTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -1051,7 +897,7 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
                         Days = timeSpans[i].Days,
@@ -1060,7 +906,8 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        State = DailyTimeState.AWAITING
+                        State = DailyTimeState.AWAITING,
+                        Type = DailyTimeTypes.DisciplineTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -1091,7 +938,7 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
                         DeliverableId = drawId,
@@ -1100,7 +947,8 @@ public class WorkingTime : IDisposable
                         Minutes = timeSpans[i].Minutes,
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
-                        State = DailyTimeState.NOREQUEST
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.DeliverableTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -1129,7 +977,7 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
                         DeliverableId = drawId,
@@ -1139,7 +987,8 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        State = DailyTimeState.AWAITING
+                        State = DailyTimeState.AWAITING,
+                        Type = DailyTimeTypes.DeliverableTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -1170,7 +1019,7 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
                         SupportiveWorkId = otherId,
@@ -1179,7 +1028,8 @@ public class WorkingTime : IDisposable
                         Minutes = timeSpans[i].Minutes,
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
-                        State = DailyTimeState.NOREQUEST
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.SupportiveWorkTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }
@@ -1208,7 +1058,7 @@ public class WorkingTime : IDisposable
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
                         Date = DateTime.Now.AddDays(-i),
-                        DailyUserId = userId,
+                        UserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
                         SupportiveWorkId = otherId,
@@ -1218,7 +1068,8 @@ public class WorkingTime : IDisposable
                         Seconds = timeSpans[i].Seconds,
                         IsEditByAdmin = isEditByAdmin,
                         Description = description,
-                        State = DailyTimeState.AWAITING
+                        State = DailyTimeState.AWAITING,
+                        Type = DailyTimeTypes.SupportiveWorkTime
                     };
                     await _context.Set<DailyTime>().AddAsync(time);
                 }

@@ -6,6 +6,7 @@ using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using EmpiriaBMS.Models.Enum;
 
 namespace EmpiriaBMS.Core.Repositories;
 public class UsersRepo : Repository<UserDto, User>, IDisposable
@@ -372,10 +373,7 @@ public class UsersRepo : Repository<UserDto, User>, IDisposable
         {
             var timeSpans = await _context.Set<DailyTime>()
                                  .Where(r => !r.IsDeleted)
-                                 .Where(u => u.DailyUserId == userId
-                                        || u.PersonalUserId == userId
-                                        || u.TrainingUserId == userId
-                                        || u.CorporateUserId == userId)
+                                 .Where(u => u.UserId == userId)
                                  .Where(u => u.Date.CompareTo(dateOneMonthLater) > 0)
                                  .Select(u => u.ToTimeSpan())
                                  .ToListAsync();
@@ -395,7 +393,7 @@ public class UsersRepo : Repository<UserDto, User>, IDisposable
         {
             return await _context.Set<DailyTime>()
                            .Where(r => !r.IsDeleted)
-                           .Where(u => u.DailyUserId == userId)
+                           .Where(u => u.UserId == userId)
                            .Select(d => d.Hours)
                            .SumAsync();
         }
@@ -414,7 +412,7 @@ public class UsersRepo : Repository<UserDto, User>, IDisposable
             var dateBeforeWeek = date.AddDays(-7);
             return await _context.Set<DailyTime>()
                                            .Where(r => !r.IsDeleted)
-                                           .Where(u => u.DailyUserId == userId)
+                                           .Where(u => u.UserId == userId)
                                            .Where(u => u.Date.CompareTo(dateBeforeWeek) > 0)
                                            .Select(u => u.Hours)
                                            .SumAsync();
@@ -428,8 +426,9 @@ public class UsersRepo : Repository<UserDto, User>, IDisposable
             // DailyTime
             var dailyTimeSpans = await _context.Set<DailyTime>()
                                           .Where(r => !r.IsDeleted)
+                                          .Where(r => r.Type == DailyTimeTypes.GeneralUserTime)
                                           .Where(dt =>
-                                                dt.DailyUserId == userId
+                                                dt.UserId == userId
                                                 && dt.Date.Year.Equals(date.Year)
                                                 && dt.Date.Month.Equals(date.Month)
                                                 && dt.Date.Day.Equals(date.Day))
@@ -439,8 +438,9 @@ public class UsersRepo : Repository<UserDto, User>, IDisposable
             // PersonalTime
             var personalTimeSpans = await _context.Set<DailyTime>()
                                             .Where(r => !r.IsDeleted)
+                                            .Where(r => r.Type == DailyTimeTypes.PersonalTime)
                                             .Where(dt =>
-                                                dt.PersonalUserId == userId
+                                                dt.UserId == userId
                                                 && dt.Date.Year.Equals(date.Year)
                                                 && dt.Date.Month.Equals(date.Month)
                                                 && dt.Date.Day.Equals(date.Day))
@@ -450,8 +450,9 @@ public class UsersRepo : Repository<UserDto, User>, IDisposable
             // TrainingTime
             var trainingTimeSpans = await _context.Set<DailyTime>()
                                           .Where(r => !r.IsDeleted)
+                                          .Where(r => r.Type == DailyTimeTypes.TrainingTime)
                                           .Where(dt =>
-                                                dt.TrainingUserId == userId
+                                                dt.UserId == userId
                                                 && dt.Date.Year.Equals(date.Year)
                                                 && dt.Date.Month.Equals(date.Month)
                                                 && dt.Date.Day.Equals(date.Day))
@@ -461,8 +462,9 @@ public class UsersRepo : Repository<UserDto, User>, IDisposable
             // CorporateEventTime
             var corporateEventTimeSpans = await _context.Set<DailyTime>()
                                           .Where(r => !r.IsDeleted)
+                                          .Where(r => r.Type == DailyTimeTypes.CorporateTime)
                                           .Where(dt =>
-                                                dt.CorporateUserId == userId
+                                                dt.UserId == userId
                                                 && dt.Date.Year.Equals(date.Year)
                                                 && dt.Date.Month.Equals(date.Month)
                                                 && dt.Date.Day.Equals(date.Day))

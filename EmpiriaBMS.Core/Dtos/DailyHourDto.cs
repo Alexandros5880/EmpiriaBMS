@@ -15,21 +15,14 @@ public class DailyHourDto : EntityDto
 {
     public DateTime Date { get; set; }
 
+    public DailyTimeTypes Type { get; set; }
+
     public DailyTimeState State { get; set; }
 
     public bool IsEditByAdmin { get; set; }
 
-    public long? DailyUserId { get; set; }
-    public User? DailyUser { get; set; }
-
-    public long? PersonalUserId { get; set; }
-    public User? PersonalUser { get; set; }
-
-    public long? TrainingUserId { get; set; }
-    public User? TrainingUser { get; set; }
-
-    public long? CorporateUserId { get; set; }
-    public User? CorporateUser { get; set; }
+    public long? UserId { get; set; }
+    public User? User { get; set; }
 
     public long? DeliverableId { get; set; }
     public Deliverable? Deliverable { get; set; }
@@ -66,6 +59,7 @@ public class DailyHourDto : EntityDto
         return new DailyTime()
         {
             Date = Date,
+            Type = Type,
             State = State,
             Days = Days,
             Hours = Hours,
@@ -73,14 +67,8 @@ public class DailyHourDto : EntityDto
             Seconds = Seconds,
             Description = Description,
             IsEditByAdmin = IsEditByAdmin,
-            DailyUserId = DailyUserId,
-            DailyUser = DailyUser,
-            PersonalUserId = PersonalUserId,
-            PersonalUser = PersonalUser,
-            TrainingUserId = TrainingUserId,
-            TrainingUser = TrainingUser,
-            CorporateUserId = CorporateUserId,
-            CorporateUser = CorporateUser,
+            UserId = UserId,
+            User = User,
             DeliverableId = DeliverableId,
             Deliverable = Deliverable,
             SupportiveWorkId = SupportiveWorkId,

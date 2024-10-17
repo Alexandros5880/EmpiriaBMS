@@ -48,16 +48,7 @@ public class User : Entity
 
     public ICollection<DisciplineEngineer>? DisciplinesEngineers { get; set; }
 
-    // TODO: Think
-    #region Think
     public ICollection<DailyTime>? DailyTime { get; set; }
-
-    public ICollection<DailyTime>? PersonalTime { get; set; }
-
-    public ICollection<DailyTime>? TrainingTime { get; set; }
-
-    public ICollection<DailyTime>? CorporateEventTime { get; set; }
-    #endregion
 
     public ICollection<Issue>? MyIssues { get; set; }
 
