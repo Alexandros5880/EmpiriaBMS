@@ -6,6 +6,34 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 
 public class SupportiveWorkVM : BaseVM
 {
+    // Not Mapped
+    private TimeSpan _time = TimeSpan.Zero;
+    public TimeSpan Time
+    {
+        get => _time;
+        set
+        {
+            if (value == _time)
+                return;
+            _time = value;
+            NotifyPropertyChanged(nameof(Time));
+        }
+    }
+
+    // Not Mapped
+    private DateTime _timeDate = DateTime.Now;
+    public DateTime TimeDatePassed
+    {
+        get => _timeDate;
+        set
+        {
+            if (value == _timeDate)
+                return;
+            _timeDate = value;
+            NotifyPropertyChanged(nameof(TimeDatePassed));
+        }
+    }
+
     private long? _typeId;
     public long? TypeId
     {
@@ -34,19 +62,6 @@ public class SupportiveWorkVM : BaseVM
 
     [NotMapped]
     public string TypeName => Type != null ? Type.Name : "";
-
-    private TimeSpan _time = TimeSpan.Zero;
-    public TimeSpan Time
-    {
-        get => _time;
-        set
-        {
-            if (value == _time)
-                return;
-            _time = value;
-            NotifyPropertyChanged(nameof(Time));
-        }
-    }
 
     private float _completionEstimation;
     public float CompletionEstimation

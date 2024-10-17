@@ -20,6 +20,20 @@ public class OfferVM : BaseVM
         }
     }
 
+    // Not Mapped
+    private DateTime _timeDate = DateTime.Now;
+    public DateTime TimeDatePassed
+    {
+        get => _timeDate;
+        set
+        {
+            if (value == _timeDate)
+                return;
+            _timeDate = value;
+            NotifyPropertyChanged(nameof(TimeDatePassed));
+        }
+    }
+
     // Type
     private long _typeId;
     public long TypeId

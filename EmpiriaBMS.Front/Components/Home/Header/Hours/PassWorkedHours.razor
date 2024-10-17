@@ -29,7 +29,7 @@
     </h3>
 </div>
 
-<div style="width: auto; overflow-y: hidden; overflow-x: hidden;">
+<div style="max-height: 80vh; overflow-y: auto; overflow-x: hidden;">
 
     <div class="mt-1 row gx-2 ms-1 me-1">
 
@@ -145,12 +145,12 @@
         </div>
     }
 
-    <FluentStack Orientation="Orientation.Horizontal" Class="mt-1">
+    <FluentStack Class="mt-1">
 
         <!-- Deliverables -->
         @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
         {
-            <div class="w-50">
+            <div>
                 <div class="text-center">
                     <h5>Deliverables</h5>
                 </div>
@@ -162,6 +162,7 @@
                                 <th scope="col" class="sticky-header">Deliverable</th>
                                 <th scope="col" class="sticky-header">Time</th>
                                 <th scope="col" class="sticky-header">Declared Completion</th>
+                                <th scope="col" class="sticky-header">Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -193,6 +194,12 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <td class="align-middle">
+                                        <div class="input-group" style="width: 128px;">
+                                            <FluentDatePicker Value="@_deliverable.TimeDatePassed"
+                                                              Appearance="FluentInputAppearance.Outline"/>
+                                        </div>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -204,7 +211,7 @@
         <!-- Supportive Works -->
         @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
         {
-            <div class="w-50">
+            <div>
                 <div class="text-center">
                     <h5>Supportive Works</h5>
                 </div>
@@ -215,6 +222,7 @@
                             <tr>
                                 <th scope="col" class="sticky-header">Other</th>
                                 <th scope="col" class="sticky-header">Time</th>
+                                <th scope="col" class="sticky-header">Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -224,11 +232,17 @@
                                     <td class="align-middle">
                                         <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
                                     </td>
-                                    <td class="align-middle nowrap-td">
+                                    <td class="align-middle nowrap-td" style="width: 120px;">
                                         <TimeInput MinTime="@TimeSpan.Zero"
                                                    MaxTime="@RemainingTime"
                                                    Time="@_supportiveWork.Time"
                                                    OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="input-group" style="width: 128px;">
+                                            <FluentDatePicker Value="@_supportiveWork.TimeDatePassed"
+                                                              Appearance="FluentInputAppearance.Outline" />
+                                        </div>
                                     </td>
                                 </tr>
                             }
@@ -276,45 +290,61 @@
 
                                         @if ((workOnClients || seeAdmin) && (_selectedClient != null && _selectedClient.Id != 0))
                                         {
-                                            <div class="col-3 text-center">
-                                                <span class="mb-2 fs-5">Client</span>
+                                            <div class="col-3">
+                                                <span class="text-start">Client</span>
                                                 <TimeInput MinTime="@TimeSpan.Zero"
                                                            MaxTime="@RemainingTime"
                                                            Time="_selectedClient.Time"
                                                            OnPropertyChanged=@((time) => _onClientTimeChanged(_selectedClient, time)) />
+                                                <div class="input-group" style="width: 150px;">
+                                                    <FluentDatePicker Value="@_selectedClient.TimeDatePassed"
+                                                                      Appearance="FluentInputAppearance.Outline" />
+                                                </div>
                                             </div>
                                         }
 
                                         @if ((workOnOffers || seeAdmin) && (_selectedOffer != null && _selectedOffer.Id != 0))
                                         {
-                                            <div class="col-3 text-center">
-                                                <span class="mb-2 fs-5">Offer</span>
+                                            <div class="col-3">
+                                                <span class="text-start">Offer</span>
                                                 <TimeInput MinTime="@TimeSpan.Zero"
                                                            MaxTime="@RemainingTime"
                                                            Time="_selectedOffer.Time"
                                                            OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
+                                                <div class="input-group" style="width: 150px;">
+                                                    <FluentDatePicker Value="@_selectedOffer.TimeDatePassed"
+                                                                      Appearance="FluentInputAppearance.Outline" />
+                                                </div>
                                             </div>
                                         }
 
                                         @if ((workOnProject || seeAdmin) && (_selectedProject != null && _selectedProject.Id != 0))
                                         {
-                                            <div class="col-3 text-center">
-                                                <span class="mb-2 fs-5">Project</span>
+                                            <div class="col-3">
+                                                <span class="text-start">Project</span>
                                                 <TimeInput MinTime="@TimeSpan.Zero"
                                                            MaxTime="@RemainingTime"
                                                            Time="_selectedProject.Time"
                                                            OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
+                                                <div class="input-group" style="width: 150px;">
+                                                    <FluentDatePicker Value="@_selectedProject.TimeDatePassed"
+                                                                      Appearance="FluentInputAppearance.Outline" />
+                                                </div>
                                             </div>
                                         }
 
                                         @if ((workOnProject || seeAdmin) && (_selectedDiscipline != null && _selectedDiscipline.Id != 0))
                                         {
-                                            <div class="col-3 text-center">
-                                                <span class="mb-2 fs-5">Discipline</span>
+                                            <div class="col-3">
+                                                <span class="text-start">Discipline</span>
                                                 <TimeInput MinTime="@TimeSpan.Zero"
                                                            MaxTime="@RemainingTime"
                                                            Time="_selectedDiscipline.Time"
                                                            OnPropertyChanged=@((time) => _onDisciplineTimeChanged(_selectedDiscipline, time)) />
+                                                <div class="input-group" style="width: 150px;">
+                                                    <FluentDatePicker Value="@_selectedDiscipline.TimeDatePassed"
+                                                                      Appearance="FluentInputAppearance.Outline" />
+                                                </div>
                                             </div>
                                         }
                                     </div>
@@ -330,7 +360,8 @@
                                                  MinTime="@minTime"
                                                  OnPersonalTimeChanged="@_onPersonalTimeChanged"
                                                  OnTrainingTimeChanged="@_onTrainingTimeChanged"
-                                                 OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+                                                 OnCorporateTimeChanged="@_onCorporateTimeChanged"
+                                                 DisplayDateInput ="true"/>
                                 </div>
                             }
 

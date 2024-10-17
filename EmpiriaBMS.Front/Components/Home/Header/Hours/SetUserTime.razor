@@ -8,47 +8,56 @@
 @if (LogedUserTimes != null)
 {
     <div class="row gx-3 m-2 ">
-        <div class="col-4 text-center">
-            <div class="d-flex justify-content-center">
-                <span class="mb-2 fs-5">Personal</span>
-            </div>
-            <div class="d-flex justify-content-center">
-                <TimeInput MinTime="MinTime"
-                           MaxTime="@RemainingTime"
-                           Time="LogedUserTimes.PersonalTime"
-                           OnPropertyChanged=@(async (time) => await OnPersonalTimeChanged.InvokeAsync(time)) />
-            </div>
-        </div>
-        <div class="col-4 text-center">
-            <div class="d-flex justify-content-center">
-                <span class="mb-2 fs-5">Training</span>
-            </div>
-            <div class="d-flex justify-content-center">
-                <TimeInput MinTime="MinTime"
-                           MaxTime="@RemainingTime"
-                           Time="LogedUserTimes.TrainingTime"
-                           OnPropertyChanged=@(async (time) => await OnTrainingTimeChanged.InvokeAsync(time)) />
+
+        <div class="col-3">
+            <span class="text-start">Personal</span>
+            <TimeInput MinTime="MinTime"
+                       MaxTime="@RemainingTime"
+                       Time="LogedUserTimes.PersonalTime"
+                       OnPropertyChanged=@(async (time) => await OnPersonalTimeChanged.InvokeAsync(time)) />
+            <div class="input-group" style="width: 150px;">
+                <FluentDatePicker Value="@PersonalTimeDatePassed"
+                                  Appearance="FluentInputAppearance.Outline"
+                                  ValueChanged="@(async (date) => await OnPersonalTimeDateChanged.InvokeAsync(date ?? DateTime.Now))" />
             </div>
         </div>
-        <div class="col-4 text-center">
-            <div class="d-flex justify-content-center">
-                <span class="mb-2 fs-5">Corporate Event</span>
-            </div>
-            <div class="d-flex justify-content-center">
-                <TimeInput MinTime="MinTime"
-                           MaxTime="@RemainingTime"
-                           Time="LogedUserTimes.CorporateEventTime"
-                           OnPropertyChanged=@(async (time) => await OnCorporateTimeChanged.InvokeAsync(time)) />
+
+        <div class="col-3">
+            <span class="text-start">Training</span>
+            <TimeInput MinTime="MinTime"
+                       MaxTime="@RemainingTime"
+                       Time="LogedUserTimes.TrainingTime"
+                       OnPropertyChanged=@(async (time) => await OnTrainingTimeChanged.InvokeAsync(time)) />
+            <div class="input-group" style="width: 150px;">
+                <FluentDatePicker Value="@TrainingTimeDatePassed"
+                                  Appearance="FluentInputAppearance.Outline"
+                                  ValueChanged="@(async (date) => await OnTrainingTimeDateChanged.InvokeAsync(date ?? DateTime.Now))" />
             </div>
         </div>
+
+        <div class="col-3">
+            <span class="text-start">Corporate Event</span>
+            <TimeInput MinTime="MinTime"
+                       MaxTime="@RemainingTime"
+                       Time="LogedUserTimes.CorporateEventTime"
+                       OnPropertyChanged=@(async (time) => await OnCorporateTimeChanged.InvokeAsync(time)) />
+            <div class="input-group" style="width: 150px;">
+                <FluentDatePicker Value="@CorporateTimeDatePassed"
+                                  Appearance="FluentInputAppearance.Outline"
+                                  ValueChanged="@(async (date) => await OnCorporateTimeDateChanged.InvokeAsync(date ?? DateTime.Now))" />
+            </div>
+        </div>
+
     </div>
 }
 
 @code {
+    [Parameter]
+    public bool DisplayDateInput { get; set; } = false;
 
     [Parameter]
     public UserTimes LogedUserTimes { get; set; }
-    
+
     [Parameter]
     public TimeSpan RemainingTime { get; set; }
 
@@ -64,6 +73,7 @@
         }
     }
 
+    #region Time Changed
     [Parameter]
     public EventCallback<TimeSpan> OnPersonalTimeChanged { get; set; }
 
@@ -72,6 +82,22 @@
 
     [Parameter]
     public EventCallback<TimeSpan> OnCorporateTimeChanged { get; set; }
+    #endregion
+
+    #region Date Set
+    [Parameter]
+    public EventCallback<DateTime> OnPersonalTimeDateChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<DateTime> OnTrainingTimeDateChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<DateTime> OnCorporateTimeDateChanged { get; set; }
+
+    private DateTime PersonalTimeDatePassed = DateTime.Now;
+    private DateTime TrainingTimeDatePassed = DateTime.Now;
+    private DateTime CorporateTimeDatePassed = DateTime.Now;
+    #endregion
 
     #region Authorization Properties
     bool seeAdmin => _sharedAuthData.Permissions.Any(p => p.Ord == 7);
