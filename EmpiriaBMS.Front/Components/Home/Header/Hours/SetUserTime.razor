@@ -1,6 +1,9 @@
 ﻿@using EmpiriaBMS.Core.ReturnModels
+﻿@using EmpiriaBMS.Front.Services
+
 @inject IDataProvider DataProvider
 @inject Logging.LoggerManager Logger
+@inject SharedAuthDataService _sharedAuthData
 
 @if (LogedUserTimes != null)
 {
@@ -69,4 +72,13 @@
 
     [Parameter]
     public EventCallback<TimeSpan> OnCorporateTimeChanged { get; set; }
+
+    #region Authorization Properties
+    bool seeAdmin => _sharedAuthData.Permissions.Any(p => p.Ord == 7);
+    bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
+    bool getAllDeliverables => _sharedAuthData.Permissions.Any(p => p.Ord == 10);
+    bool workOnProject => _sharedAuthData.Permissions.Any(p => p.Ord == 31);
+    bool workOnOffers => _sharedAuthData.Permissions.Any(p => p.Ord == 32);
+    bool workOnClients => _sharedAuthData.Permissions.Any(p => p.Ord == 33);
+    #endregion
 }

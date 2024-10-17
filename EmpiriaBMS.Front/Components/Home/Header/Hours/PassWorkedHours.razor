@@ -29,7 +29,7 @@
     </h3>
 </div>
 
-<div style="max-height: 600px; width: auto; overflow-y: hidden; overflow-x: hidden;">
+<div style="width: auto; overflow-y: hidden; overflow-x: hidden;">
 
     <div class="mt-1 row gx-2 ms-1 me-1">
 
@@ -226,7 +226,7 @@
 
     </FluentStack>
 
-    <div class="mt-4">
+    <div class="mt-4 mb-2">
 
         @{
             var seeSetUserWithHighRolesTime = _selectedClient != null && _selectedClient.Id != 0
@@ -251,71 +251,75 @@
                     </HeadingTemplate>
                     <ChildContent>
 
-                        <!-- Set User With High Roles Time -->
-                        @if (seeSetUserWithHighRolesTime)
-                        {
-                            <div class="mb-1">
-                                <div class="row gx-3 m-2 w-96">
+                        <div class="p-2">
+                        
+                            <!-- Set User With High Roles Time -->
+                            @if (seeSetUserWithHighRolesTime)
+                            {
+                                <div class="mb-1">
+                                    <div class="row gx-3 m-2 w-96">
 
-                                    @if ((workOnClients || seeAdmin) && (_selectedClient != null && _selectedClient.Id != 0))
-                                    {
-                                        <div class="col-3 text-center">
-                                            <span class="mb-2 fs-5">Client</span>
-                                            <TimeInput MinTime="@TimeSpan.Zero"
-                                                       MaxTime="@RemainingTime"
-                                                       Time="_selectedClient.Time"
-                                                       OnPropertyChanged=@((time) => _onClientTimeChanged(_selectedClient, time)) />
-                                        </div>
-                                    }
+                                        @if ((workOnClients || seeAdmin) && (_selectedClient != null && _selectedClient.Id != 0))
+                                        {
+                                            <div class="col-3 text-center">
+                                                <span class="mb-2 fs-5">Client</span>
+                                                <TimeInput MinTime="@TimeSpan.Zero"
+                                                           MaxTime="@RemainingTime"
+                                                           Time="_selectedClient.Time"
+                                                           OnPropertyChanged=@((time) => _onClientTimeChanged(_selectedClient, time)) />
+                                            </div>
+                                        }
 
-                                    @if ((workOnOffers || seeAdmin) && (_selectedOffer != null && _selectedOffer.Id != 0))
-                                    {
-                                        <div class="col-3 text-center">
-                                            <span class="mb-2 fs-5">Offer</span>
-                                            <TimeInput MinTime="@TimeSpan.Zero"
-                                                       MaxTime="@RemainingTime"
-                                                       Time="_selectedOffer.Time"
-                                                       OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
-                                        </div>
-                                    }
+                                        @if ((workOnOffers || seeAdmin) && (_selectedOffer != null && _selectedOffer.Id != 0))
+                                        {
+                                            <div class="col-3 text-center">
+                                                <span class="mb-2 fs-5">Offer</span>
+                                                <TimeInput MinTime="@TimeSpan.Zero"
+                                                           MaxTime="@RemainingTime"
+                                                           Time="_selectedOffer.Time"
+                                                           OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
+                                            </div>
+                                        }
 
-                                    @if ((workOnProject || seeAdmin) && (_selectedProject != null && _selectedProject.Id != 0))
-                                    {
-                                        <div class="col-3 text-center">
-                                            <span class="mb-2 fs-5">Project</span>
-                                            <TimeInput MinTime="@TimeSpan.Zero"
-                                                       MaxTime="@RemainingTime"
-                                                       Time="_selectedProject.Time"
-                                                       OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
-                                        </div>
-                                    }
+                                        @if ((workOnProject || seeAdmin) && (_selectedProject != null && _selectedProject.Id != 0))
+                                        {
+                                            <div class="col-3 text-center">
+                                                <span class="mb-2 fs-5">Project</span>
+                                                <TimeInput MinTime="@TimeSpan.Zero"
+                                                           MaxTime="@RemainingTime"
+                                                           Time="_selectedProject.Time"
+                                                           OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
+                                            </div>
+                                        }
 
-                                    @if ((workOnProject || seeAdmin) && (_selectedDiscipline != null && _selectedDiscipline.Id != 0))
-                                    {
-                                        <div class="col-3 text-center">
-                                            <span class="mb-2 fs-5">Discipline</span>
-                                            <TimeInput MinTime="@TimeSpan.Zero"
-                                                       MaxTime="@RemainingTime"
-                                                       Time="_selectedDiscipline.Time"
-                                                       OnPropertyChanged=@((time) => _onDisciplineTimeChanged(_selectedDiscipline, time)) />
-                                        </div>
-                                    }
+                                        @if ((workOnProject || seeAdmin) && (_selectedDiscipline != null && _selectedDiscipline.Id != 0))
+                                        {
+                                            <div class="col-3 text-center">
+                                                <span class="mb-2 fs-5">Discipline</span>
+                                                <TimeInput MinTime="@TimeSpan.Zero"
+                                                           MaxTime="@RemainingTime"
+                                                           Time="_selectedDiscipline.Time"
+                                                           OnPropertyChanged=@((time) => _onDisciplineTimeChanged(_selectedDiscipline, time)) />
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                        }
+                            }
 
-                        <!-- Set User Extra Time -->
-                        @if (seeSetUserExtraTime)
-                        {
-                            <div class="mb-1">
-                                <SetUserTime LogedUserTimes="@_editLogedUserTimes"
-                                             RemainingTime="@RemainingTime"
-                                             MinTime="@minTime"
-                                             OnPersonalTimeChanged="@_onPersonalTimeChanged"
-                                             OnTrainingTimeChanged="@_onTrainingTimeChanged"
-                                             OnCorporateTimeChanged="@_onCorporateTimeChanged" />
-                            </div>
-                        }
+                            <!-- Set User Extra Time -->
+                            @if (seeSetUserExtraTime)
+                            {
+                                <div class="mb-1">
+                                    <SetUserTime LogedUserTimes="@_editLogedUserTimes"
+                                                 RemainingTime="@RemainingTime"
+                                                 MinTime="@minTime"
+                                                 OnPersonalTimeChanged="@_onPersonalTimeChanged"
+                                                 OnTrainingTimeChanged="@_onTrainingTimeChanged"
+                                                 OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+                                </div>
+                            }
+
+                        </div>
 
                     </ChildContent>
                 </FluentAccordionItem>
