@@ -227,9 +227,6 @@ public partial class HomeHeadComp : IDisposable
     {
         try
         {
-            _endWorkDialog.Hide();
-            _isEndWorkDialogOdepened = false;
-
             // Validate
             if (remainingTime.Hours > 0)
             {
@@ -237,9 +234,10 @@ public partial class HomeHeadComp : IDisposable
                 return;
             }
 
-            _loading = true;
+            _endWorkDialog.Hide();
+            _isEndWorkDialogOdepened = false;
 
-            await _editHoursCompoment.Save();
+            _loading = true;
 
             //_resetChangesDeliverables();
             //_resetChangesSupportiveWoprk();

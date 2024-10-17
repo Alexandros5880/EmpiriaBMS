@@ -16,9 +16,6 @@ public partial class PassWorkedHours
     public TimeSpan RemainingTime { get; set; }
 
     [Parameter]
-    public EventCallback OnEnd { get; set; }
-
-    [Parameter]
     public EventCallback<TimeSpan> OnTimeChanged { get; set; }
 
     private UserVM _loggedUser;
@@ -42,7 +39,16 @@ public partial class PassWorkedHours
         CorporateEventTime = TimeSpan.Zero,
     };
 
+    // With General Time
     private bool _hasChanged = false;
+
+    // Without General Time
+    private bool _hasChanges => _clientsChanged.Any() ||
+            _offersChanged.Any() ||
+            _projectsChanged.Any() ||
+            _disciplinesChanged.Any() ||
+            _deliverablesChanged.Any() ||
+            _supportiveWorkChanged.Any();
 
     #region Selections Lists
     private ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
@@ -553,29 +559,13 @@ public partial class PassWorkedHours
     }
     #endregion
 
-    public async Task Save()
+    public async Task UpdateHours()
     {
         if (!_hasChanged)
             return;
 
-        await _addHours();
-
-        // Refresh
-        RemainingTime = TimeSpan.Zero;
-        await Refresh(RemainingTime);
-
-        _startLoading = false;
-    }
-
-    private async Task _addHours()
-    {
         try
         {
-            // Validate
-            if (RemainingTime.Hours > 0)
-                // TODO: Display a message to update his hours.
-                return;
-
             // Update Db
             _startLoading = true;
 
@@ -587,7 +577,7 @@ public partial class PassWorkedHours
                 await _dataProvider.WorkingTime.ClientAddTime(userId, led.Id, led.Time);
             }
             _clientsChanged.Clear();
-            _selectedClient = null;
+            //_selectedClient = null;
 
             // Update Offers
             foreach (var offer in _offersChanged)
@@ -595,7 +585,7 @@ public partial class PassWorkedHours
                 await _dataProvider.WorkingTime.OfferAddTime(userId, offer.Id, offer.Time);
             }
             _offersChanged.Clear();
-            _selectedOffer = null;
+            //_selectedOffer = null;
 
             // Update Projects
             foreach (var project in _projectsChanged)
@@ -627,6 +617,7 @@ public partial class PassWorkedHours
                     await _dataProvider.Deliverables.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
                 await _dataProvider.WorkingTime.DeliverableAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
             }
+            _deliverablesChanged.Clear();
 
             // Update Others
             foreach (var other in _supportiveWorkChanged)
@@ -634,20 +625,36 @@ public partial class PassWorkedHours
                 //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
                 await _dataProvider.WorkingTime.SupportiveWorkAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
             }
+            _supportiveWorkChanged.Clear();
 
             // Update User Hours
             if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
+            {
                 await _dataProvider.WorkingTime.AddPersonalTime(userId, DateTime.Now, _editLogedUserTimes.PersonalTime);
+                _editLogedUserTimes.PersonalTime = TimeSpan.Zero;
+            }
+                
             if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
+            {
                 await _dataProvider.WorkingTime.AddTraningTime(userId, DateTime.Now, _editLogedUserTimes.TrainingTime);
+                _editLogedUserTimes.TrainingTime = TimeSpan.Zero;
+            }
+                
             if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
+            {
                 await _dataProvider.WorkingTime.AddCorporateEventTime(userId, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
+                _editLogedUserTimes.CorporateEventTime = TimeSpan.Zero;
+            }
 
-            await OnEnd.InvokeAsync();
+            // Refresh
+            //RemainingTime = TimeSpan.Zero;
+            await Refresh(RemainingTime);
         }
         catch (Exception ex)
         {
             Logger.LogError($"Exception EditUsersHours._addHours(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
+
+        _startLoading = false;
     }
 }

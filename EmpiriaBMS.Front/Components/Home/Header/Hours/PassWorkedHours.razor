@@ -44,7 +44,8 @@
                     <select class="form-select form-select-lg"
                             aria-label="Select Client"
                             value="@_selectedClient?.Id"
-                            @onchange="@(async (ChangeEventArgs e) => await OnSelectClient(Convert.ToInt32(e.Value)))">
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectClient(Convert.ToInt32(e.Value)))"
+                            disabled="@_hasChanges">
                         <option value="0" selected>Select Client</option>
                         @foreach (var client in _clients)
                         {
@@ -68,7 +69,8 @@
                     <select class="form-select form-select-lg"
                             aria-label="Select Offer"
                             value="@_selectedOffer?.Id"
-                            @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))"
+                            disabled="@_hasChanges">
                         <option value="0" selected>Select Offer</option>
                         @foreach (var offer in _offers)
                         {
@@ -92,7 +94,8 @@
                     <select class="form-select form-select-lg"
                             aria-label="Select Project"
                             value="@_selectedProject?.Id"
-                            @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))"
+                            disabled="@_hasChanges">
                         <option value="0" selected>Select Project</option>
                         @foreach (var project in _projects)
                         {
@@ -116,7 +119,8 @@
                     <select class="form-select form-select-lg"
                             aria-label="Select Discipline"
                             value="@_selectedDiscipline?.Id"
-                            @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
+                            @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))"
+                            disabled="@_hasChanges">
                         <option value="0" selected>Select Discipline</option>
                         @foreach (var discipline in _disciplines)
                         {
@@ -130,6 +134,16 @@
         }
 
     </div>
+
+    <!-- When has changes Displayes MSG -->
+    @if (_hasChanges)
+    {
+        <div class="ms-1 me-1">
+            <span class="text-warning">
+                Update changes to this point to enable selections!
+            </span>
+        </div>
+    }
 
     <FluentStack Orientation="Orientation.Horizontal" Class="mt-1">
 
@@ -226,8 +240,9 @@
 
     </FluentStack>
 
-    <div class="mt-4 mb-2">
-
+    <!-- General Time -->
+    <div class="mt-2 mb-2">
+        
         @{
             var seeSetUserWithHighRolesTime = _selectedClient != null && _selectedClient.Id != 0
                                                 || _selectedOffer != null && _selectedOffer.Id != 0
@@ -327,6 +342,17 @@
         }
 
     </div>
+
+    <FluentStack class="mt-2 mb-4"
+                 Orientation="Orientation.Horizontal"
+                 HorizontalAlignment="HorizontalAlignment.End">
+        <!-- Update Hours -->
+        <FluentButton Disabled="@(!_hasChanges)"
+                      OnClick="@(async () => await UpdateHours())"
+                      Appearance="Appearance.Accent">
+            Update Hours
+        </FluentButton>
+    </FluentStack>
 
 </div>
 
