@@ -14,6 +14,8 @@ public class DailyTime : Entity
 
     public bool IsEditByAdmin { get; set; }
 
+    // TODO: Think
+    #region Think
     public long? DailyUserId { get; set; }
     public User? DailyUser { get; set; }
 
@@ -25,6 +27,7 @@ public class DailyTime : Entity
 
     public long? CorporateUserId { get; set; }
     public User? CorporateUser { get; set; }
+    #endregion
 
     public long? DeliverableId { get; set; }
     public Deliverable? Deliverable { get; set; }
