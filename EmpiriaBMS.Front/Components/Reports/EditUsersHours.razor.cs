@@ -563,9 +563,14 @@ public partial class EditUsersHours
 
     private async Task OnSelectProject(long projectId)
     {
-        if (projectId == 0 || projectId == _selectedProject?.Id) return;
+        if (projectId == 0 || projectId == _selectedProject?.Id)
+            return;
 
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
+
+        if (project == null)
+            return;
+
         _deliverables.Clear();
         _supportiveWork.Clear();
         _disciplines.Clear();

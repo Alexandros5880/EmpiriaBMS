@@ -234,6 +234,20 @@ public partial class PassWorkedHours
     #endregion
 
     #region On Time/DateTime Changed
+    private TimeSpan _unusedTime = TimeSpan.Zero;
+    private async Task _onUnusedTimeChanged(TimeSpan newTimeSpan)
+    {
+        // previusTime, updatedTime, RemainingTime
+
+        var previusTime = _unusedTime;
+        var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
+
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
+        StateHasChanged();
+    }
+
     private async Task _onClientTimeChanged(ClientVM client, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
@@ -518,9 +532,14 @@ public partial class PassWorkedHours
 
     private async Task OnSelectProject(long projectId)
     {
-        if (projectId == 0 || projectId == _selectedProject?.Id) return;
+        if (projectId == 0 || projectId == _selectedProject?.Id)
+            return;
 
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
+
+        if (project == null)
+            return;
+
         _deliverables.Clear();
         _supportiveWork.Clear();
         _disciplines.Clear();
