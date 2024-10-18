@@ -158,6 +158,7 @@
                                 <th scope="col" class="sticky-header">Deliverable</th>
                                 <th scope="col" class="sticky-header">Time</th>
                                 <th scope="col" class="sticky-header">Declared Completion</th>
+                                <th scope="col" class="sticky-header">Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -189,6 +190,12 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <td class="align-middle">
+                                        <div class="input-group" style="width: 128px;">
+                                            <FluentDatePicker Value="@_deliverable.TimeDatePassed"
+                                                              Appearance="FluentInputAppearance.Outline" />
+                                        </div>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -211,6 +218,7 @@
                             <tr>
                                 <th scope="col" class="sticky-header">Other</th>
                                 <th scope="col" class="sticky-header">Time</th>
+                                <th scope="col" class="sticky-header">Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -225,6 +233,12 @@
                                                    MaxTime="@RemainingTime"
                                                    Time="@_supportiveWork.Time"
                                                    OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="input-group" style="width: 128px;">
+                                            <FluentDatePicker Value="@_supportiveWork.TimeDatePassed"
+                                                              Appearance="FluentInputAppearance.Outline" />
+                                        </div>
                                     </td>
                                 </tr>
                             }
@@ -264,6 +278,10 @@
                                        MaxTime="@RemainingTime"
                                        Time="_selectedClient.Time"
                                        OnPropertyChanged=@((time) => _onClientTimeChanged(_selectedClient, time)) />
+                            <div class="input-group" style="width: 150px;">
+                                <FluentDatePicker Value="@_selectedClient.TimeDatePassed"
+                                                  Appearance="FluentInputAppearance.Outline" />
+                            </div>
                         </div>
                     }
 
@@ -275,6 +293,10 @@
                                        MaxTime="@RemainingTime"
                                        Time="_selectedOffer.Time"
                                        OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
+                            <div class="input-group" style="width: 150px;">
+                                <FluentDatePicker Value="@_selectedOffer.TimeDatePassed"
+                                                  Appearance="FluentInputAppearance.Outline" />
+                            </div>
                         </div>
                     }
 
@@ -286,6 +308,10 @@
                                        MaxTime="@RemainingTime"
                                        Time="_selectedProject.Time"
                                        OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
+                            <div class="input-group" style="width: 150px;">
+                                <FluentDatePicker Value="@_selectedProject.TimeDatePassed"
+                                                  Appearance="FluentInputAppearance.Outline" />
+                            </div>
                         </div>
                     }
 
@@ -297,6 +323,10 @@
                                        MaxTime="@RemainingTime"
                                        Time="_selectedDiscipline.Time"
                                        OnPropertyChanged=@((time) => _onDisciplineTimeChanged(_selectedDiscipline, time)) />
+                            <div class="input-group" style="width: 150px;">
+                                <FluentDatePicker Value="@_selectedDiscipline.TimeDatePassed"
+                                                  Appearance="FluentInputAppearance.Outline" />
+                            </div>
                         </div>
                     }
                 </div>
@@ -318,7 +348,10 @@
                          MinTime="@minTime"
                          OnPersonalTimeChanged="@_onPersonalTimeChanged"
                          OnTrainingTimeChanged="@_onTrainingTimeChanged"
-                         OnCorporateTimeChanged="@_onCorporateTimeChanged" />
+                         OnCorporateTimeChanged="@_onCorporateTimeChanged"
+                         OnPersonalTimeDateChanged="@_onPersonalTimeDateChanged"
+                         OnTrainingTimeDateChanged="@_onTrainingTimeDateChanged"
+                         OnCorporateTimeDateChanged="@_onCorporateTimeDateChanged" />
         </div>
 
     </div>

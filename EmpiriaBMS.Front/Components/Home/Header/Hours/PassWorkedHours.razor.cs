@@ -18,6 +18,7 @@ public partial class PassWorkedHours
     [Parameter]
     public EventCallback<TimeSpan> OnTimeChanged { get; set; }
 
+    private DateTime _defaultDate = DateTime.UtcNow;
     private UserVM _loggedUser;
 
     #region Authorization Properties
@@ -66,6 +67,9 @@ public partial class PassWorkedHours
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DeliverableVM _selectedDeliverable = new DeliverableVM();
     private SupportiveWorkVM _selectedSupportiveWork = new SupportiveWorkVM();
+    private DateTime _personalTimeDate;
+    private DateTime _trainingTimeDate;
+    private DateTime _corporateTimeDate;
     #endregion
 
     #region Changed Records Lists
@@ -91,6 +95,9 @@ public partial class PassWorkedHours
         {
             RemainingTime = TimeSpan.Zero;
             _loggedUser = _sharedAuthData.LogedUser;
+            _personalTimeDate = _defaultDate;
+            _trainingTimeDate = _defaultDate;
+            _corporateTimeDate = _defaultDate;
             await Refresh();
         }
     }
@@ -226,7 +233,7 @@ public partial class PassWorkedHours
     }
     #endregion
 
-    #region On Time Changed
+    #region On Time/DateTime Changed
     private async Task _onClientTimeChanged(ClientVM client, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
@@ -446,6 +453,21 @@ public partial class PassWorkedHours
 
         StateHasChanged();
     }
+
+    private void _onPersonalTimeDateChanged(DateTime date)
+    {
+        _personalTimeDate = date;
+    }
+
+    private void _onTrainingTimeDateChanged(DateTime date)
+    {
+        _trainingTimeDate = date;
+    }
+
+    private void _onCorporateTimeDateChanged(DateTime date)
+    {
+        _corporateTimeDate = date;
+    }
     #endregion
 
     #region When Records Selected
@@ -572,9 +594,9 @@ public partial class PassWorkedHours
             var userId = _sharedAuthData.LogedUser.Id;
 
             // Update Clients
-            foreach (var led in _clientsChanged)
+            foreach (var client in _clientsChanged)
             {
-                await _dataProvider.WorkingTime.ClientAddTime(userId, led.Id, led.Time);
+                await _dataProvider.WorkingTime.ClientAddTime(userId, client.Id, client.Time, client.TimeDatePassed);
             }
             _clientsChanged.Clear();
             //_selectedClient = null;
@@ -582,7 +604,7 @@ public partial class PassWorkedHours
             // Update Offers
             foreach (var offer in _offersChanged)
             {
-                await _dataProvider.WorkingTime.OfferAddTime(userId, offer.Id, offer.Time);
+                await _dataProvider.WorkingTime.OfferAddTime(userId, offer.Id, offer.Time, offer.TimeDatePassed);
             }
             _offersChanged.Clear();
             //_selectedOffer = null;
@@ -590,7 +612,7 @@ public partial class PassWorkedHours
             // Update Projects
             foreach (var project in _projectsChanged)
             {
-                await _dataProvider.WorkingTime.ProjectAddTime(userId, project.Id, project.Time);
+                await _dataProvider.WorkingTime.ProjectAddTime(userId, project.Id, project.Time, project.TimeDatePassed);
             }
             _projectsChanged.Clear();
             //_selectedProject = null;
@@ -598,7 +620,7 @@ public partial class PassWorkedHours
             // Update Discipline
             foreach (var discipline in _disciplinesChanged)
             {
-                await _dataProvider.WorkingTime.DisciplineAddTime(userId, _selectedProject.Id, discipline.Id, discipline.Time);
+                await _dataProvider.WorkingTime.DisciplineAddTime(userId, _selectedProject.Id, discipline.Id, discipline.Time, discipline.TimeDatePassed);
             }
             _disciplinesChanged.Clear();
             //_selectedDiscipline = null;
@@ -615,7 +637,7 @@ public partial class PassWorkedHours
                 }
                 else
                     await _dataProvider.Deliverables.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-                await _dataProvider.WorkingTime.DeliverableAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+                await _dataProvider.WorkingTime.DeliverableAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, draw.TimeDatePassed);
             }
             _deliverablesChanged.Clear();
 
@@ -623,26 +645,26 @@ public partial class PassWorkedHours
             foreach (var other in _supportiveWorkChanged)
             {
                 //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-                await _dataProvider.WorkingTime.SupportiveWorkAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+                await _dataProvider.WorkingTime.SupportiveWorkAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, other.TimeDatePassed);
             }
             _supportiveWorkChanged.Clear();
 
             // Update User Hours
             if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
             {
-                await _dataProvider.WorkingTime.AddPersonalTime(userId, DateTime.Now, _editLogedUserTimes.PersonalTime);
+                await _dataProvider.WorkingTime.AddPersonalTime(userId, _personalTimeDate, _editLogedUserTimes.PersonalTime);
                 _editLogedUserTimes.PersonalTime = TimeSpan.Zero;
             }
                 
             if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
             {
-                await _dataProvider.WorkingTime.AddTraningTime(userId, DateTime.Now, _editLogedUserTimes.TrainingTime);
+                await _dataProvider.WorkingTime.AddTraningTime(userId, _trainingTimeDate, _editLogedUserTimes.TrainingTime);
                 _editLogedUserTimes.TrainingTime = TimeSpan.Zero;
             }
                 
             if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
             {
-                await _dataProvider.WorkingTime.AddCorporateEventTime(userId, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
+                await _dataProvider.WorkingTime.AddCorporateEventTime(userId, _corporateTimeDate, _editLogedUserTimes.CorporateEventTime);
                 _editLogedUserTimes.CorporateEventTime = TimeSpan.Zero;
             }
 

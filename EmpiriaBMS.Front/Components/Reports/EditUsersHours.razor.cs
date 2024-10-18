@@ -1,6 +1,7 @@
 ﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using System.Collections.ObjectModel;
 
@@ -59,6 +60,9 @@ public partial class EditUsersHours
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DeliverableVM _selectedDeliverable = new DeliverableVM();
     private SupportiveWorkVM _selectedSupportiveWork = new SupportiveWorkVM();
+    private DateTime _personalTimeDate;
+    private DateTime _trainingTimeDate;
+    private DateTime _corporateTimeDate;
     #endregion
 
     #region Changed Records Lists
@@ -249,7 +253,7 @@ public partial class EditUsersHours
     }
     #endregion
 
-    #region On Time Changed
+    #region On Time/DateTime Changed
     private async Task _onClientTimeChanged(ClientVM client, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
@@ -469,6 +473,20 @@ public partial class EditUsersHours
 
         StateHasChanged();
     }
+    private void _onPersonalTimeDateChanged(DateTime date)
+    {
+        _personalTimeDate = date;
+    }
+
+    private void _onTrainingTimeDateChanged(DateTime date)
+    {
+        _trainingTimeDate = date;
+    }
+
+    private void _onCorporateTimeDateChanged(DateTime date)
+    {
+        _corporateTimeDate = date;
+    }
     #endregion
 
     #region When Records Selected
@@ -633,9 +651,9 @@ public partial class EditUsersHours
 
 
             // Update Clients
-            foreach (var led in _clientsChanged)
+            foreach (var client in _clientsChanged)
             {
-                await _dataProvider.WorkingTime.ClientAddTime(userId, led.Id, led.Time);
+                await _dataProvider.WorkingTime.ClientAddTime(userId, client.Id, client.Time, client.TimeDatePassed);
             }
             _clientsChanged.Clear();
             _selectedClient = null;
@@ -643,7 +661,7 @@ public partial class EditUsersHours
             // Update Offers
             foreach (var offer in _offersChanged)
             {
-                await _dataProvider.WorkingTime.OfferAddTime(userId, offer.Id, offer.Time);
+                await _dataProvider.WorkingTime.OfferAddTime(userId, offer.Id, offer.Time, offer.TimeDatePassed);
             }
             _offersChanged.Clear();
             _selectedOffer = null;
@@ -651,7 +669,7 @@ public partial class EditUsersHours
             // Update Projects
             foreach (var project in _projectsChanged)
             {
-                await _dataProvider.WorkingTime.ProjectAddTime(userId, project.Id, project.Time);
+                await _dataProvider.WorkingTime.ProjectAddTime(userId, project.Id, project.Time, project.TimeDatePassed);
             }
             _projectsChanged.Clear();
             //_selectedProject = null;
@@ -659,7 +677,7 @@ public partial class EditUsersHours
             // Update Discipline
             foreach (var discipline in _disciplinesChanged)
             {
-                await _dataProvider.WorkingTime.DisciplineAddTime(userId, _selectedProject.Id, discipline.Id, discipline.Time);
+                await _dataProvider.WorkingTime.DisciplineAddTime(userId, _selectedProject.Id, discipline.Id, discipline.Time, discipline.TimeDatePassed);
             }
             _disciplinesChanged.Clear();
             //_selectedDiscipline = null;
@@ -676,14 +694,14 @@ public partial class EditUsersHours
                 }
                 else
                     await _dataProvider.Deliverables.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-                await _dataProvider.WorkingTime.DeliverableAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+                await _dataProvider.WorkingTime.DeliverableAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, draw.TimeDatePassed);
             }
 
             // Update Others
             foreach (var other in _supportiveWorkChanged)
             {
                 //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-                await _dataProvider.WorkingTime.SupportiveWorkAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+                await _dataProvider.WorkingTime.SupportiveWorkAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, other.TimeDatePassed);
             }
 
             // Update User Hours
