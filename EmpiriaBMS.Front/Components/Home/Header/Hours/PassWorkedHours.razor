@@ -17,7 +17,7 @@
 
     <h3>
         My Time Since Start: <b class="text-warning">
-            @if (RemainingTime.TotalDays > 0)
+            @if (RemainingTime.Days > 0)
             {
                 @RemainingTime.ToString(@"d' days, 'hh\:mm")
             }
