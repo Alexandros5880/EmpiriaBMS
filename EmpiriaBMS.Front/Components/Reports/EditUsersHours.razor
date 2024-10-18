@@ -141,7 +141,7 @@
                                         </td>
                                         <td class="align-middle nowrap-td">
                                             <TimeInput MinTime="@minTime"
-                                                       MaxTime="@maxTime"
+                                                       MaxTime="@RemainingTime"
                                                        Time="_deliverable.Time"
                                                        OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
                                         </td>
@@ -199,7 +199,7 @@
                                         </td>
                                         <td class="align-middle nowrap-td">
                                             <TimeInput MinTime="@minTime"
-                                                       MaxTime="@maxTime"
+                                                       MaxTime="@RemainingTime"
                                                        Time="@_supportiveWork.Time"
                                                        OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
                                         </td>

@@ -286,13 +286,14 @@
                          RemainingTime="@remainingTime"
                          OnTimeChanged="@_onTimeTimeChanged" />
 
-        <div class="row mt-1">
+        <div class="d-flex justify-content-between mt-1">
             <FluentButton Disabled="@_isEndWorkAcceptDialogDisabled"
-                          class="col-6"
-                          OnClick="@(async () => await _endWorkDialogAccept())">
+                          OnClick="@(async () => await _endWorkDialogAccept())"
+                          Style="width: 200px;">
                 Ok
             </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => _endWorkDialogCansel())">
+            <FluentButton OnClick="@(() => _endWorkDialogCansel())"
+                          Style="width: 200px;">
                 Cancel
             </FluentButton>
         </div>
