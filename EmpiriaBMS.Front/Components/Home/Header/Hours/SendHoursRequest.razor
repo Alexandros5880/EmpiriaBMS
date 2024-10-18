@@ -23,19 +23,19 @@
 
     <div class="mt-1 row gx-2 ms-1 me-1">
 
-        <!-- Select Client -->
+        <!-- Client -->
         @if (workOnClients || seeAdmin)
         {
             <div class="col selections">
                 <div class="text-center">
-                    <h5>Select Client</h5>
+                    <h5>Client</h5>
                 </div>
                 <div class="select-wrapper form-column form-column-field">
                     <select class="form-select form-select-lg"
-                            aria-label="Select Client"
+                            aria-label="Client"
                             value="@_selectedClient?.Id"
                             @onchange="@(async (ChangeEventArgs e) => await OnSelectClient(Convert.ToInt32(e.Value)))">
-                        <option value="0" selected>Select Client</option>
+                        <option value="0" selected>Client</option>
                         @foreach (var client in _clients)
                         {
                             <option value="@client.Id">
@@ -47,19 +47,19 @@
             </div>
         }
 
-        <!-- Select Offer -->
+        <!-- Offer -->
         @if (workOnOffers || seeAdmin && (_selectedClient != null && _selectedClient.Id != 0))
         {
             <div class="col selections">
                 <div class="text-center">
-                    <h5>Select Offer</h5>
+                    <h5>Offer</h5>
                 </div>
                 <div class="select-wrapper form-column form-column-field">
                     <select class="form-select form-select-lg"
-                            aria-label="Select Offer"
+                            aria-label="Offer"
                             value="@_selectedOffer?.Id"
                             @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
-                        <option value="0" selected>Select Offer</option>
+                        <option value="0" selected>Offer</option>
                         @foreach (var offer in _offers)
                         {
                             <option value="@offer.Id">
@@ -71,17 +71,17 @@
             </div>
         }
 
-        <!-- Select Project -->
+        <!-- Project -->
         <div class="col selections">
             <div class="text-center">
-                <h5>Select Project</h5>
+                <h5>Project</h5>
             </div>
             <div class="select-wrapper form-column form-column-field">
                 <select class="form-select form-select-lg"
-                        aria-label="Select Project"
+                        aria-label="Project"
                         value="@_selectedProject?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
-                    <option value="0" selected>Select Project</option>
+                    <option value="0" selected>Project</option>
                     @foreach (var project in _projects)
                     {
                         <option value="@project.Id">
@@ -95,14 +95,14 @@
         <!-- Discipline -->
         <div class="col selections">
             <div class="text-center">
-                <h5>Select Discipline</h5>
+                <h5>Discipline</h5>
             </div>
             <div class="select-wrapper form-column form-column-field">
                 <select class="form-select form-select-lg"
-                        aria-label="Select Discipline"
+                        aria-label="Discipline"
                         value="@_selectedDiscipline?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
-                    <option value="0" selected>Select Discipline</option>
+                    <option value="0" selected>Discipline</option>
                     @foreach (var discipline in _disciplines)
                     {
                         <option value="@discipline.Id">
