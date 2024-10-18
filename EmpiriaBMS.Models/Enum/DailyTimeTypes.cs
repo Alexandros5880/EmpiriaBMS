@@ -4,24 +4,24 @@ namespace EmpiriaBMS.Models.Enum;
 
 public enum DailyTimeTypes
 {
-    [Display(Name = "Daily Time")]
-    DailyUser = 0,
+    [Display(Name = "General on User")]
+    GeneralUserTime = 0,
     [Display(Name = "Personal Time")]
-    PersonalUser = 1,
+    PersonalTime = 1,
     [Display(Name = "Training Time")]
-    TrainingUser = 2,
+    TrainingTime = 2,
     [Display(Name = "Corporate Time")]
-    CorporateUser = 3,
-    [Display(Name = "Time on Lead")]
-    Lead = 4,
+    CorporateTime = 3,
+    [Display(Name = "Time on Client")]
+    ClientTime = 4,
     [Display(Name = "Time on Offer")]
-    Offer = 5,
+    OfferTime = 5,
     [Display(Name = "Time on Project")]
-    Project = 6,
+    ProjectTime = 6,
     [Display(Name = "Time on Discipline")]
-    Discipline = 7,
+    DisciplineTime = 7,
     [Display(Name = "Time on Deliverable")]
-    Deliverable = 8,
+    DeliverableTime = 8,
     [Display(Name = "Time on SupportiveWork")]
-    SupportiveWork = 9
+    SupportiveWorkTime = 9
 }

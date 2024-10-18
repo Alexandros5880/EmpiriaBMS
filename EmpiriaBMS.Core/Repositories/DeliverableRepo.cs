@@ -178,15 +178,17 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
         }
     }
 
+    #region Get Men Hours
     public async Task<long> GetMenHoursAsync(long drwaingId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<DailyTime>()
-                                 .Where(r => !r.IsDeleted)
-                                 .Where(mh => mh.DeliverableId == drwaingId)
-                                 .Select(mh => mh.Hours)
-                                 .SumAsync();
+            var data = await _context.Set<DailyTime>()
+                               .Where(r => !r.IsDeleted)
+                               .Where(mh => mh.DeliverableId == drwaingId)
+                               .ToListAsync();
+
+            return data.Select(mh => Convert.ToInt64(mh.GetTotalHours())).Sum();
         }
     }
 
@@ -194,13 +196,15 @@ public class DeliverableRepo : Repository<DeliverableDto, Deliverable>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return _context.Set<DailyTime>()
-                           .Where(r => !r.IsDeleted)
-                           .Where(mh => mh.DeliverableId == drwaingId)
-                           .Select(mh => mh.Hours)
-                           .Sum();
+            var data = _context.Set<DailyTime>()
+                               .Where(r => !r.IsDeleted)
+                               .Where(mh => mh.DeliverableId == drwaingId)
+                               .ToList();
+
+            return data.Select(mh => Convert.ToInt64(mh.GetTotalHours())).Sum();
         }
     }
+    #endregion
 
     public async Task UpdateCompleted(long projectId, long disciplineId, long drawId, float completed)
     {

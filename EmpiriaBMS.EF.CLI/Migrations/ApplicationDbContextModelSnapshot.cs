@@ -217,14 +217,8 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<long?>("ClientId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CorporateUserId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<long?>("DailyUserId")
-                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -259,9 +253,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<long?>("OfferId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("PersonalUserId")
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("ProjectId")
                         .HasColumnType("bigint");
 
@@ -274,16 +265,15 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                     b.Property<long?>("SupportiveWorkId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("TrainingUserId")
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
-
-                    b.HasIndex("CorporateUserId");
-
-                    b.HasIndex("DailyUserId");
 
                     b.HasIndex("DeliverableId");
 
@@ -291,13 +281,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.HasIndex("OfferId");
 
-                    b.HasIndex("PersonalUserId");
-
                     b.HasIndex("ProjectId");
 
                     b.HasIndex("SupportiveWorkId");
 
-                    b.HasIndex("TrainingUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("DailyTime");
                 });
@@ -1546,16 +1534,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.ClientNoAction);
 
-                    b.HasOne("EmpiriaBMS.Models.Models.User", "CorporateUser")
-                        .WithMany("CorporateEventTime")
-                        .HasForeignKey("CorporateUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("EmpiriaBMS.Models.Models.User", "DailyUser")
-                        .WithMany("DailyTime")
-                        .HasForeignKey("DailyUserId")
-                        .OnDelete(DeleteBehavior.ClientNoAction);
-
                     b.HasOne("EmpiriaBMS.Models.Models.Deliverable", "Deliverable")
                         .WithMany("DailyTime")
                         .HasForeignKey("DeliverableId")
@@ -1571,11 +1549,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasForeignKey("OfferId")
                         .OnDelete(DeleteBehavior.ClientNoAction);
 
-                    b.HasOne("EmpiriaBMS.Models.Models.User", "PersonalUser")
-                        .WithMany("PersonalTime")
-                        .HasForeignKey("PersonalUserId")
-                        .OnDelete(DeleteBehavior.ClientNoAction);
-
                     b.HasOne("EmpiriaBMS.Models.Models.Project", "Project")
                         .WithMany("DailyTime")
                         .HasForeignKey("ProjectId")
@@ -1586,16 +1559,12 @@ namespace EmpiriaBMS.EF.CLI.Migrations
                         .HasForeignKey("SupportiveWorkId")
                         .OnDelete(DeleteBehavior.ClientNoAction);
 
-                    b.HasOne("EmpiriaBMS.Models.Models.User", "TrainingUser")
-                        .WithMany("TrainingTime")
-                        .HasForeignKey("TrainingUserId")
+                    b.HasOne("EmpiriaBMS.Models.Models.User", "User")
+                        .WithMany("DailyTime")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.Navigation("Client");
-
-                    b.Navigation("CorporateUser");
-
-                    b.Navigation("DailyUser");
 
                     b.Navigation("Deliverable");
 
@@ -1603,13 +1572,11 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.Navigation("Offer");
 
-                    b.Navigation("PersonalUser");
-
                     b.Navigation("Project");
 
                     b.Navigation("SupportiveWork");
 
-                    b.Navigation("TrainingUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.Deliverable", b =>
@@ -2175,8 +2142,6 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
             modelBuilder.Entity("EmpiriaBMS.Models.Models.User", b =>
                 {
-                    b.Navigation("CorporateEventTime");
-
                     b.Navigation("DailyTime");
 
                     b.Navigation("DeliverablesEmployees");
@@ -2191,11 +2156,7 @@ namespace EmpiriaBMS.EF.CLI.Migrations
 
                     b.Navigation("PMProjects");
 
-                    b.Navigation("PersonalTime");
-
                     b.Navigation("SupportiveWorksEmployees");
-
-                    b.Navigation("TrainingTime");
 
                     b.Navigation("UserRoles");
                 });

@@ -1,24 +1,19 @@
 ﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
 using EmpiriaBMS.Front.ViewModel.Components;
+using EmpiriaBMS.Models.Models;
 using Microsoft.AspNetCore.Components;
 using System.Collections.ObjectModel;
 
-namespace EmpiriaBMS.Front.Components.Home.Header.Hours;
+namespace EmpiriaBMS.Front.Components.Reports;
 
 public partial class EditUsersHours
 {
-    [Parameter]
-    public bool IsFromDashboard { get; set; } = false;
-
     [Parameter]
     public bool DisplayTitle { get; set; } = true;
 
     [Parameter]
     public TimeSpan RemainingTime { get; set; }
-
-    [Parameter]
-    public UserVM User { get; set; } = null;
 
     [Parameter]
     public EventCallback OnEnd { get; set; }
@@ -65,6 +60,9 @@ public partial class EditUsersHours
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DeliverableVM _selectedDeliverable = new DeliverableVM();
     private SupportiveWorkVM _selectedSupportiveWork = new SupportiveWorkVM();
+    private DateTime _personalTimeDate;
+    private DateTime _trainingTimeDate;
+    private DateTime _corporateTimeDate;
     #endregion
 
     #region Changed Records Lists
@@ -88,13 +86,8 @@ public partial class EditUsersHours
 
         if (firstRender)
         {
-            RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
+            RemainingTime = new TimeSpan(300, 0, 0);
             await Refresh();
-
-            if (User != null)
-            {
-                await OnSelectUser(User.Id);
-            }
         }
     }
 
@@ -111,8 +104,7 @@ public partial class EditUsersHours
         _deliverables.Clear();
         _disciplines.Clear();
 
-        if (!IsFromDashboard)
-            await _getUsers();
+        await _getUsers();
 
         if (workOnClients || seeAdmin)
             await _getClients();
@@ -221,7 +213,7 @@ public partial class EditUsersHours
         _deliverables.Clear();
         _supportiveWork.Clear();
 
-        var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+        var userId = _selectedUser?.Id ?? 0;
 
         try
         {
@@ -261,7 +253,7 @@ public partial class EditUsersHours
     }
     #endregion
 
-    #region On Time Changed
+    #region On Time/DateTime Changed
     private async Task _onClientTimeChanged(ClientVM client, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime, RemainingTime
@@ -481,6 +473,20 @@ public partial class EditUsersHours
 
         StateHasChanged();
     }
+    private void _onPersonalTimeDateChanged(DateTime date)
+    {
+        _personalTimeDate = date;
+    }
+
+    private void _onTrainingTimeDateChanged(DateTime date)
+    {
+        _trainingTimeDate = date;
+    }
+
+    private void _onCorporateTimeDateChanged(DateTime date)
+    {
+        _corporateTimeDate = date;
+    }
     #endregion
 
     #region When Records Selected
@@ -557,9 +563,14 @@ public partial class EditUsersHours
 
     private async Task OnSelectProject(long projectId)
     {
-        if (projectId == 0 || projectId == _selectedProject?.Id) return;
+        if (projectId == 0 || projectId == _selectedProject?.Id)
+            return;
 
         var project = _projects.FirstOrDefault(p => p.Id == projectId);
+
+        if (project == null)
+            return;
+
         _deliverables.Clear();
         _supportiveWork.Clear();
         _disciplines.Clear();
@@ -568,7 +579,7 @@ public partial class EditUsersHours
         _selectedDeliverable = null;
         _selectedSupportiveWork = null;
 
-        var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+        var userId = _selectedUser?.Id ?? 0;
 
         var disciplines = await _dataProvider.Projects.GetDisciplines(project.Id, userId, getAllDisciplines);
 
@@ -587,7 +598,7 @@ public partial class EditUsersHours
 
         _selectedDiscipline = _disciplines.FirstOrDefault(d => d.Id == disciplineId);
 
-        var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+        var userId = _selectedUser?.Id ?? 0;
 
         var draws = await _dataProvider.Disciplines.GetDraws(_selectedDiscipline.Id, userId, getAllDeliverables);
         var others = await _dataProvider.Disciplines.GetOthers(_selectedDiscipline.Id, userId, true);
@@ -628,13 +639,8 @@ public partial class EditUsersHours
         await _addHours();
 
         // Refresh
-        RemainingTime = IsFromDashboard ? TimeSpan.Zero : new TimeSpan(300, 0, 0);
+        RemainingTime = new TimeSpan(300, 0, 0);
         await Refresh(RemainingTime);
-
-        if (User != null)
-        {
-            await OnSelectUser(User.Id);
-        }
 
         _startLoading = false;
     }
@@ -643,24 +649,16 @@ public partial class EditUsersHours
     {
         try
         {
-            // Validate
-            if (IsFromDashboard)
-            {
-                if (RemainingTime.Hours > 0)
-                    // TODO: Display a message to update his hours.
-                    return;
-            }
-
             // Update Db
             _startLoading = true;
 
-            var userId = IsFromDashboard ? _sharedAuthData.LogedUser.Id : _selectedUser?.Id ?? 0;
+            var userId = _selectedUser?.Id ?? 0;
 
 
             // Update Clients
-            foreach (var led in _clientsChanged)
+            foreach (var client in _clientsChanged)
             {
-                await _dataProvider.WorkingTime.ClientAddTime(userId, led.Id, led.Time);
+                await _dataProvider.WorkingTime.ClientAddTime(userId, client.Id, client.Time, client.TimeDatePassed);
             }
             _clientsChanged.Clear();
             _selectedClient = null;
@@ -668,7 +666,7 @@ public partial class EditUsersHours
             // Update Offers
             foreach (var offer in _offersChanged)
             {
-                await _dataProvider.WorkingTime.OfferAddTime(userId, offer.Id, offer.Time);
+                await _dataProvider.WorkingTime.OfferAddTime(userId, offer.Id, offer.Time, offer.TimeDatePassed);
             }
             _offersChanged.Clear();
             _selectedOffer = null;
@@ -676,7 +674,7 @@ public partial class EditUsersHours
             // Update Projects
             foreach (var project in _projectsChanged)
             {
-                await _dataProvider.WorkingTime.ProjectAddTime(userId, project.Id, project.Time);
+                await _dataProvider.WorkingTime.ProjectAddTime(userId, project.Id, project.Time, project.TimeDatePassed);
             }
             _projectsChanged.Clear();
             //_selectedProject = null;
@@ -684,7 +682,7 @@ public partial class EditUsersHours
             // Update Discipline
             foreach (var discipline in _disciplinesChanged)
             {
-                await _dataProvider.WorkingTime.DisciplineAddTime(userId, _selectedProject.Id, discipline.Id, discipline.Time);
+                await _dataProvider.WorkingTime.DisciplineAddTime(userId, _selectedProject.Id, discipline.Id, discipline.Time, discipline.TimeDatePassed);
             }
             _disciplinesChanged.Clear();
             //_selectedDiscipline = null;
@@ -701,23 +699,23 @@ public partial class EditUsersHours
                 }
                 else
                     await _dataProvider.Deliverables.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
-                await _dataProvider.WorkingTime.DeliverableAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time);
+                await _dataProvider.WorkingTime.DeliverableAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, draw.TimeDatePassed);
             }
 
             // Update Others
             foreach (var other in _supportiveWorkChanged)
             {
                 //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
-                await _dataProvider.WorkingTime.SupportiveWorkAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time);
+                await _dataProvider.WorkingTime.SupportiveWorkAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, other.TimeDatePassed);
             }
 
             // Update User Hours
             if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddPersonalTime(userId, DateTime.Now, _editLogedUserTimes.PersonalTime);
+                await _dataProvider.WorkingTime.AddPersonalTime(userId, _personalTimeDate, _editLogedUserTimes.PersonalTime);
             if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddTraningTime(userId, DateTime.Now, _editLogedUserTimes.TrainingTime);
+                await _dataProvider.WorkingTime.AddTraningTime(userId, _trainingTimeDate, _editLogedUserTimes.TrainingTime);
             if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddCorporateEventTime(userId, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
+                await _dataProvider.WorkingTime.AddCorporateEventTime(userId, _corporateTimeDate, _editLogedUserTimes.CorporateEventTime);
 
             await OnEnd.InvokeAsync();
         }

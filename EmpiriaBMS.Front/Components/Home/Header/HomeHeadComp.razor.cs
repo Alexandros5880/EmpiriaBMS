@@ -108,7 +108,7 @@ public partial class HomeHeadComp : IDisposable
     TimeSpan elapsedTime = TimeSpan.Zero;
     TimeSpan timePaused = TimeSpan.Zero;
     TimeSpan remainingTime = TimeSpan.Zero;
-    private EditUsersHours _editHoursCompoment;
+    private PassWorkedHours _editHoursCompoment;
     
     private void UpdateElapsedTime()
     {
@@ -215,7 +215,7 @@ public partial class HomeHeadComp : IDisposable
         _endWorkDialog.Show();
         _isEndWorkDialogOdepened = true;
 
-        IsWorkingModeChanged.InvokeAsync(IsWorkingMode);
+        await IsWorkingModeChanged.InvokeAsync(IsWorkingMode);
     }
 
     private void _onTimeTimeChanged(TimeSpan timeSpan)
@@ -228,9 +228,6 @@ public partial class HomeHeadComp : IDisposable
     {
         try
         {
-            _endWorkDialog.Hide();
-            _isEndWorkDialogOdepened = false;
-
             // Validate
             if (remainingTime.Hours > 0)
             {
@@ -238,14 +235,17 @@ public partial class HomeHeadComp : IDisposable
                 return;
             }
 
-            _loading = true;
+            _endWorkDialog.Hide();
+            _isEndWorkDialogOdepened = false;
 
-            await _editHoursCompoment.Save();
+            _loading = true;
 
             //_resetChangesDeliverables();
             //_resetChangesSupportiveWoprk();
 
             //await _getRecordsProjects(_selectedOffer?.Id ?? 0);
+
+            await _editHoursCompoment.UpdateHours();
 
             // Clear Timer From this User
             TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());

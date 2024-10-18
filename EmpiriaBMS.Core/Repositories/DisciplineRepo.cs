@@ -369,15 +369,17 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
         }
     }
 
+    #region Get Men Hours
     public async Task<long> GetMenHoursAsync(long disciplineId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<DailyTime>()
-                                 .Where(r => !r.IsDeleted)
-                                 .Where(mh => mh.DisciplineId == disciplineId)
-                                 .Select(mh => mh.Hours)
-                                 .SumAsync();
+            var data = await _context.Set<DailyTime>()
+                               .Where(r => !r.IsDeleted)
+                               .Where(mh => mh.DisciplineId == disciplineId)
+                               .ToListAsync();
+
+            return data.Select(mh => Convert.ToInt64(mh.GetTotalHours())).Sum();
         }
     }
 
@@ -385,13 +387,15 @@ public class DisciplineRepo : Repository<DisciplineDto, Discipline>, IDisposable
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return _context.Set<DailyTime>()
-                           .Where(r => !r.IsDeleted)
-                           .Where(mh => mh.DisciplineId == disciplineId)
-                           .Select(mh => mh.Hours)
-                           .Sum();
+            var data = _context.Set<DailyTime>()
+                               .Where(r => !r.IsDeleted)
+                               .Where(mh => mh.DisciplineId == disciplineId)
+                               .ToList();
+
+            return data.Select(mh => Convert.ToInt64(mh.GetTotalHours())).Sum();
         }
     }
+    #endregion
 
     public async Task<ICollection<UserDto>> GetEngineers(long disciplineId)
     {

@@ -1,20 +1,25 @@
 ﻿using EmpiriaBMS.Core.Dtos;
 using EmpiriaBMS.Core.ReturnModels;
+using EmpiriaBMS.Front.Services;
 using EmpiriaBMS.Front.ViewModel.Components;
 using Microsoft.AspNetCore.Components;
 using System.Collections.ObjectModel;
 
 namespace EmpiriaBMS.Front.Components.Home.Header.Hours;
 
-public partial class SendHoursRequest
+public partial class PassWorkedHours
 {
     [Parameter]
-    public UserVM User { get; set; } = null;
+    public bool DisplayTitle { get; set; } = true;
 
     [Parameter]
-    public EventCallback OnEnd { get; set; }
+    public TimeSpan RemainingTime { get; set; }
+
+    [Parameter]
+    public EventCallback<TimeSpan> OnTimeChanged { get; set; }
 
     private DateTime _defaultDate = DateTime.UtcNow;
+    private UserVM _loggedUser;
 
     #region Authorization Properties
     bool seeAdmin => _sharedAuthData.Permissions.Any(p => p.Ord == 7);
@@ -35,9 +40,16 @@ public partial class SendHoursRequest
         CorporateEventTime = TimeSpan.Zero,
     };
 
+    // With General Time
     private bool _hasChanged = false;
 
-    private string _description { get; set; }
+    // Without General Time
+    private bool _hasChanges => _clientsChanged.Any() ||
+            _offersChanged.Any() ||
+            _projectsChanged.Any() ||
+            _disciplinesChanged.Any() ||
+            _deliverablesChanged.Any() ||
+            _supportiveWorkChanged.Any();
 
     #region Selections Lists
     private ObservableCollection<ClientVM> _clients = new ObservableCollection<ClientVM>();
@@ -81,13 +93,19 @@ public partial class SendHoursRequest
 
         if (firstRender)
         {
+            RemainingTime = TimeSpan.Zero;
+            _loggedUser = _sharedAuthData.LogedUser;
+            _personalTimeDate = _defaultDate;
+            _trainingTimeDate = _defaultDate;
+            _corporateTimeDate = _defaultDate;
             await Refresh();
         }
     }
 
     public async Task Refresh(TimeSpan? timespan = null)
     {
-        _description = string.Empty;
+        if (timespan != null)
+            RemainingTime = (TimeSpan)timespan;
 
         _clients.Clear();
         _offers.Clear();
@@ -216,12 +234,27 @@ public partial class SendHoursRequest
     #endregion
 
     #region On Time/DateTime Changed
-    private void _onClientTimeChanged(ClientVM client, TimeSpan newTimeSpan)
+    private TimeSpan _unusedTime = TimeSpan.Zero;
+    private async Task _onUnusedTimeChanged(TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime
+        // previusTime, updatedTime, RemainingTime
+
+        var previusTime = _unusedTime;
+        var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
+
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
+        StateHasChanged();
+    }
+
+    private async Task _onClientTimeChanged(ClientVM client, TimeSpan newTimeSpan)
+    {
+        // previusTime, updatedTime, RemainingTime
 
         var previusTime = client.Time;
         var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
 
         client.Time = newTimeSpan;
 
@@ -235,15 +268,18 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onOfferTimeChanged(OfferVM offer, TimeSpan newTimeSpan)
+    private async Task _onOfferTimeChanged(OfferVM offer, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime
+        // previusTime, updatedTime, RemainingTime
 
         var previusTime = offer.Time;
         var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
 
         offer.Time = newTimeSpan;
 
@@ -257,15 +293,18 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onProjectTimeChanged(ProjectVM project, TimeSpan newTimeSpan)
+    private async Task _onProjectTimeChanged(ProjectVM project, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime
+        // previusTime, updatedTime, RemainingTime
 
         var previusTime = project.Time;
         var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
 
         project.Time = newTimeSpan;
 
@@ -279,15 +318,18 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onDisciplineTimeChanged(DisciplineVM discipline, TimeSpan newTimeSpan)
+    private async Task _onDisciplineTimeChanged(DisciplineVM discipline, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime
+        // previusTime, updatedTime, RemainingTime
 
         var previusTime = discipline.Time;
         var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
 
         discipline.Time = newTimeSpan;
 
@@ -301,15 +343,18 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onDeliverableTimeChanged(DeliverableVM draw, TimeSpan newTimeSpan)
+    private async Task _onDeliverableTimeChanged(DeliverableVM draw, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime
+        // previusTime, updatedTime, RemainingTime
 
         var previusTime = draw.Time;
         var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
 
         draw.Time = newTimeSpan;
 
@@ -323,10 +368,12 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onDeliverableCompletedChanged(DeliverableVM draw, object val)
+    private async Task _onDeliverableCompletedChanged(DeliverableVM draw, object val)
     {
         draw.CompletionEstimation = Convert.ToInt32(val);
 
@@ -340,15 +387,18 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onOtherTimeChanged(SupportiveWorkVM other, TimeSpan newTimeSpan)
+    private async Task _onOtherTimeChanged(SupportiveWorkVM other, TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime
+        // previusTime, updatedTime, RemainingTime
 
         var previusTime = other.Time;
         var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
 
         other.Time = newTimeSpan;
 
@@ -362,47 +412,58 @@ public partial class SendHoursRequest
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onPersonalTimeChanged(TimeSpan newTimeSpan)
+    private async Task _onPersonalTimeChanged(TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime
+        // previusTime, updatedTime, RemainingTime
 
         var previusTime = _editLogedUserTimes.PersonalTime;
         var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
 
         _editLogedUserTimes.PersonalTime = newTimeSpan;
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onTrainingTimeChanged(TimeSpan newTimeSpan)
+    private async Task _onTrainingTimeChanged(TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime
+        // previusTime, updatedTime, RemainingTime
 
         var previusTime = _editLogedUserTimes.TrainingTime;
         var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
 
         _editLogedUserTimes.TrainingTime = newTimeSpan;
 
         _hasChanged = true;
 
+        await OnTimeChanged.InvokeAsync(RemainingTime);
+
         StateHasChanged();
     }
 
-    private void _onCorporateTimeChanged(TimeSpan newTimeSpan)
+    private async Task _onCorporateTimeChanged(TimeSpan newTimeSpan)
     {
-        // previusTime, updatedTime
+        // previusTime, updatedTime, RemainingTime
 
         var previusTime = _editLogedUserTimes.CorporateEventTime;
         var updatedTime = newTimeSpan - previusTime;
+        RemainingTime += (-updatedTime);
 
         _editLogedUserTimes.CorporateEventTime = newTimeSpan;
 
         _hasChanged = true;
+
+        await OnTimeChanged.InvokeAsync(RemainingTime);
 
         StateHasChanged();
     }
@@ -424,7 +485,7 @@ public partial class SendHoursRequest
     #endregion
 
     #region When Records Selected
-    private async Task OnSelectClient(int ledId)
+    private async Task OnSelectClient(long ledId)
     {
         if (ledId == 0 || ledId == _selectedClient?.Id) return;
 
@@ -448,7 +509,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task OnSelectOffer(int offerId)
+    private async Task OnSelectOffer(long offerId)
     {
         if (offerId == 0 || offerId == _selectedOffer?.Id) return;
 
@@ -469,7 +530,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task OnSelectProject(int projectId)
+    private async Task OnSelectProject(long projectId)
     {
         if (projectId == 0 || projectId == _selectedProject?.Id)
             return;
@@ -500,7 +561,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task OnSelectDiscipline(int disciplineId)
+    private async Task OnSelectDiscipline(long disciplineId)
     {
         if (disciplineId == 0 || disciplineId == _selectedDiscipline?.Id) return;
 
@@ -539,46 +600,38 @@ public partial class SendHoursRequest
     }
     #endregion
 
-    public async Task Save()
+    public async Task UpdateHours()
     {
         if (!_hasChanged)
             return;
 
-        var valid = Validate();
-        if (valid)
-            await _sendRequest();
-        else
-            return;
-
-        await OnEnd.InvokeAsync();
-    }
-
-    private async Task _sendRequest()
-    {
         try
         {
+            // Update Db
+            _startLoading = true;
+
             var userId = _sharedAuthData.LogedUser.Id;
 
             // Update Clients
             foreach (var client in _clientsChanged)
             {
-                await _dataProvider.WorkingTime.ClientAddTimeRequest(userId, client.Id, client.Time, client.TimeDatePassed, _description);
+                await _dataProvider.WorkingTime.ClientAddTime(userId, client.Id, client.Time, client.TimeDatePassed);
             }
             _clientsChanged.Clear();
-            _selectedClient = null;
+            //_selectedClient = null;
 
             // Update Offers
             foreach (var offer in _offersChanged)
             {
-                await _dataProvider.WorkingTime.OfferAddTimeRequest(userId, offer.Id, offer.Time, offer.TimeDatePassed, _description);
+                await _dataProvider.WorkingTime.OfferAddTime(userId, offer.Id, offer.Time, offer.TimeDatePassed);
             }
             _offersChanged.Clear();
-            _selectedOffer = null;
+            //_selectedOffer = null;
 
             // Update Projects
             foreach (var project in _projectsChanged)
             {
-                await _dataProvider.WorkingTime.ProjectAddTimeRequest(userId, project.Id, project.Time, project.TimeDatePassed, _description);
+                await _dataProvider.WorkingTime.ProjectAddTime(userId, project.Id, project.Time, project.TimeDatePassed);
             }
             _projectsChanged.Clear();
             //_selectedProject = null;
@@ -586,61 +639,63 @@ public partial class SendHoursRequest
             // Update Discipline
             foreach (var discipline in _disciplinesChanged)
             {
-                await _dataProvider.WorkingTime.DisciplineAddTimeRequest(userId, _selectedProject.Id, discipline.Id, discipline.Time, discipline.TimeDatePassed, _description);
+                await _dataProvider.WorkingTime.DisciplineAddTime(userId, _selectedProject.Id, discipline.Id, discipline.Time, discipline.TimeDatePassed);
             }
             _disciplinesChanged.Clear();
             //_selectedDiscipline = null;
 
             // Update Draws
             foreach (var draw in _deliverablesChanged)
-                await _dataProvider.WorkingTime.DeliverableAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, draw.TimeDatePassed, _description);
+            {
+                var old = _deliverables.FirstOrDefault(d => d.Id == draw.Id);
+                if (old.CompletionEstimation > draw.CompletionEstimation)
+                {
+                    //TODO: Display Msg
+
+                    return;
+                }
+                else
+                    await _dataProvider.Deliverables.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.CompletionEstimation);
+                await _dataProvider.WorkingTime.DeliverableAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, draw.TimeDatePassed);
+            }
+            _deliverablesChanged.Clear();
 
             // Update Others
             foreach (var other in _supportiveWorkChanged)
-                await _dataProvider.WorkingTime.SupportiveWorkAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, other.TimeDatePassed, _description);
+            {
+                //await _dataProvider.Others.UpdateCompleted(_selectedProject.Id, _selectedDiscipline.Id, other.Id, other.CompletionEstimation);
+                await _dataProvider.WorkingTime.SupportiveWorkAddTime(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, other.TimeDatePassed);
+            }
+            _supportiveWorkChanged.Clear();
 
             // Update User Hours
             if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddPersonaTimeRequest(userId, _personalTimeDate, _editLogedUserTimes.PersonalTime, _description);
+            {
+                await _dataProvider.WorkingTime.AddPersonalTime(userId, _personalTimeDate, _editLogedUserTimes.PersonalTime);
+                _editLogedUserTimes.PersonalTime = TimeSpan.Zero;
+            }
+                
             if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddTraningTimeRequest(userId, _trainingTimeDate, _editLogedUserTimes.TrainingTime, _description);
+            {
+                await _dataProvider.WorkingTime.AddTraningTime(userId, _trainingTimeDate, _editLogedUserTimes.TrainingTime);
+                _editLogedUserTimes.TrainingTime = TimeSpan.Zero;
+            }
+                
             if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddCorporateEventTimeRequest(userId, _corporateTimeDate, _editLogedUserTimes.CorporateEventTime, _description);
+            {
+                await _dataProvider.WorkingTime.AddCorporateEventTime(userId, _corporateTimeDate, _editLogedUserTimes.CorporateEventTime);
+                _editLogedUserTimes.CorporateEventTime = TimeSpan.Zero;
+            }
 
-            await OnEnd.InvokeAsync();
+            // Refresh
+            //RemainingTime = TimeSpan.Zero;
+            await Refresh(RemainingTime);
         }
         catch (Exception ex)
         {
-            Logger.LogError($"Exception EditUsersHours._sendRequest(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
+            Logger.LogError($"Exception EditUsersHours._addHours(): {ex.Message}, \n Inner Exception: {ex.InnerException}");
         }
+
+        _startLoading = false;
     }
-
-    #region Validation
-    private bool validDescription = true;
-
-    public bool Validate(string fieldname = null)
-    {
-        if (fieldname == null)
-        {
-            validDescription = !string.IsNullOrEmpty(_description) && !string.IsNullOrWhiteSpace(_description);
-
-            return validDescription;
-        }
-        else
-        {
-            validDescription = true;
-
-            switch (fieldname)
-            {
-                case "Description":
-                    validDescription = !string.IsNullOrEmpty(_description) && !string.IsNullOrWhiteSpace(_description);
-                    return validDescription;
-
-                default:
-                    return true;
-            }
-
-        }
-    }
-    #endregion
 }
