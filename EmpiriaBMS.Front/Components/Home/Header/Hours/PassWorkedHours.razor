@@ -34,7 +34,7 @@
     </h3>
 </div>
 
-<div style="max-height: 80vh; overflow-y: auto; overflow-x: hidden;">
+<div style="min-width: 96vw; height: 80vh; overflow-y: auto; overflow-x: hidden;">
 
     <!-- Filters / Remove Time -->
     <div class="d-flex justify-content-between mt-1 ms-1 me-1">
@@ -141,11 +141,11 @@
 
     @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
     {
-        <div class="row mt-1">
+        <div class="row">
 
             <!-- Deliverables -->
             <div class="col-xl-6 col-12">
-                <div class="me-xl-2 me-0 p-1 border rounded">
+                <div class="m-5 p-3 border rounded">
                     <div class="text-start">
                         <h5>Deliverables</h5>
                     </div>
@@ -191,7 +191,7 @@
                                         <td class="align-middle">
                                             <div class="input-group" style="width: 128px;">
                                                 <FluentDatePicker Value="@_deliverable.TimeDatePassed"
-                                                                  Appearance="FluentInputAppearance.Outline"/>
+                                                                  Appearance="FluentInputAppearance.Outline" />
                                             </div>
                                         </td>
                                     </tr>
@@ -204,7 +204,7 @@
 
             <!-- Supportive Works -->
             <div class="col-xl-6 col-12">
-                <div class="ms-xl-2 ms-0 mt-xl-0 mt-2 p-1 border rounded">
+                <div class="m-5 p-3 border rounded">
                     <div class="text-start">
                         <h5>Supportive Works</h5>
                     </div>

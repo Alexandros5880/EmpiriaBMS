@@ -279,7 +279,7 @@
                   Hidden="@(!_isEndWorkDialogOdepened || _loading)"
                   Modal="false"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: clamp(1000px, 80vw, 1800px) !important;
+                  style="--dialog-width: auto !important;
                          --dialog-height: auto !important;">
 
         <PassWorkedHours @ref="@_editHoursCompoment"
@@ -325,7 +325,7 @@
                   Hidden="@(!_isCorrectHoursDialogOdepened || _loading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: clamp(1000px, 80vw, 1800px) !important;
+                  style="--dialog-width: clamp(1200px, 84vw, 1800px) !important;
                          --dialog-height: auto !important;">
 
         <div class="modal-body row mb-1">
@@ -348,8 +348,8 @@
                   Hidden="@(!_isDisplayHoursCorrectionRequestsDialogOdepened || _loading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: min(98vw, 1300px) !important;
-                         --dialog-height: min(86vh, 1400px) !important;">
+                  style="--dialog-width: auto !important;
+                         --dialog-height: auto !important;">
 
         <div class="modal-body row mb-1">
 
