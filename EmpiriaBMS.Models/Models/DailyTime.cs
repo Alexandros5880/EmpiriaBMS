@@ -10,21 +10,14 @@ public class DailyTime : Entity
     [Column(TypeName = "datetime2")]
     public DateTime Date { get; set; }
 
+    public DailyTimeTypes Type { get; set; }
+
     public DailyTimeState State { get; set; }
 
     public bool IsEditByAdmin { get; set; }
 
-    public long? DailyUserId { get; set; }
-    public User? DailyUser { get; set; }
-
-    public long? PersonalUserId { get; set; }
-    public User? PersonalUser { get; set; }
-
-    public long? TrainingUserId { get; set; }
-    public User? TrainingUser { get; set; }
-
-    public long? CorporateUserId { get; set; }
-    public User? CorporateUser { get; set; }
+    public long? UserId { get; set; }
+    public User? User { get; set; }
 
     public long? DeliverableId { get; set; }
     public Deliverable? Deliverable { get; set; }
@@ -54,13 +47,23 @@ public class DailyTime : Entity
     public long Minutes { get; set; }
 
     public long Seconds { get; set; }
-    #endregion
+
+    public double GetTotalHours()
+    {
+        double totalHours = Days * 24;
+        totalHours += Hours;
+        totalHours += Minutes / 60.0;
+        totalHours += Seconds / 3600.0;
+
+        return totalHours;
+    }
 
     public DailyTime GetDailyTime()
     {
         return new DailyTime()
         {
             Date = Date,
+            Type = Type,
             State = State,
             Days = Days,
             Hours = Hours,
@@ -68,14 +71,8 @@ public class DailyTime : Entity
             Seconds = Seconds,
             Description = Description,
             IsEditByAdmin = IsEditByAdmin,
-            DailyUserId = DailyUserId,
-            DailyUser = DailyUser,
-            PersonalUserId = PersonalUserId,
-            PersonalUser = PersonalUser,
-            TrainingUserId = TrainingUserId,
-            TrainingUser = TrainingUser,
-            CorporateUserId = CorporateUserId,
-            CorporateUser = CorporateUser,
+            UserId = UserId,
+            User = User,
             DeliverableId = DeliverableId,
             Deliverable = Deliverable,
             SupportiveWorkId = SupportiveWorkId,
@@ -95,4 +92,5 @@ public class DailyTime : Entity
     {
         return new TimeSpan((int)Days, (int)Hours, (int)Minutes, (int)Seconds);
     }
+    #endregion
 }

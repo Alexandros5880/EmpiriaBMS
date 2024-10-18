@@ -404,15 +404,17 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
         }
     }
 
+    #region Get Men Hours
     public async Task<long> GetMenHoursAsync(long projectId)
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return await _context.Set<DailyTime>()
-                                 .Where(r => !r.IsDeleted)
-                                 .Where(mh => mh.ProjectId == projectId)
-                                 .Select(mh => mh.Hours)
-                                 .SumAsync();
+            var data = await _context.Set<DailyTime>()
+                               .Where(r => !r.IsDeleted)
+                               .Where(mh => mh.ProjectId == projectId)
+                               .ToListAsync();
+
+            return data.Select(mh => Convert.ToInt64(mh.GetTotalHours())).Sum();
         }
     }
 
@@ -420,13 +422,15 @@ public class ProjectsRepo : Repository<ProjectDto, Project>
     {
         using (var _context = _dbContextFactory.CreateDbContext())
         {
-            return _context.Set<DailyTime>()
-                           .Where(r => !r.IsDeleted)
-                           .Where(mh => mh.ProjectId == projectId)
-                           .Select(mh => mh.Hours)
-                           .Sum();
+            var data = _context.Set<DailyTime>()
+                               .Where(r => !r.IsDeleted)
+                               .Where(mh => mh.ProjectId == projectId)
+                               .AsEnumerable();
+
+            return data.Select(mh => Convert.ToInt64(mh.GetTotalHours())).Sum();
         }
     }
+    #endregion
 
     public async Task<ICollection<DisciplineDto>> GetDisciplines(long projectId, long userId, bool all)
     {

@@ -6,9 +6,7 @@ namespace EmpiriaBMS.Front.ViewModel.Components;
 public class ProjectVM : BaseVM
 {
     // Not Mapped
-    [NotMapped]
     private TimeSpan _time = TimeSpan.Zero;
-    [NotMapped]
     public TimeSpan Time
     {
         get => _time;
@@ -18,6 +16,20 @@ public class ProjectVM : BaseVM
                 return;
             _time = value;
             NotifyPropertyChanged(nameof(Time));
+        }
+    }
+
+    // Not Mapped
+    private DateTime _timeDate = DateTime.Now;
+    public DateTime TimeDatePassed
+    {
+        get => _timeDate;
+        set
+        {
+            if (value == _timeDate)
+                return;
+            _timeDate = value;
+            NotifyPropertyChanged(nameof(TimeDatePassed));
         }
     }
 
