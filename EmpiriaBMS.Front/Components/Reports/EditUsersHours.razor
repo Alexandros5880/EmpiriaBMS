@@ -21,21 +21,21 @@
     }
 </div>
 
-<div style="width: auto; overflow-y: hidden; overflow-x: hidden;">
+<div style="overflow-y: hidden; overflow-x: hidden;">
 
     <div class="mt-1 row gx-2 ms-1 me-1">
 
-        <!-- Select User -->
+        <!-- User -->
         <div class="col selections">
             <div class="text-center">
-                <h5>Select User</h5>
+                <h5>User</h5>
             </div>
             <div class="select-wrapper form-column form-column-field">
                 <select class="form-select form-select-lg"
-                        aria-label="Select User"
+                        aria-label="User"
                         value="@_selectedUser?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectUser(Convert.ToInt32(e.Value)))">
-                    <option value="0" selected>Select User</option>
+                    <option value="0" selected>User</option>
                     @foreach (var user in _users)
                     {
                         <option value="@user.Id">
@@ -46,17 +46,17 @@
             </div>
         </div>
 
-        <!-- Select Client -->
+        <!-- Client -->
         <div class="col selections">
             <div class="text-center">
-                <h5>Select Client</h5>
+                <h5>Client</h5>
             </div>
             <div class="select-wrapper form-column form-column-field">
                 <select class="form-select form-select-lg"
-                        aria-label="Select Client"
+                        aria-label="Client"
                         value="@_selectedClient?.Id"
                         @onchange="@(async (ChangeEventArgs e) => await OnSelectClient(Convert.ToInt32(e.Value)))">
-                    <option value="0" selected>Select Client</option>
+                    <option value="0" selected>Client</option>
                     @foreach (var client in _clients)
                     {
                         <option value="@client.Id">
@@ -67,19 +67,19 @@
             </div>
         </div>
 
-        <!-- Select Offer -->
+        <!-- Offer -->
         @if (_selectedClient != null && _selectedClient.Id != 0)
         {
             <div class="col selections">
                 <div class="text-center">
-                    <h5>Select Offer</h5>
+                    <h5>Offer</h5>
                 </div>
                 <div class="select-wrapper form-column form-column-field">
                     <select class="form-select form-select-lg"
-                            aria-label="Select Offer"
+                            aria-label="Offer"
                             value="@_selectedOffer?.Id"
                             @onchange="@(async (ChangeEventArgs e) => await OnSelectOffer(Convert.ToInt32(e.Value)))">
-                        <option value="0" selected>Select Offer</option>
+                        <option value="0" selected>Offer</option>
                         @foreach (var offer in _offers)
                         {
                             <option value="@offer.Id">
@@ -91,19 +91,19 @@
             </div>
         }
 
-        <!-- Select Project -->
+        <!-- Project -->
         @if (_selectedOffer != null && _selectedOffer.Id != 0)
         {
             <div class="col selections">
                 <div class="text-center">
-                    <h5>Select Project</h5>
+                    <h5>Project</h5>
                 </div>
                 <div class="select-wrapper form-column form-column-field">
                     <select class="form-select form-select-lg"
-                            aria-label="Select Project"
+                            aria-label="Project"
                             value="@_selectedProject?.Id"
                             @onchange="@(async (ChangeEventArgs e) => await OnSelectProject(Convert.ToInt32(e.Value)))">
-                        <option value="0" selected>Select Project</option>
+                        <option value="0" selected>Project</option>
                         @foreach (var project in _projects)
                         {
                             <option value="@project.Id">
@@ -120,14 +120,14 @@
         {
             <div class="col selections">
                 <div class="text-center">
-                    <h5>Select Discipline</h5>
+                    <h5>Discipline</h5>
                 </div>
                 <div class="select-wrapper form-column form-column-field">
                     <select class="form-select form-select-lg"
-                            aria-label="Select Discipline"
+                            aria-label="Discipline"
                             value="@_selectedDiscipline?.Id"
                             @onchange="@(async (ChangeEventArgs e) => await OnSelectDiscipline(Convert.ToInt32(e.Value)))">
-                        <option value="0" selected>Select Discipline</option>
+                        <option value="0" selected>Discipline</option>
                         @foreach (var discipline in _disciplines)
                         {
                             <option value="@discipline.Id">
@@ -141,13 +141,13 @@
 
     </div>
 
-    <FluentStack Orientation="Orientation.Horizontal" Class="mt-1">
+    @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
+    {
+        <div class="row mt-1 ms-1 me-1 g-3">
 
-        <!-- Deliverables -->
-        @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
-        {
-            <div class="w-50">
-                <div class="text-center">
+            <!-- Deliverables -->
+            <div class="col-xl-6 col-12 border rounded">
+                <div class="text-start">
                     <h5>Deliverables</h5>
                 </div>
                 <div class="table-responsive"
@@ -202,13 +202,10 @@
                     </table>
                 </div>
             </div>
-        }
 
-        <!-- Supportive Works -->
-        @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
-        {
-            <div class="w-50">
-                <div class="text-center">
+            <!-- Supportive Works -->
+            <div class="col-xl-6 col-12 border rounded">
+                <div class="text-start">
                     <h5>Supportive Works</h5>
                 </div>
                 <div class="table-responsive"
@@ -246,9 +243,9 @@
                     </table>
                 </div>
             </div>
-        }
 
-    </FluentStack>
+        </div>
+    }
 
     @{
         var setClientTime = (workOnClients || seeAdmin) && (_selectedClient != null && _selectedClient.Id != 0);
@@ -272,8 +269,8 @@
 
                     @if (setClientTime)
                     {
-                        <div class="col-3 text-center">
-                            <span class="mb-2 fs-5">Client</span>
+                        <div class="col-3">
+                            <span class="text-start">Client</span>
                             <TimeInput MinTime="@minTime"
                                        MaxTime="@RemainingTime"
                                        Time="_selectedClient.Time"
@@ -287,8 +284,8 @@
 
                     @if (setOfferTime)
                     {
-                        <div class="col-3 text-center">
-                            <span class="mb-2 fs-5">Offer</span>
+                        <div class="col-3">
+                            <span class="text-start">Offer</span>
                             <TimeInput MinTime="@minTime"
                                        MaxTime="@RemainingTime"
                                        Time="_selectedOffer.Time"
@@ -302,8 +299,8 @@
 
                     @if (setProjectTime)
                     {
-                        <div class="col-3 text-center">
-                            <span class="mb-2 fs-5">Project</span>
+                        <div class="col-3">
+                            <span class="text-start">Project</span>
                             <TimeInput MinTime="@minTime"
                                        MaxTime="@RemainingTime"
                                        Time="_selectedProject.Time"
@@ -317,8 +314,8 @@
 
                     @if (setDisciplineTime)
                     {
-                        <div class="col-3 text-center">
-                            <span class="mb-2 fs-5">Discipline</span>
+                        <div class="col-3">
+                            <span class="text-start">Discipline</span>
                             <TimeInput MinTime="@minTime"
                                        MaxTime="@RemainingTime"
                                        Time="_selectedDiscipline.Time"
@@ -351,7 +348,8 @@
                          OnCorporateTimeChanged="@_onCorporateTimeChanged"
                          OnPersonalTimeDateChanged="@_onPersonalTimeDateChanged"
                          OnTrainingTimeDateChanged="@_onTrainingTimeDateChanged"
-                         OnCorporateTimeDateChanged="@_onCorporateTimeDateChanged" />
+                         OnCorporateTimeDateChanged="@_onCorporateTimeDateChanged"
+                         DisplayDateInput="true" />
         </div>
 
     </div>

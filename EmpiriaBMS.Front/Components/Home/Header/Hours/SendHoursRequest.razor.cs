@@ -14,6 +14,8 @@ public partial class SendHoursRequest
     [Parameter]
     public EventCallback OnEnd { get; set; }
 
+    private DateTime _defaultDate = DateTime.UtcNow;
+
     #region Authorization Properties
     bool seeAdmin => _sharedAuthData.Permissions.Any(p => p.Ord == 7);
     bool getAllDisciplines => _sharedAuthData.Permissions.Any(p => p.Ord == 9);
@@ -53,6 +55,9 @@ public partial class SendHoursRequest
     private DisciplineVM _selectedDiscipline = new DisciplineVM();
     private DeliverableVM _selectedDeliverable = new DeliverableVM();
     private SupportiveWorkVM _selectedSupportiveWork = new SupportiveWorkVM();
+    private DateTime _personalTimeDate;
+    private DateTime _trainingTimeDate;
+    private DateTime _corporateTimeDate;
     #endregion
 
     #region Changed Records Lists
@@ -210,8 +215,8 @@ public partial class SendHoursRequest
     }
     #endregion
 
-    #region On Time Changed
-    private async Task _onClientTimeChanged(ClientVM client, TimeSpan newTimeSpan)
+    #region On Time/DateTime Changed
+    private void _onClientTimeChanged(ClientVM client, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime
 
@@ -233,7 +238,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task _onOfferTimeChanged(OfferVM offer, TimeSpan newTimeSpan)
+    private void _onOfferTimeChanged(OfferVM offer, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime
 
@@ -255,7 +260,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task _onProjectTimeChanged(ProjectVM project, TimeSpan newTimeSpan)
+    private void _onProjectTimeChanged(ProjectVM project, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime
 
@@ -277,7 +282,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task _onDisciplineTimeChanged(DisciplineVM discipline, TimeSpan newTimeSpan)
+    private void _onDisciplineTimeChanged(DisciplineVM discipline, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime
 
@@ -299,7 +304,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task _onDeliverableTimeChanged(DeliverableVM draw, TimeSpan newTimeSpan)
+    private void _onDeliverableTimeChanged(DeliverableVM draw, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime
 
@@ -321,7 +326,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task _onDeliverableCompletedChanged(DeliverableVM draw, object val)
+    private void _onDeliverableCompletedChanged(DeliverableVM draw, object val)
     {
         draw.CompletionEstimation = Convert.ToInt32(val);
 
@@ -338,7 +343,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task _onOtherTimeChanged(SupportiveWorkVM other, TimeSpan newTimeSpan)
+    private void _onOtherTimeChanged(SupportiveWorkVM other, TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime
 
@@ -360,7 +365,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task _onPersonalTimeChanged(TimeSpan newTimeSpan)
+    private void _onPersonalTimeChanged(TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime
 
@@ -374,7 +379,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task _onTrainingTimeChanged(TimeSpan newTimeSpan)
+    private void _onTrainingTimeChanged(TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime
 
@@ -388,7 +393,7 @@ public partial class SendHoursRequest
         StateHasChanged();
     }
 
-    private async Task _onCorporateTimeChanged(TimeSpan newTimeSpan)
+    private void _onCorporateTimeChanged(TimeSpan newTimeSpan)
     {
         // previusTime, updatedTime
 
@@ -400,6 +405,21 @@ public partial class SendHoursRequest
         _hasChanged = true;
 
         StateHasChanged();
+    }
+
+    private void _onPersonalTimeDateChanged(DateTime date)
+    {
+        _personalTimeDate = date;
+    }
+
+    private void _onTrainingTimeDateChanged(DateTime date)
+    {
+        _trainingTimeDate = date;
+    }
+
+    private void _onCorporateTimeDateChanged(DateTime date)
+    {
+        _corporateTimeDate = date;
     }
     #endregion
 
@@ -535,9 +555,9 @@ public partial class SendHoursRequest
             var userId = _sharedAuthData.LogedUser.Id;
 
             // Update Clients
-            foreach (var led in _clientsChanged)
+            foreach (var client in _clientsChanged)
             {
-                await _dataProvider.WorkingTime.ClientAddTimeRequest(userId, led.Id, led.Time, _description);
+                await _dataProvider.WorkingTime.ClientAddTimeRequest(userId, client.Id, client.Time, client.TimeDatePassed, _description);
             }
             _clientsChanged.Clear();
             _selectedClient = null;
@@ -545,7 +565,7 @@ public partial class SendHoursRequest
             // Update Offers
             foreach (var offer in _offersChanged)
             {
-                await _dataProvider.WorkingTime.OfferAddTimeRequest(userId, offer.Id, offer.Time, _description);
+                await _dataProvider.WorkingTime.OfferAddTimeRequest(userId, offer.Id, offer.Time, offer.TimeDatePassed, _description);
             }
             _offersChanged.Clear();
             _selectedOffer = null;
@@ -553,7 +573,7 @@ public partial class SendHoursRequest
             // Update Projects
             foreach (var project in _projectsChanged)
             {
-                await _dataProvider.WorkingTime.ProjectAddTimeRequest(userId, project.Id, project.Time, _description);
+                await _dataProvider.WorkingTime.ProjectAddTimeRequest(userId, project.Id, project.Time, project.TimeDatePassed, _description);
             }
             _projectsChanged.Clear();
             //_selectedProject = null;
@@ -561,26 +581,26 @@ public partial class SendHoursRequest
             // Update Discipline
             foreach (var discipline in _disciplinesChanged)
             {
-                await _dataProvider.WorkingTime.DisciplineAddTimeRequest(userId, _selectedProject.Id, discipline.Id, discipline.Time, _description);
+                await _dataProvider.WorkingTime.DisciplineAddTimeRequest(userId, _selectedProject.Id, discipline.Id, discipline.Time, discipline.TimeDatePassed, _description);
             }
             _disciplinesChanged.Clear();
             //_selectedDiscipline = null;
 
             // Update Draws
             foreach (var draw in _deliverablesChanged)
-                await _dataProvider.WorkingTime.DeliverableAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, _description);
+                await _dataProvider.WorkingTime.DeliverableAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, draw.Id, draw.Time, draw.TimeDatePassed, _description);
 
             // Update Others
             foreach (var other in _supportiveWorkChanged)
-                await _dataProvider.WorkingTime.SupportiveWorkAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, _description);
+                await _dataProvider.WorkingTime.SupportiveWorkAddTimeRequest(userId, _selectedProject.Id, _selectedDiscipline.Id, other.Id, other.Time, other.TimeDatePassed, _description);
 
             // Update User Hours
             if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddPersonaTimeRequest(userId, _editLogedUserTimes.PersonalTime, _description);
+                await _dataProvider.WorkingTime.AddPersonaTimeRequest(userId, _personalTimeDate, _editLogedUserTimes.PersonalTime, _description);
             if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddTraningTimeRequest(userId, _editLogedUserTimes.TrainingTime, _description);
+                await _dataProvider.WorkingTime.AddTraningTimeRequest(userId, _trainingTimeDate, _editLogedUserTimes.TrainingTime, _description);
             if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddCorporateEventTimeRequest(userId, _editLogedUserTimes.CorporateEventTime, _description);
+                await _dataProvider.WorkingTime.AddCorporateEventTimeRequest(userId, _corporateTimeDate, _editLogedUserTimes.CorporateEventTime, _description);
 
             await OnEnd.InvokeAsync();
         }

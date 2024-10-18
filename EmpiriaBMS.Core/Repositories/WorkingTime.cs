@@ -170,7 +170,12 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region User General Time
-    public async Task<DailyTime> AddDailyTime(long userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
+    public async Task<DailyTime> AddDailyTime(
+        long userId, 
+        DateTime date, 
+        TimeSpan ts, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -242,7 +247,13 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task AddDailyTimeRequest(long userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task AddDailyTimeRequest(
+        long userId, 
+        DateTime date, 
+        TimeSpan timespan, 
+        string description, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -258,7 +269,7 @@ public class WorkingTime : IDisposable
                     {
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Date = DateTime.Now.AddDays(-i),
+                        Date = date.AddDays(-i),
                         Type = DailyTimeTypes.GeneralUserTime,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
@@ -281,7 +292,12 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task<DailyTime> AddPersonalTime(long userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
+    public async Task<DailyTime> AddPersonalTime(
+        long userId, 
+        DateTime date, 
+        TimeSpan ts, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -352,7 +368,13 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task AddPersonaTimeRequest(long userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task AddPersonaTimeRequest(
+        long userId, 
+        DateTime date, 
+        TimeSpan timespan, 
+        string description, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -368,7 +390,7 @@ public class WorkingTime : IDisposable
                     {
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Date = DateTime.Now.AddDays(-i),
+                        Date = date.AddDays(-i),
                         Type = DailyTimeTypes.PersonalTime,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
@@ -391,7 +413,12 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task<DailyTime> AddTraningTime(long userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
+    public async Task<DailyTime> AddTraningTime(
+        long userId, 
+        DateTime date, 
+        TimeSpan ts,
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -462,7 +489,13 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task AddTraningTimeRequest(long userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task AddTraningTimeRequest(
+        long userId, 
+        DateTime date, 
+        TimeSpan timespan, 
+        string description, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -478,7 +511,7 @@ public class WorkingTime : IDisposable
                     {
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Date = DateTime.Now.AddDays(-i),
+                        Date = date.AddDays(-i),
                         Type = DailyTimeTypes.TrainingTime,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
@@ -501,7 +534,12 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task<DailyTime> AddCorporateEventTime(long userId, DateTime date, TimeSpan ts, bool isEditByAdmin = false)
+    public async Task<DailyTime> AddCorporateEventTime(
+        long userId, 
+        DateTime date, 
+        TimeSpan ts, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -573,7 +611,13 @@ public class WorkingTime : IDisposable
         }
     }
 
-    public async Task AddCorporateEventTimeRequest(long userId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task AddCorporateEventTimeRequest(
+        long userId, 
+        DateTime date, 
+        TimeSpan timespan, 
+        string description, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -589,7 +633,7 @@ public class WorkingTime : IDisposable
                     {
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Date = DateTime.Now.AddDays(-i),
+                        Date = date.AddDays(-i),
                         Type = DailyTimeTypes.CorporateTime,
                         Days = timeSpans[i].Days,
                         Hours = timeSpans[i].Hours,
@@ -614,61 +658,13 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Client Time
-    public async Task ClientAddTime(long userId, long clientId, TimeSpan timespan, DateTime date, bool isEditByAdmin = false)
-    {
-        try
-        {
-            using (var _context = _dbContextFactory.CreateDbContext())
-            {
-                //TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
-                //for (int i = timeSpans.Count() - 1; i >= 0; i--)
-                //{
-                //    DailyTime time = new DailyTime()
-                //    {
-                //        CreatedDate = DateTime.Now,
-                //        LastUpdatedDate = DateTime.Now,
-                //        Date = DateTime.Now.AddDays(-i),
-                //        UserId = userId,
-                //        ClientId = clientId,
-                //        Days = timeSpans[i].Days,
-                //        Hours = timeSpans[i].Hours,
-                //        Minutes = timeSpans[i].Minutes,
-                //        Seconds = timeSpans[i].Seconds,
-                //        IsEditByAdmin = isEditByAdmin,
-                //        State = DailyTimeState.NOREQUEST,
-                //        Type = DailyTimeTypes.ClientTime
-                //    };
-                //    await _context.Set<DailyTime>().AddAsync(time);
-                //}
-
-                DailyTime time = new DailyTime()
-                {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Date = date,
-                    UserId = userId,
-                    ClientId = clientId,
-                    Days = timespan.Days,
-                    Hours = timespan.Hours,
-                    Minutes = timespan.Minutes,
-                    Seconds = timespan.Seconds,
-                    IsEditByAdmin = isEditByAdmin,
-                    State = DailyTimeState.NOREQUEST,
-                    Type = DailyTimeTypes.ClientTime
-                };
-                await _context.Set<DailyTime>().AddAsync(time);
-
-                // Save Changes
-                await _context.SaveChangesAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Exception On WorkingTime.ClientAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-        }
-    }
-
-    public async Task ClientAddTimeRequest(long userId, long clientId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task ClientAddTime(
+        long userId, 
+        long clientId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -681,7 +677,51 @@ public class WorkingTime : IDisposable
                     {
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Date = DateTime.Now.AddDays(-i),
+                        Date = date.AddDays(-i),
+                        UserId = userId,
+                        ClientId = clientId,
+                        Days = timeSpans[i].Days,
+                        Hours = timeSpans[i].Hours,
+                        Minutes = timeSpans[i].Minutes,
+                        Seconds = timeSpans[i].Seconds,
+                        IsEditByAdmin = isEditByAdmin,
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.ClientTime
+                    };
+                    await _context.Set<DailyTime>().AddAsync(time);
+                }
+
+                // Save Changes
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On WorkingTime.ClientAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+
+    public async Task ClientAddTimeRequest(
+        long userId, 
+        long clientId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        string description, 
+        bool isEditByAdmin = false
+    )
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+                for (int i = timeSpans.Count() - 1; i >= 0; i--)
+                {
+                    DailyTime time = new DailyTime()
+                    {
+                        CreatedDate = DateTime.Now,
+                        LastUpdatedDate = DateTime.Now,
+                        Date = date.AddDays(-i),
                         UserId = userId,
                         ClientId = clientId,
                         Days = timeSpans[i].Days,
@@ -708,61 +748,13 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Project Time
-    public async Task ProjectAddTime(long userId, long projectId, TimeSpan timespan, DateTime date, bool isEditByAdmin = false)
-    {
-        try
-        {
-            using (var _context = _dbContextFactory.CreateDbContext())
-            {
-                //TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
-                //for (int i = timeSpans.Count() - 1; i >= 0; i--)
-                //{
-                //    DailyTime time = new DailyTime()
-                //    {
-                //        CreatedDate = DateTime.Now,
-                //        LastUpdatedDate = DateTime.Now,
-                //        Date = DateTime.Now.AddDays(-i),
-                //        UserId = userId,
-                //        ProjectId = projectId,
-                //        Days = timeSpans[i].Days,
-                //        Hours = timeSpans[i].Hours,
-                //        Minutes = timeSpans[i].Minutes,
-                //        Seconds = timeSpans[i].Seconds,
-                //        IsEditByAdmin = isEditByAdmin,
-                //        State = DailyTimeState.NOREQUEST,
-                //        Type = DailyTimeTypes.ProjectTime
-                //    };
-                //    await _context.Set<DailyTime>().AddAsync(time);
-                //}
-
-                DailyTime time = new DailyTime()
-                {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Date = date,
-                    UserId = userId,
-                    ProjectId = projectId,
-                    Days = timespan.Days,
-                    Hours = timespan.Hours,
-                    Minutes = timespan.Minutes,
-                    Seconds = timespan.Seconds,
-                    IsEditByAdmin = isEditByAdmin,
-                    State = DailyTimeState.NOREQUEST,
-                    Type = DailyTimeTypes.ProjectTime
-                };
-                await _context.Set<DailyTime>().AddAsync(time);
-
-                // Save Changes
-                await _context.SaveChangesAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Exception On WorkingTime.ProjectAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-        }
-    }
-
-    public async Task ProjectAddTimeRequest(long userId, long projectId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task ProjectAddTime(
+        long userId, 
+        long projectId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -775,7 +767,51 @@ public class WorkingTime : IDisposable
                     {
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Date = DateTime.Now.AddDays(-i),
+                        Date = date.AddDays(-i),
+                        UserId = userId,
+                        ProjectId = projectId,
+                        Days = timeSpans[i].Days,
+                        Hours = timeSpans[i].Hours,
+                        Minutes = timeSpans[i].Minutes,
+                        Seconds = timeSpans[i].Seconds,
+                        IsEditByAdmin = isEditByAdmin,
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.ProjectTime
+                    };
+                    await _context.Set<DailyTime>().AddAsync(time);
+                }
+
+                // Save Changes
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On WorkingTime.ProjectAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+
+    public async Task ProjectAddTimeRequest(
+        long userId, 
+        long projectId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        string description, 
+        bool isEditByAdmin = false
+    )
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+                for (int i = timeSpans.Count() - 1; i >= 0; i--)
+                {
+                    DailyTime time = new DailyTime()
+                    {
+                        CreatedDate = DateTime.Now,
+                        LastUpdatedDate = DateTime.Now,
+                        Date = date.AddDays(-i),
                         UserId = userId,
                         ProjectId = projectId,
                         Days = timeSpans[i].Days,
@@ -802,61 +838,13 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Offer Time
-    public async Task OfferAddTime(long userId, long offerId, TimeSpan timespan, DateTime date, bool isEditByAdmin = false)
-    {
-        try
-        {
-            using (var _context = _dbContextFactory.CreateDbContext())
-            {
-                //TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
-                //for (int i = timeSpans.Count() - 1; i >= 0; i--)
-                //{
-                //    DailyTime time = new DailyTime()
-                //    {
-                //        CreatedDate = DateTime.Now,
-                //        LastUpdatedDate = DateTime.Now,
-                //        Date = DateTime.Now.AddDays(-i),
-                //        UserId = userId,
-                //        OfferId = offerId,
-                //        Days = timeSpans[i].Days,
-                //        Hours = timeSpans[i].Hours,
-                //        Minutes = timeSpans[i].Minutes,
-                //        Seconds = timeSpans[i].Seconds,
-                //        IsEditByAdmin = isEditByAdmin,
-                //        State = DailyTimeState.NOREQUEST,
-                //        Type = DailyTimeTypes.OfferTime
-                //    };
-                //    await _context.Set<DailyTime>().AddAsync(time);
-                //}
-
-                DailyTime time = new DailyTime()
-                {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Date = date,
-                    UserId = userId,
-                    OfferId = offerId,
-                    Days = timespan.Days,
-                    Hours = timespan.Hours,
-                    Minutes = timespan.Minutes,
-                    Seconds = timespan.Seconds,
-                    IsEditByAdmin = isEditByAdmin,
-                    State = DailyTimeState.NOREQUEST,
-                    Type = DailyTimeTypes.OfferTime
-                };
-                await _context.Set<DailyTime>().AddAsync(time);
-
-                // Save Changes
-                await _context.SaveChangesAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Exception On WorkingTime.OfferAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-        }
-    }
-
-    public async Task OfferAddTimeRequest(long userId, long offerId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task OfferAddTime(
+        long userId, 
+        long offerId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -869,7 +857,51 @@ public class WorkingTime : IDisposable
                     {
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Date = DateTime.Now.AddDays(-i),
+                        Date = date.AddDays(-i),
+                        UserId = userId,
+                        OfferId = offerId,
+                        Days = timeSpans[i].Days,
+                        Hours = timeSpans[i].Hours,
+                        Minutes = timeSpans[i].Minutes,
+                        Seconds = timeSpans[i].Seconds,
+                        IsEditByAdmin = isEditByAdmin,
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.OfferTime
+                    };
+                    await _context.Set<DailyTime>().AddAsync(time);
+                }
+
+                // Save Changes
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On WorkingTime.OfferAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+
+    public async Task OfferAddTimeRequest(
+        long userId, 
+        long offerId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        string description, 
+        bool isEditByAdmin = false
+    )
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+                for (int i = timeSpans.Count() - 1; i >= 0; i--)
+                {
+                    DailyTime time = new DailyTime()
+                    {
+                        CreatedDate = DateTime.Now,
+                        LastUpdatedDate = DateTime.Now,
+                        Date = date.AddDays(-i),
                         UserId = userId,
                         OfferId = offerId,
                         Days = timeSpans[i].Days,
@@ -896,63 +928,14 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Discipline Time
-    public async Task DisciplineAddTime(long userId, long projectId, long disciplineId, TimeSpan timespan, DateTime date, bool isEditByAdmin = false)
-    {
-        try
-        {
-            using (var _context = _dbContextFactory.CreateDbContext())
-            {
-                //TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
-                //for (int i = timeSpans.Count() - 1; i >= 0; i--)
-                //{
-                //    DailyTime time = new DailyTime()
-                //    {
-                //        CreatedDate = DateTime.Now,
-                //        LastUpdatedDate = DateTime.Now,
-                //        Date = DateTime.Now.AddDays(-i),
-                //        UserId = userId,
-                //        ProjectId = projectId,
-                //        DisciplineId = disciplineId,
-                //        Days = timeSpans[i].Days,
-                //        Hours = timeSpans[i].Hours,
-                //        Minutes = timeSpans[i].Minutes,
-                //        Seconds = timeSpans[i].Seconds,
-                //        IsEditByAdmin = isEditByAdmin,
-                //        State = DailyTimeState.NOREQUEST,
-                //        Type = DailyTimeTypes.DisciplineTime
-                //    };
-                //    await _context.Set<DailyTime>().AddAsync(time);
-                //}
-
-                DailyTime time = new DailyTime()
-                {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Date = date,
-                    UserId = userId,
-                    ProjectId = projectId,
-                    DisciplineId = disciplineId,
-                    Days = timespan.Days,
-                    Hours = timespan.Hours,
-                    Minutes = timespan.Minutes,
-                    Seconds = timespan.Seconds,
-                    IsEditByAdmin = isEditByAdmin,
-                    State = DailyTimeState.NOREQUEST,
-                    Type = DailyTimeTypes.DisciplineTime
-                };
-                await _context.Set<DailyTime>().AddAsync(time);
-
-                // Save Changes
-                await _context.SaveChangesAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Exception On WorkingTime.DisciplineAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-        }
-    }
-
-    public async Task DisciplineAddTimeRequest(long userId, long projectId, long disciplineId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task DisciplineAddTime(
+        long userId, 
+        long projectId, 
+        long disciplineId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -965,7 +948,53 @@ public class WorkingTime : IDisposable
                     {
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Date = DateTime.Now.AddDays(-i),
+                        Date = date.AddDays(-i),
+                        UserId = userId,
+                        ProjectId = projectId,
+                        DisciplineId = disciplineId,
+                        Days = timeSpans[i].Days,
+                        Hours = timeSpans[i].Hours,
+                        Minutes = timeSpans[i].Minutes,
+                        Seconds = timeSpans[i].Seconds,
+                        IsEditByAdmin = isEditByAdmin,
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.DisciplineTime
+                    };
+                    await _context.Set<DailyTime>().AddAsync(time);
+                }
+
+                // Save Changes
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On WorkingTime.DisciplineAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+
+    public async Task DisciplineAddTimeRequest(
+        long userId, 
+        long projectId, 
+        long disciplineId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        string description, 
+        bool isEditByAdmin = false
+    )
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+                for (int i = timeSpans.Count() - 1; i >= 0; i--)
+                {
+                    DailyTime time = new DailyTime()
+                    {
+                        CreatedDate = DateTime.Now,
+                        LastUpdatedDate = DateTime.Now,
+                        Date = date.AddDays(-i),
                         UserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
@@ -993,65 +1022,15 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region Deliverable Time
-    public async Task DeliverableAddTime(long userId, long projectId, long disciplineId, long drawId, TimeSpan timespan, DateTime date, bool isEditByAdmin = false)
-    {
-        try
-        {
-            using (var _context = _dbContextFactory.CreateDbContext())
-            {
-                //TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
-                //for (int i = timeSpans.Count() - 1; i >= 0; i--)
-                //{
-                //    DailyTime time = new DailyTime()
-                //    {
-                //        CreatedDate = DateTime.Now,
-                //        LastUpdatedDate = DateTime.Now,
-                //        Date = DateTime.Now.AddDays(-i),
-                //        UserId = userId,
-                //        ProjectId = projectId,
-                //        DisciplineId = disciplineId,
-                //        DeliverableId = drawId,
-                //        Days = timeSpans[i].Days,
-                //        Hours = timeSpans[i].Hours,
-                //        Minutes = timeSpans[i].Minutes,
-                //        Seconds = timeSpans[i].Seconds,
-                //        IsEditByAdmin = isEditByAdmin,
-                //        State = DailyTimeState.NOREQUEST,
-                //        Type = DailyTimeTypes.DeliverableTime
-                //    };
-                //    await _context.Set<DailyTime>().AddAsync(time);
-                //}
-
-                DailyTime time = new DailyTime()
-                {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Date = date,
-                    UserId = userId,
-                    ProjectId = projectId,
-                    DisciplineId = disciplineId,
-                    DeliverableId = drawId,
-                    Days = timespan.Days,
-                    Hours = timespan.Hours,
-                    Minutes = timespan.Minutes,
-                    Seconds = timespan.Seconds,
-                    IsEditByAdmin = isEditByAdmin,
-                    State = DailyTimeState.NOREQUEST,
-                    Type = DailyTimeTypes.DeliverableTime
-                };
-                await _context.Set<DailyTime>().AddAsync(time);
-
-                // Save Changes
-                await _context.SaveChangesAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Exception On WorkingTime.DeliverableAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-        }
-    }
-
-    public async Task DeliverableAddTimeRequest(long userId, long projectId, long disciplineId, long drawId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task DeliverableAddTime(
+        long userId, 
+        long projectId, 
+        long disciplineId, 
+        long drawId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -1064,7 +1043,55 @@ public class WorkingTime : IDisposable
                     {
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Date = DateTime.Now.AddDays(-i),
+                        Date = date.AddDays(-i),
+                        UserId = userId,
+                        ProjectId = projectId,
+                        DisciplineId = disciplineId,
+                        DeliverableId = drawId,
+                        Days = timeSpans[i].Days,
+                        Hours = timeSpans[i].Hours,
+                        Minutes = timeSpans[i].Minutes,
+                        Seconds = timeSpans[i].Seconds,
+                        IsEditByAdmin = isEditByAdmin,
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.DeliverableTime
+                    };
+                    await _context.Set<DailyTime>().AddAsync(time);
+                }
+
+                // Save Changes
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On WorkingTime.DeliverableAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+
+    public async Task DeliverableAddTimeRequest(
+        long userId, 
+        long projectId, 
+        long disciplineId, 
+        long drawId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        string description, 
+        bool isEditByAdmin = false
+    )
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+                for (int i = timeSpans.Count() - 1; i >= 0; i--)
+                {
+                    DailyTime time = new DailyTime()
+                    {
+                        CreatedDate = DateTime.Now,
+                        LastUpdatedDate = DateTime.Now,
+                        Date = date.AddDays(-i),
                         UserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,
@@ -1093,65 +1120,15 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region SupportiveWork Time
-    public async Task SupportiveWorkAddTime(long userId, long projectId, long disciplineId, long otherId, TimeSpan timespan, DateTime date, bool isEditByAdmin = false)
-    {
-        try
-        {
-            using (var _context = _dbContextFactory.CreateDbContext())
-            {
-                //TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
-                //for (int i = timeSpans.Count() - 1; i >= 0; i--)
-                //{
-                //    DailyTime time = new DailyTime()
-                //    {
-                //        CreatedDate = DateTime.Now,
-                //        LastUpdatedDate = DateTime.Now,
-                //        Date = DateTime.Now.AddDays(-i),
-                //        UserId = userId,
-                //        ProjectId = projectId,
-                //        DisciplineId = disciplineId,
-                //        SupportiveWorkId = otherId,
-                //        Days = timeSpans[i].Days,
-                //        Hours = timeSpans[i].Hours,
-                //        Minutes = timeSpans[i].Minutes,
-                //        Seconds = timeSpans[i].Seconds,
-                //        IsEditByAdmin = isEditByAdmin,
-                //        State = DailyTimeState.NOREQUEST,
-                //        Type = DailyTimeTypes.SupportiveWorkTime
-                //    };
-                //    await _context.Set<DailyTime>().AddAsync(time);
-                //}
-
-                DailyTime time = new DailyTime()
-                {
-                    CreatedDate = DateTime.Now,
-                    LastUpdatedDate = DateTime.Now,
-                    Date = date,
-                    UserId = userId,
-                    ProjectId = projectId,
-                    DisciplineId = disciplineId,
-                    SupportiveWorkId = otherId,
-                    Days = timespan.Days,
-                    Hours = timespan.Hours,
-                    Minutes = timespan.Minutes,
-                    Seconds = timespan.Seconds,
-                    IsEditByAdmin = isEditByAdmin,
-                    State = DailyTimeState.NOREQUEST,
-                    Type = DailyTimeTypes.SupportiveWorkTime
-                };
-                await _context.Set<DailyTime>().AddAsync(time);
-
-                // Save Changes
-                await _context.SaveChangesAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Exception On WorkingTime.SupportiveWorkAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
-        }
-    }
-
-    public async Task SupportiveWorkAddTimeRequest(long userId, long projectId, long disciplineId, long otherId, TimeSpan timespan, string description, bool isEditByAdmin = false)
+    public async Task SupportiveWorkAddTime(
+        long userId, 
+        long projectId, 
+        long disciplineId, 
+        long otherId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        bool isEditByAdmin = false
+    )
     {
         try
         {
@@ -1164,7 +1141,55 @@ public class WorkingTime : IDisposable
                     {
                         CreatedDate = DateTime.Now,
                         LastUpdatedDate = DateTime.Now,
-                        Date = DateTime.Now.AddDays(-i),
+                        Date = date.AddDays(-i),
+                        UserId = userId,
+                        ProjectId = projectId,
+                        DisciplineId = disciplineId,
+                        SupportiveWorkId = otherId,
+                        Days = timeSpans[i].Days,
+                        Hours = timeSpans[i].Hours,
+                        Minutes = timeSpans[i].Minutes,
+                        Seconds = timeSpans[i].Seconds,
+                        IsEditByAdmin = isEditByAdmin,
+                        State = DailyTimeState.NOREQUEST,
+                        Type = DailyTimeTypes.SupportiveWorkTime
+                    };
+                    await _context.Set<DailyTime>().AddAsync(time);
+                }
+
+                // Save Changes
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On WorkingTime.SupportiveWorkAddTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+        }
+    }
+
+    public async Task SupportiveWorkAddTimeRequest(
+        long userId, 
+        long projectId, 
+        long disciplineId, 
+        long otherId, 
+        TimeSpan timespan, 
+        DateTime date, 
+        string description, 
+        bool isEditByAdmin = false
+    )
+    {
+        try
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                TimeSpan[] timeSpans = TimeHelper.SplitTimeSpanToDays(timespan);
+                for (int i = timeSpans.Count() - 1; i >= 0; i--)
+                {
+                    DailyTime time = new DailyTime()
+                    {
+                        CreatedDate = DateTime.Now,
+                        LastUpdatedDate = DateTime.Now,
+                        Date = date.AddDays(-i),
                         UserId = userId,
                         ProjectId = projectId,
                         DisciplineId = disciplineId,

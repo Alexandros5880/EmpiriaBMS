@@ -15,11 +15,14 @@
                        MaxTime="@RemainingTime"
                        Time="LogedUserTimes.PersonalTime"
                        OnPropertyChanged=@(async (time) => await OnPersonalTimeChanged.InvokeAsync(time)) />
-            <div class="input-group" style="width: 150px;">
-                <FluentDatePicker Value="@PersonalTimeDatePassed"
-                                  Appearance="FluentInputAppearance.Outline"
-                                  ValueChanged="@(async (date) => await OnPersonalTimeDateChanged.InvokeAsync(date ?? DateTime.Now))" />
-            </div>
+            @if (DisplayDateInput)
+            {
+                <div class="input-group" style="width: 150px;">
+                    <FluentDatePicker Value="@PersonalTimeDatePassed"
+                                      Appearance="FluentInputAppearance.Outline"
+                                      ValueChanged="@(async (date) => await OnPersonalTimeDateChanged.InvokeAsync(date ?? DateTime.Now))" />
+                </div>
+            }
         </div>
 
         <div class="col-3">
@@ -28,11 +31,14 @@
                        MaxTime="@RemainingTime"
                        Time="LogedUserTimes.TrainingTime"
                        OnPropertyChanged=@(async (time) => await OnTrainingTimeChanged.InvokeAsync(time)) />
-            <div class="input-group" style="width: 150px;">
-                <FluentDatePicker Value="@TrainingTimeDatePassed"
-                                  Appearance="FluentInputAppearance.Outline"
-                                  ValueChanged="@(async (date) => await OnTrainingTimeDateChanged.InvokeAsync(date ?? DateTime.Now))" />
-            </div>
+            @if (DisplayDateInput)
+            {
+                <div class="input-group" style="width: 150px;">
+                    <FluentDatePicker Value="@TrainingTimeDatePassed"
+                                      Appearance="FluentInputAppearance.Outline"
+                                      ValueChanged="@(async (date) => await OnTrainingTimeDateChanged.InvokeAsync(date ?? DateTime.Now))" />
+                </div>
+            }
         </div>
 
         <div class="col-3">
@@ -41,11 +47,14 @@
                        MaxTime="@RemainingTime"
                        Time="LogedUserTimes.CorporateEventTime"
                        OnPropertyChanged=@(async (time) => await OnCorporateTimeChanged.InvokeAsync(time)) />
-            <div class="input-group" style="width: 150px;">
-                <FluentDatePicker Value="@CorporateTimeDatePassed"
-                                  Appearance="FluentInputAppearance.Outline"
-                                  ValueChanged="@(async (date) => await OnCorporateTimeDateChanged.InvokeAsync(date ?? DateTime.Now))" />
-            </div>
+            @if (DisplayDateInput)
+            {
+                <div class="input-group" style="width: 150px;">
+                    <FluentDatePicker Value="@CorporateTimeDatePassed"
+                                      Appearance="FluentInputAppearance.Outline"
+                                      ValueChanged="@(async (date) => await OnCorporateTimeDateChanged.InvokeAsync(date ?? DateTime.Now))" />
+                </div>
+            }
         </div>
 
     </div>

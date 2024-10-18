@@ -279,7 +279,7 @@
                   Hidden="@(!_isEndWorkDialogOdepened || _loading)"
                   Modal="false"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: auto !important;
+                  style="--dialog-width: clamp(1000px, 50vw, 1400px) !important;
                          --dialog-height: auto !important;">
 
         <PassWorkedHours @ref="@_editHoursCompoment"
