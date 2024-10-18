@@ -244,6 +244,8 @@ public partial class HomeHeadComp : IDisposable
 
             //await _getRecordsProjects(_selectedOffer?.Id ?? 0);
 
+            await _editHoursCompoment.UpdateHours();
+
             // Clear Timer From this User
             TimerService.ClearTimer(_sharedAuthData.LogedUser.Id.ToString());
 
