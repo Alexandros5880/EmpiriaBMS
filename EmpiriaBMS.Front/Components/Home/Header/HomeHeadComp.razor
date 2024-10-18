@@ -279,21 +279,21 @@
                   Hidden="@(!_isEndWorkDialogOdepened || _loading)"
                   Modal="false"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: min(max(80vw, 800px), 1000px) !important;
+                  style="--dialog-width: auto !important;
                          --dialog-height: auto !important;">
 
-        <EditUsersHours @ref="@_editHoursCompoment"
-                        RemainingTime="@remainingTime"
-                        IsFromDashboard="true"
-                        OnTimeChanged="@_onTimeTimeChanged" />
+        <PassWorkedHours @ref="@_editHoursCompoment"
+                         RemainingTime="@remainingTime"
+                         OnTimeChanged="@_onTimeTimeChanged" />
 
-        <div class="row mt-1">
+        <div class="d-flex justify-content-between mt-1">
             <FluentButton Disabled="@_isEndWorkAcceptDialogDisabled"
-                          class="col-6"
-                          OnClick="@(async () => await _endWorkDialogAccept())">
+                          OnClick="@(async () => await _endWorkDialogAccept())"
+                          Style="width: 200px;">
                 Ok
             </FluentButton>
-            <FluentButton class="col-6" OnClick="@(() => _endWorkDialogCansel())">
+            <FluentButton OnClick="@(() => _endWorkDialogCansel())"
+                          Style="width: 200px;">
                 Cancel
             </FluentButton>
         </div>
@@ -326,7 +326,7 @@
                   Hidden="@(!_isCorrectHoursDialogOdepened || _loading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: min(max(80vw, 800px), 1000px) !important;
+                  style="--dialog-width: clamp(1200px, 84vw, 1800px) !important;
                          --dialog-height: auto !important;">
 
         <div class="modal-body row mb-1">
@@ -349,8 +349,8 @@
                   Hidden="@(!_isDisplayHoursCorrectionRequestsDialogOdepened || _loading)"
                   Modal="true"
                   DialogType=@DialogType.Panel
-                  style="--dialog-width: min(98vw, 1300px) !important;
-                         --dialog-height: min(86vh, 1400px) !important;">
+                  style="--dialog-width: auto !important;
+                         --dialog-height: auto !important;">
 
         <div class="modal-body row mb-1">
 

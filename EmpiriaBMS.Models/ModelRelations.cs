@@ -279,30 +279,9 @@ public static class ModelRelations
         // User DailyTime
         builder.Entity<User>()
                .HasMany(u => u.DailyTime)
-               .WithOne(d => d.DailyUser)
-               .HasForeignKey(d => d.DailyUserId)
+               .WithOne(d => d.User)
+               .HasForeignKey(d => d.UserId)
                .OnDelete(DeleteBehavior.ClientNoAction);
-
-        // User PersonalTime
-        builder.Entity<User>()
-               .HasMany(u => u.PersonalTime)
-               .WithOne(d => d.PersonalUser)
-               .HasForeignKey(d => d.PersonalUserId)
-               .OnDelete(DeleteBehavior.ClientNoAction);
-
-        // User TrainingTime
-        builder.Entity<User>()
-               .HasMany(u => u.TrainingTime)
-               .WithOne(d => d.TrainingUser)
-               .HasForeignKey(d => d.TrainingUserId)
-               .OnDelete(DeleteBehavior.ClientNoAction);
-
-        // User CorporateEvents
-        builder.Entity<User>()
-               .HasMany(u => u.CorporateEventTime)
-               .WithOne(d => d.CorporateUser)
-               .HasForeignKey(d => d.CorporateUserId)
-               .OnDelete(DeleteBehavior.NoAction);
 
         // Client DailyTime
         builder.Entity<Client>()

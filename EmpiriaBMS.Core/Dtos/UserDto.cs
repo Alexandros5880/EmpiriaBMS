@@ -53,17 +53,11 @@ public class UserDto : EntityDto
 
     public ICollection<DailyTime>? DailyTime { get; set; }
 
-    public ICollection<DailyTime>? PersonalTime { get; set; }
-
-    public ICollection<DailyTime>? TrainingTime { get; set; }
-
-    public ICollection<DailyTime>? CorporateEventTime { get; set; }
-
     public ICollection<Issue>? MyIssues { get; set; }
 
     [NotMapped]
     public string FullName => $"{LastName} {MidName} {FirstName}";
 
     [NotMapped]
-    public ICollection<RoleDto> Roles { get; set; }
+    public ICollection<RoleDto>? Roles { get; set; }
 }

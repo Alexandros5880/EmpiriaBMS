@@ -9,7 +9,7 @@ namespace EmpiriaBMS.Front.Services
     public class TimerService : IDisposable
     {
         private bool disposedValue;
-        private TimeSpan prefixTime = TimeSpan.FromHours(23);
+        private TimeSpan prefixTime = TimeSpan.FromHours(77); // Set Pred Default worked Hours For Debug
         private readonly Dictionary<string, System.Threading.Timer> _timers = new();
         private readonly ConcurrentDictionary<string, TimeSpan> _elapsedTime = new();
         private readonly ConcurrentDictionary<string, TimeSpan> _pausedTime = new();

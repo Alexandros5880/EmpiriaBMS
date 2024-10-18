@@ -26,22 +26,7 @@
         <h5>@Request.Date.ToShortDateString()</h5>
         <div>
             <h5>
-                @if (Type == DailyTimeTypes.PersonalUser)
-                {
-                    @Request.PersonalUser?.FullName
-                }
-                else if (Type == DailyTimeTypes.TrainingUser)
-                {
-                    @Request.TrainingUser?.FullName
-                }
-                else if (Type == DailyTimeTypes.CorporateUser)
-                {
-                    @Request.CorporateUser?.FullName
-                }
-                else
-                {
-                    @Request.DailyUser?.FullName
-                }
+                @Request.User?.FullName
             </h5>
         </div>
     </div>

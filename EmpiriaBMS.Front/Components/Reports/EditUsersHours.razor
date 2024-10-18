@@ -1,0 +1,343 @@
+﻿@using EmpiriaBMS.Front.Components.Home.Header.Hours
+﻿@using EmpiriaBMS.Front.Services
+@using EmpiriaBMS.Front.Components.Home;
+
+@inject IDataProvider _dataProvider
+@inject IMapper Mapper
+@inject SharedAuthDataService _sharedAuthData
+@inject TimerService TimerService
+@inject Logging.LoggerManager Logger
+
+@{
+    var minTime = new TimeSpan(-300, 0, 0);
+}
+
+<!-- Headder -->
+<div class="d-flex justify-content-between">
+
+    @if (DisplayTitle)
+    {
+        <h3>Work Hours Update</h3>
+    }
+</div>
+
+<div style="min-width: 96vw; height: 80vh; overflow-y: auto; overflow-x: hidden;">
+
+    <!-- Filters -->
+    <FluentStack Class="mt-1 ms-1 me-1"
+                 Wrap="true"
+                 HorizontalAlignment="HorizontalAlignment.Start"
+                 VerticalAlignment="VerticalAlignment.Top"
+                 HorizontalGap="4"
+                 VerticalGap="4">
+
+        <!-- User -->
+        <div class="selections">
+            <div class="text-start">
+                <h5>User</h5>
+            </div>
+            <FluentCombobox Items="_users"
+                            Height="100px"
+                            Width="140px"
+                            TOption="UserVM"
+                            OptionText="@(c => c.FullName)"
+                            OptionValue="@(c => c.Id.ToString())"
+                            SelectedOptionChanged="@(async (c) => await OnSelectUser(Convert.ToInt32(c?.Id ?? 0)))" />
+        </div>
+
+        <!-- Client -->
+        <div class="selections">
+            <div class="text-start">
+                <h5>Client</h5>
+            </div>
+            <FluentCombobox Items="_clients"
+                            Height="100px"
+                            Width="140px"
+                            TOption="ClientVM"
+                            OptionText="@(c => c.Name)"
+                            OptionValue="@(c => c.Id.ToString())"
+                            SelectedOptionChanged="@(async (c) => await OnSelectClient(Convert.ToInt32(c?.Id ?? 0)))" />
+        </div>
+
+        <!-- Offer -->
+        @if (_selectedClient != null && _selectedClient.Id != 0)
+        {
+            <div class="selections">
+                <div class="text-start">
+                    <h5>Offer</h5>
+                </div>
+                <FluentCombobox Items="_offers"
+                                Height="100px"
+                                Width="140px"
+                                TOption="OfferVM"
+                                OptionText="@(c => c.Code)"
+                                OptionValue="@(c => c.Id.ToString())"
+                                SelectedOptionChanged="@(async (c) => await OnSelectOffer(Convert.ToInt32(c?.Id ?? 0)))" />
+            </div>
+        }
+
+        <!-- Project -->
+        @if (_selectedOffer != null && _selectedOffer.Id != 0)
+        {
+            <div class="selections">
+                <div class="text-start">
+                    <h5>Project</h5>
+                </div>
+                <FluentCombobox Items="_projects"
+                                Height="100px"
+                                Width="140px"
+                                TOption="ProjectVM"
+                                OptionText="@(c => c.Name)"
+                                OptionValue="@(c => c.Id.ToString())"
+                                SelectedOptionChanged="@(async (c) => await OnSelectProject(Convert.ToInt32(c?.Id ?? 0)))" />
+            </div>
+        }
+
+        <!-- Discipline -->
+        @if (_selectedProject != null && _selectedProject.Id != 0)
+        {
+            <div class="selections">
+                <div class="text-start">
+                    <h5>Discipline</h5>
+                </div>
+                <FluentCombobox Items="_disciplines"
+                                Height="100px"
+                                Width="140px"
+                                TOption="DisciplineVM"
+                                OptionText="@(c => c.Type.Name)"
+                                OptionValue="@(c => c.Id.ToString())"
+                                SelectedOptionChanged="@(async (c) => await OnSelectDiscipline(Convert.ToInt32(c?.Id ?? 0)))" />
+            </div>
+        }
+
+    </FluentStack>
+
+    @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
+    {
+        <div class="row">
+
+            <!-- Deliverables -->
+            <div class="col-xl-6 col-12">
+                <div class="m-5 p-3 border rounded">
+                    <div class="text-start">
+                        <h5>Deliverables</h5>
+                    </div>
+                    <div>
+                        <table class="table table-hover table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="sticky-header">Deliverable</th>
+                                    <th scope="col" class="sticky-header">Time</th>
+                                    <th scope="col" class="sticky-header">Declared Completion</th>
+                                    <th scope="col" class="sticky-header">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var _deliverable in _deliverables)
+                                {
+                                    <tr class="align-middle">
+                                        <td class="align-middle">
+                                            <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
+                                        </td>
+                                        <td class="align-middle nowrap-td">
+                                            <TimeInput MinTime="@minTime"
+                                                       MaxTime="@RemainingTime"
+                                                       Time="_deliverable.Time"
+                                                       OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group" style="width: 120px;">
+                                                <input type="number"
+                                                       class="form-control"
+                                                       EnableMinMax="true"
+                                                       min="0"
+                                                       max="100"
+                                                       style="width: 80px;"
+                                                       onkeyup="if(value<0) value=0; if(value>100) value=100;"
+                                                       onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+                                                       @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group" style="width: 128px;">
+                                                <FluentDatePicker Value="@_deliverable.TimeDatePassed"
+                                                                  Appearance="FluentInputAppearance.Outline" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Supportive Works -->
+            <div class="col-xl-6 col-12">
+                <div class="m-5 p-3 border rounded">
+                    <div class="text-start">
+                        <h5>Supportive Works</h5>
+                    </div>
+                    <div>
+                        <table class="table table-hover table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="sticky-header">Other</th>
+                                    <th scope="col" class="sticky-header">Time</th>
+                                    <th scope="col" class="sticky-header">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var _supportiveWork in _supportiveWork)
+                                {
+                                    <tr class="align-middle">
+                                        <td class="align-middle">
+                                            <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
+                                        </td>
+                                        <td class="align-middle nowrap-td">
+                                            <TimeInput MinTime="@minTime"
+                                                       MaxTime="@RemainingTime"
+                                                       Time="@_supportiveWork.Time"
+                                                       OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group" style="width: 128px;">
+                                                <FluentDatePicker Value="@_supportiveWork.TimeDatePassed"
+                                                                  Appearance="FluentInputAppearance.Outline" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+
+    @{
+        var setClientTime = (workOnClients || seeAdmin) && (_selectedClient != null && _selectedClient.Id != 0);
+        var setOfferTime = (workOnOffers || seeAdmin) && (_selectedOffer != null && _selectedOffer.Id != 0);
+        var setProjectTime = (workOnProject || seeAdmin) && (_selectedProject != null && _selectedProject.Id != 0);
+        var setDisciplineTime = (workOnProject || seeAdmin) && (_selectedDiscipline != null && _selectedDiscipline.Id != 0);
+    }
+
+    @if (setClientTime || setOfferTime || setProjectTime || setDisciplineTime)
+    {
+        <div class="m-2 mt-4 p-2 border rounded">
+
+            <!-- Set User With High Roles Time -->
+            <div class="mb-1">
+
+                <div>
+                    <h3>General Time</h3>
+                </div>
+
+                <div class="row gx-3 m-2 w-96">
+
+                    @if (setClientTime)
+                    {
+                        <div class="col-3">
+                            <span class="mb-2 fs-5 text-start">Client</span>
+                            <TimeInput MinTime="@minTime"
+                                       MaxTime="@RemainingTime"
+                                       Time="_selectedClient.Time"
+                                       OnPropertyChanged=@((time) => _onClientTimeChanged(_selectedClient, time)) />
+                            <div class="input-group" style="width: 150px;">
+                                <FluentDatePicker Value="@_selectedClient.TimeDatePassed"
+                                                  Appearance="FluentInputAppearance.Outline" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (setOfferTime)
+                    {
+                        <div class="col-3">
+                            <span class="mb-2 fs-5 text-start">Offer</span>
+                            <TimeInput MinTime="@minTime"
+                                       MaxTime="@RemainingTime"
+                                       Time="_selectedOffer.Time"
+                                       OnPropertyChanged=@((time) => _onOfferTimeChanged(_selectedOffer, time)) />
+                            <div class="input-group" style="width: 150px;">
+                                <FluentDatePicker Value="@_selectedOffer.TimeDatePassed"
+                                                  Appearance="FluentInputAppearance.Outline" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (setProjectTime)
+                    {
+                        <div class="col-3">
+                            <span class="mb-2 fs-5 text-start">Project</span>
+                            <TimeInput MinTime="@minTime"
+                                       MaxTime="@RemainingTime"
+                                       Time="_selectedProject.Time"
+                                       OnPropertyChanged=@((time) => _onProjectTimeChanged(_selectedProject, time)) />
+                            <div class="input-group" style="width: 150px;">
+                                <FluentDatePicker Value="@_selectedProject.TimeDatePassed"
+                                                  Appearance="FluentInputAppearance.Outline" />
+                            </div>
+                        </div>
+                    }
+
+                    @if (setDisciplineTime)
+                    {
+                        <div class="col-3">
+                            <span class="mb-2 fs-5 text-start">Discipline</span>
+                            <TimeInput MinTime="@minTime"
+                                       MaxTime="@RemainingTime"
+                                       Time="_selectedDiscipline.Time"
+                                       OnPropertyChanged=@((time) => _onDisciplineTimeChanged(_selectedDiscipline, time)) />
+                            <div class="input-group" style="width: 150px;">
+                                <FluentDatePicker Value="@_selectedDiscipline.TimeDatePassed"
+                                                  Appearance="FluentInputAppearance.Outline" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    }
+
+    <!-- Horizontal Time -->
+    <div class="m-2 mt-4 p-2 border rounded">
+
+        <div>
+            <h3>Horizontal Time</h3>
+        </div>
+        
+        <div class="mb-1">
+            <SetUserTime LogedUserTimes="@_editLogedUserTimes"
+                         RemainingTime="@RemainingTime"
+                         MinTime="@minTime"
+                         OnPersonalTimeChanged="@_onPersonalTimeChanged"
+                         OnTrainingTimeChanged="@_onTrainingTimeChanged"
+                         OnCorporateTimeChanged="@_onCorporateTimeChanged"
+                         OnPersonalTimeDateChanged="@_onPersonalTimeDateChanged"
+                         OnTrainingTimeDateChanged="@_onTrainingTimeDateChanged"
+                         OnCorporateTimeDateChanged="@_onCorporateTimeDateChanged"
+                         DisplayDateInput="true" />
+        </div>
+
+    </div>
+
+</div>
+
+@if (_selectedUser != null)
+{
+    <div class="mt-1">
+        <FluentStack Orientation="Orientation.Horizontal" Class="d-flex justify-content-center">
+            <!-- Class="d-flex justify-content-end" -->
+            <FluentButton OnClick="@(async () => await Save())"
+                          Disabled="@(!_hasChanged)"> <!--  && (SendRequest && (string.IsNullOrEmpty(_description) || string.IsNullOrWhiteSpace(_description))) -->
+                Update
+            </FluentButton>
+        </FluentStack>
+    </div>
+}
