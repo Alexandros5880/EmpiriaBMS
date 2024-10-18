@@ -706,11 +706,11 @@ public partial class EditUsersHours
 
             // Update User Hours
             if (_editLogedUserTimes.PersonalTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddPersonalTime(userId, DateTime.Now, _editLogedUserTimes.PersonalTime);
+                await _dataProvider.WorkingTime.AddPersonalTime(userId, _personalTimeDate, _editLogedUserTimes.PersonalTime);
             if (_editLogedUserTimes.TrainingTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddTraningTime(userId, DateTime.Now, _editLogedUserTimes.TrainingTime);
+                await _dataProvider.WorkingTime.AddTraningTime(userId, _trainingTimeDate, _editLogedUserTimes.TrainingTime);
             if (_editLogedUserTimes.CorporateEventTime != TimeSpan.Zero)
-                await _dataProvider.WorkingTime.AddCorporateEventTime(userId, DateTime.Now, _editLogedUserTimes.CorporateEventTime);
+                await _dataProvider.WorkingTime.AddCorporateEventTime(userId, _corporateTimeDate, _editLogedUserTimes.CorporateEventTime);
 
             await OnEnd.InvokeAsync();
         }
