@@ -1,6 +1,7 @@
 ﻿@using EmpiriaBMS.Front.Services
 @using EmpiriaBMS.Front.Components.Home;
 
+@inject MicrosoftTeams MicrosoftTeams
 @inject IDataProvider _dataProvider
 @inject IMapper Mapper
 @inject SharedAuthDataService _sharedAuthData
@@ -151,104 +152,106 @@
 
     @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
     {
-        <div class="row mt-1 ms-1 me-1 g-3">
+        <div class="row mt-1">
 
             <!-- Deliverables -->
-            <div class="col-xl-6 col-12 border rounded">
-                <div class="text-start">
-                    <h5>Deliverables</h5>
-                </div>
-                <div class="table-responsive"
-                     style="height: 240px;">
-                    <table class="table table-hover table-borderless">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="sticky-header">Deliverable</th>
-                                <th scope="col" class="sticky-header">Time</th>
-                                <th scope="col" class="sticky-header">Declared Completion</th>
-                                <th scope="col" class="sticky-header">Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var _deliverable in _deliverables)
-                            {
-                                <tr class="align-middle">
-                                    <td class="align-middle">
-                                        <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
-                                    </td>
-                                    <td class="align-middle nowrap-td">
-                                        <TimeInput MinTime="@minTime"
-                                                   MaxTime="@RemainingTime"
-                                                   Time="_deliverable.Time"
-                                                   OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
-                                    </td>
-                                    <td class="align-middle">
-                                        <div class="input-group" style="width: 120px;">
-                                            <input type="number"
-                                                   class="form-control"
-                                                   EnableMinMax="true"
-                                                   min="0"
-                                                   max="100"
-                                                   style="width: 80px;"
-                                                   onkeyup="if(value<0) value=0; if(value>100) value=100;"
-                                                   onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
-                                                   @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">%</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle">
-                                        <div class="input-group" style="width: 128px;">
-                                            <FluentDatePicker Value="@_deliverable.TimeDatePassed"
-                                                              Appearance="FluentInputAppearance.Outline" />
-                                        </div>
-                                    </td>
+            <div class="col-xl-6 col-12">
+                <div class="me-xl-2 me-0 p-1 border rounded">
+                    <div class="text-start">
+                        <h5>Deliverables</h5>
+                    </div>
+                    <div>
+                        <table class="table table-hover table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="sticky-header">Deliverable</th>
+                                    <th scope="col" class="sticky-header">Time</th>
+                                    <th scope="col" class="sticky-header">Declared Completion</th>
+                                    <th scope="col" class="sticky-header">Date</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var _deliverable in _deliverables)
+                                {
+                                    <tr class="align-middle">
+                                        <td class="align-middle">
+                                            <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
+                                        </td>
+                                        <td class="align-middle nowrap-td">
+                                            <TimeInput MinTime="@minTime"
+                                                       MaxTime="@RemainingTime"
+                                                       Time="_deliverable.Time"
+                                                       OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group" style="width: 120px;">
+                                                <input type="number"
+                                                       class="form-control"
+                                                       EnableMinMax="true"
+                                                       min="0"
+                                                       max="100"
+                                                       style="width: 80px;"
+                                                       onkeyup="if(value<0) value=0; if(value>100) value=100;"
+                                                       onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+                                                       @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group" style="width: 128px;">
+                                                <FluentDatePicker Value="@_deliverable.TimeDatePassed"
+                                                                  Appearance="FluentInputAppearance.Outline"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Supportive Works -->
-            <div class="col-xl-6 col-12 border rounded">
-                <div class="text-start">
-                    <h5>Supportive Works</h5>
-                </div>
-                <div class="table-responsive"
-                     style="height: 240px;">
-                    <table class="table table-hover table-borderless">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="sticky-header">Other</th>
-                                <th scope="col" class="sticky-header">Time</th>
-                                <th scope="col" class="sticky-header">Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var _supportiveWork in _supportiveWork)
-                            {
-                                <tr class="align-middle">
-                                    <td class="align-middle">
-                                        <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
-                                    </td>
-                                    <td class="align-middle nowrap-td">
-                                        <TimeInput MinTime="@minTime"
-                                                   MaxTime="@RemainingTime"
-                                                   Time="@_supportiveWork.Time"
-                                                   OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
-                                    </td>
-                                    <td class="align-middle">
-                                        <div class="input-group" style="width: 128px;">
-                                            <FluentDatePicker Value="@_supportiveWork.TimeDatePassed"
-                                                              Appearance="FluentInputAppearance.Outline" />
-                                        </div>
-                                    </td>
+            <div class="col-xl-6 col-12">
+                <div class="ms-xl-2 ms-0 mt-xl-0 mt-2 p-1 border rounded">
+                    <div class="text-start">
+                        <h5>Supportive Works</h5>
+                    </div>
+                    <div>
+                        <table class="table table-hover table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="sticky-header">Other</th>
+                                    <th scope="col" class="sticky-header">Time</th>
+                                    <th scope="col" class="sticky-header">Date</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var _supportiveWork in _supportiveWork)
+                                {
+                                    <tr class="align-middle">
+                                        <td class="align-middle">
+                                            <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
+                                        </td>
+                                        <td class="align-middle nowrap-td">
+                                            <TimeInput MinTime="@minTime"
+                                                       MaxTime="@RemainingTime"
+                                                       Time="@_supportiveWork.Time"
+                                                       OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group" style="width: 128px;">
+                                                <FluentDatePicker Value="@_supportiveWork.TimeDatePassed"
+                                                                  Appearance="FluentInputAppearance.Outline" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
