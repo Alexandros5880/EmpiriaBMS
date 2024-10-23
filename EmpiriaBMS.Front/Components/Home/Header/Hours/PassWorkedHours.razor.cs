@@ -243,6 +243,8 @@ public partial class PassWorkedHours
         var updatedTime = newTimeSpan - previusTime;
         RemainingTime += (-updatedTime);
 
+        _unusedTime = newTimeSpan;
+
         await OnTimeChanged.InvokeAsync(RemainingTime);
 
         StateHasChanged();
@@ -685,6 +687,13 @@ public partial class PassWorkedHours
             {
                 await _dataProvider.WorkingTime.AddCorporateEventTime(userId, _corporateTimeDate, _editLogedUserTimes.CorporateEventTime);
                 _editLogedUserTimes.CorporateEventTime = TimeSpan.Zero;
+            }
+
+            // Update Unused Hours
+            if (_unusedTime != TimeSpan.Zero)
+            {
+                await _dataProvider.WorkingTime.AddUnusedTime(userId, _personalTimeDate, _unusedTime);
+                _unusedTime = TimeSpan.Zero;
             }
 
             // Refresh

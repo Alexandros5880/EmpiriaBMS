@@ -170,6 +170,82 @@ public class WorkingTime : IDisposable
     #endregion
 
     #region User General Time
+    public async Task<DailyTime> AddUnusedTime(
+        long userId,
+        DateTime date,
+        TimeSpan ts,
+        bool isEditByAdmin = false
+    ) {
+        try
+        {
+            if (userId == 0)
+                throw new ArgumentException(nameof(userId));
+
+            if (date > DateTime.Now)
+                throw new ArgumentException(nameof(date));
+
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                // Check if time is betoween 12 - 5 at morning
+                TimeSpan start = new TimeSpan(12, 0, 0);
+                TimeSpan end = new TimeSpan(5, 0, 0);
+                TimeSpan now = date.TimeOfDay;
+
+                if ((now > start) && (now < end))
+                {
+                    // Get Yesterday DailyHour
+                    var yesterdayDate = date.AddDays(-1);
+                    var yesterdayDailyHour = await _context.Set<DailyTime>()
+                                                       .Where(r => !r.IsDeleted)
+                                                       .Where(u => u.Type == DailyTimeTypes.GeneralUserTime)
+                                                       .FirstOrDefaultAsync(u => u.Date.CompareTo(yesterdayDate) == 0);
+
+                    if (yesterdayDailyHour == null)
+                        throw new NullReferenceException(nameof(yesterdayDailyHour));
+
+                    var timespan = yesterdayDailyHour.ToTimeSpan();
+                    var newHours = timespan.Hours + ts.Hours;
+                    yesterdayDailyHour.Days = timespan.Days;
+                    yesterdayDailyHour.Hours = newHours;
+                    yesterdayDailyHour.Minutes = timespan.Minutes;
+                    yesterdayDailyHour.Seconds = timespan.Seconds;
+
+                    yesterdayDailyHour.IsEditByAdmin = isEditByAdmin;
+
+                    await _context.SaveChangesAsync();
+
+                    return yesterdayDailyHour;
+                }
+                else
+                {
+                    var result = await _context.Set<DailyTime>()
+                                               .AddAsync(
+                        new DailyTime
+                        {
+                            Type = DailyTimeTypes.UnusedTime,
+                            UserId = userId,
+                            Date = date,
+                            Days = ts.Days,
+                            Hours = ts.Hours,
+                            Minutes = ts.Minutes,
+                            Seconds = ts.Seconds,
+                            IsEditByAdmin = isEditByAdmin,
+                        }
+                    );
+
+                    await _context.SaveChangesAsync();
+
+                    return result.Entity;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Exception On WorkingTime.AddUnusedTime: {ex.Message}, \nInner: {ex.InnerException?.Message}");
+            return default(DailyTime)!;
+        }
+    }
+
     public async Task<DailyTime> AddDailyTime(
         long userId, 
         DateTime date, 
