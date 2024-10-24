@@ -27,10 +27,11 @@
 
         <!-- Filters -->
         <div class="col-6">
-            <FluentStack Orientation="Orientation.Horizontal"
+            <FluentStack Wrap="true"
                          HorizontalAlignment="HorizontalAlignment.Start"
-                         HorizontalGap="8"
-                         VerticalAlignment="VerticalAlignment.Center">
+                         VerticalAlignment="VerticalAlignment.Top"
+                         HorizontalGap="4"
+                         VerticalGap="4">
 
                 <!-- Date Range -->
                 <DateRangePicker class="form-control"
@@ -78,10 +79,11 @@
 
         <!-- Change Hours / Export to PDF -->
         <div class="col-6">
-            <FluentStack Orientation="Orientation.Horizontal"
+            <FluentStack Wrap="true"
                          HorizontalAlignment="HorizontalAlignment.End"
-                         HorizontalGap="8"
-                         VerticalAlignment="VerticalAlignment.Center">
+                         VerticalAlignment="VerticalAlignment.Top"
+                         HorizontalGap="4"
+                         VerticalGap="4">
 
                 <!-- Change Hours -->
                 @if (canChangeEverybodyHours)
