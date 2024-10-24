@@ -21,7 +21,7 @@
     }
 </div>
 
-<div style="min-width: 96vw; height: 80vh; overflow-y: auto; overflow-x: hidden;">
+<div class="hours-container">
 
     <!-- Filters -->
     <FluentStack Class="mt-1 ms-1 me-1"
@@ -37,8 +37,8 @@
                 <h5>User</h5>
             </div>
             <FluentCombobox Items="_users"
-                            Height="100px"
-                            Width="140px"
+                            Height="200px"
+                            Width="180px"
                             TOption="UserVM"
                             OptionText="@(c => c.FullName)"
                             OptionValue="@(c => c.Id.ToString())"
@@ -51,8 +51,8 @@
                 <h5>Client</h5>
             </div>
             <FluentCombobox Items="_clients"
-                            Height="100px"
-                            Width="140px"
+                            Height="200px"
+                            Width="180px"
                             TOption="ClientVM"
                             OptionText="@(c => c.Name)"
                             OptionValue="@(c => c.Id.ToString())"
@@ -67,7 +67,7 @@
                     <h5>Offer</h5>
                 </div>
                 <FluentCombobox Items="_offers"
-                                Height="100px"
+                                Height="200px"
                                 Width="140px"
                                 TOption="OfferVM"
                                 OptionText="@(c => c.Code)"
@@ -84,7 +84,7 @@
                     <h5>Project</h5>
                 </div>
                 <FluentCombobox Items="_projects"
-                                Height="100px"
+                                Height="200px"
                                 Width="140px"
                                 TOption="ProjectVM"
                                 OptionText="@(c => c.Name)"
@@ -101,7 +101,7 @@
                     <h5>Discipline</h5>
                 </div>
                 <FluentCombobox Items="_disciplines"
-                                Height="100px"
+                                Height="200px"
                                 Width="140px"
                                 TOption="DisciplineVM"
                                 OptionText="@(c => c.Type.Name)"
@@ -114,106 +114,102 @@
 
     @if (_selectedDiscipline != null && _selectedDiscipline.Id != 0)
     {
-        <div class="row">
+        <div class="d-flex justify-content-xl-between justify-content-center flex-xl-nowrap flex-wrap">
 
             <!-- Deliverables -->
-            <div class="col-xl-6 col-12">
-                <div class="m-5 p-3 border rounded">
-                    <div class="text-start">
-                        <h5>Deliverables</h5>
-                    </div>
-                    <div>
-                        <table class="table table-hover table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="sticky-header">Deliverable</th>
-                                    <th scope="col" class="sticky-header">Time</th>
-                                    <th scope="col" class="sticky-header">Declared Completion</th>
-                                    <th scope="col" class="sticky-header">Date</th>
+            <div class="m-2 p-3 border rounded">
+                <div class="text-start">
+                    <h5>Deliverables</h5>
+                </div>
+                <div>
+                    <table class="table table-hover table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="sticky-header">Deliverable</th>
+                                <th scope="col" class="sticky-header">Time</th>
+                                <th scope="col" class="sticky-header">Declared Completion</th>
+                                <th scope="col" class="sticky-header">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var _deliverable in _deliverables)
+                            {
+                                <tr class="align-middle">
+                                    <td class="align-middle">
+                                        <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
+                                    </td>
+                                    <td class="align-middle nowrap-td">
+                                        <TimeInput MinTime="@minTime"
+                                                    MaxTime="@RemainingTime"
+                                                    Time="_deliverable.Time"
+                                                    OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="input-group" style="width: 120px;">
+                                            <input type="number"
+                                                    class="form-control"
+                                                    EnableMinMax="true"
+                                                    min="0"
+                                                    max="100"
+                                                    style="width: 80px;"
+                                                    onkeyup="if(value<0) value=0; if(value>100) value=100;"
+                                                    onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
+                                                    @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="input-group" style="width: 128px;">
+                                            <FluentDatePicker Value="@_deliverable.TimeDatePassed"
+                                                                Appearance="FluentInputAppearance.Outline" />
+                                        </div>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var _deliverable in _deliverables)
-                                {
-                                    <tr class="align-middle">
-                                        <td class="align-middle">
-                                            <div class="align-middle h-100"><labe>@_deliverable.Type.Name</labe></div>
-                                        </td>
-                                        <td class="align-middle nowrap-td">
-                                            <TimeInput MinTime="@minTime"
-                                                       MaxTime="@RemainingTime"
-                                                       Time="_deliverable.Time"
-                                                       OnPropertyChanged=@((time) => _onDeliverableTimeChanged(_deliverable, time)) />
-                                        </td>
-                                        <td class="align-middle">
-                                            <div class="input-group" style="width: 120px;">
-                                                <input type="number"
-                                                       class="form-control"
-                                                       EnableMinMax="true"
-                                                       min="0"
-                                                       max="100"
-                                                       style="width: 80px;"
-                                                       onkeyup="if(value<0) value=0; if(value>100) value=100;"
-                                                       onmousewheel="(e) => {if(e.deltaY > 1) {value++;} else if (e.deltaY < -1) {value--;}}"
-                                                       @onchange=@((e) => _onDeliverableCompletedChanged(_deliverable, e.Value))>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">%</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="align-middle">
-                                            <div class="input-group" style="width: 128px;">
-                                                <FluentDatePicker Value="@_deliverable.TimeDatePassed"
-                                                                  Appearance="FluentInputAppearance.Outline" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <!-- Supportive Works -->
-            <div class="col-xl-6 col-12">
-                <div class="m-5 p-3 border rounded">
-                    <div class="text-start">
-                        <h5>Supportive Works</h5>
-                    </div>
-                    <div>
-                        <table class="table table-hover table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="sticky-header">Other</th>
-                                    <th scope="col" class="sticky-header">Time</th>
-                                    <th scope="col" class="sticky-header">Date</th>
+            <div class="m-2 p-3 border rounded">
+                <div class="text-start">
+                    <h5>Supportive Works</h5>
+                </div>
+                <div>
+                    <table class="table table-hover table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="sticky-header">Other</th>
+                                <th scope="col" class="sticky-header">Time</th>
+                                <th scope="col" class="sticky-header">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var _supportiveWork in _supportiveWork)
+                            {
+                                <tr class="align-middle">
+                                    <td class="align-middle">
+                                        <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
+                                    </td>
+                                    <td class="align-middle nowrap-td">
+                                        <TimeInput MinTime="@minTime"
+                                                    MaxTime="@RemainingTime"
+                                                    Time="@_supportiveWork.Time"
+                                                    OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="input-group" style="width: 128px;">
+                                            <FluentDatePicker Value="@_supportiveWork.TimeDatePassed"
+                                                                Appearance="FluentInputAppearance.Outline" />
+                                        </div>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var _supportiveWork in _supportiveWork)
-                                {
-                                    <tr class="align-middle">
-                                        <td class="align-middle">
-                                            <div class="align-middle h-100"><labe>@_supportiveWork.Type.Name</labe></div>
-                                        </td>
-                                        <td class="align-middle nowrap-td">
-                                            <TimeInput MinTime="@minTime"
-                                                       MaxTime="@RemainingTime"
-                                                       Time="@_supportiveWork.Time"
-                                                       OnPropertyChanged=@((time) => _onOtherTimeChanged(_supportiveWork, time)) />
-                                        </td>
-                                        <td class="align-middle">
-                                            <div class="input-group" style="width: 128px;">
-                                                <FluentDatePicker Value="@_supportiveWork.TimeDatePassed"
-                                                                  Appearance="FluentInputAppearance.Outline" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -238,11 +234,11 @@
                     <h3>General Time</h3>
                 </div>
 
-                <div class="row gx-3 m-2 w-96">
+                <div class="m-2 w-96 d-flex justify-content-xl-between justify-content-center flex-xl-nowrap flex-wrap">
 
                     @if (setClientTime)
                     {
-                        <div class="col-3">
+                        <div class="m-2">
                             <span class="mb-2 fs-5 text-start">Client</span>
                             <TimeInput MinTime="@minTime"
                                        MaxTime="@RemainingTime"
@@ -257,7 +253,7 @@
 
                     @if (setOfferTime)
                     {
-                        <div class="col-3">
+                        <div class="m-2">
                             <span class="mb-2 fs-5 text-start">Offer</span>
                             <TimeInput MinTime="@minTime"
                                        MaxTime="@RemainingTime"
@@ -272,7 +268,7 @@
 
                     @if (setProjectTime)
                     {
-                        <div class="col-3">
+                        <div class="m-2">
                             <span class="mb-2 fs-5 text-start">Project</span>
                             <TimeInput MinTime="@minTime"
                                        MaxTime="@RemainingTime"
@@ -287,7 +283,7 @@
 
                     @if (setDisciplineTime)
                     {
-                        <div class="col-3">
+                        <div class="m-2">
                             <span class="mb-2 fs-5 text-start">Discipline</span>
                             <TimeInput MinTime="@minTime"
                                        MaxTime="@RemainingTime"

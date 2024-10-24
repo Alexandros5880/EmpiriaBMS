@@ -140,6 +140,22 @@ code {
 
 
 
+/* Pass Hours Compoment */
+
+.hours-container {
+    min-width: 40vw;
+    max-width: 96vw;
+    min-height: 40vh;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* | Pas Hours Compoment */
+
+
+
+
 /* Accordion */
 /*#shadow-root {
     background: red;
