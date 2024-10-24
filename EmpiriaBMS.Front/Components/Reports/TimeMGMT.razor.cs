@@ -75,6 +75,29 @@ public partial class TimeMGMT
         StateHasChanged();
     }
 
+    #region Change Hours Dialog
+    private FluentDialog _changeHoursDialog;
+    private bool _isChangeHoursDialogOdepened = false;
+
+    private void _openChangeHoursDialog()
+    {
+        if (_changeHoursDialog.Hidden)
+        {
+            _changeHoursDialog.Show();
+            _isChangeHoursDialogOdepened = true;
+        }
+    }
+
+    private void _closeChangeHoursDialog()
+    {
+        if (!_changeHoursDialog.Hidden)
+        {
+            _changeHoursDialog.Hide();
+            _isChangeHoursDialogOdepened = false;
+        } 
+    }
+    #endregion
+
     #region Initialize Chart
     private void _initializeChart(double maxHours = 100)
     {

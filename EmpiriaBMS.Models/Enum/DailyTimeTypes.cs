@@ -23,5 +23,7 @@ public enum DailyTimeTypes
     [Display(Name = "Time on Deliverable")]
     DeliverableTime = 8,
     [Display(Name = "Time on SupportiveWork")]
-    SupportiveWorkTime = 9
+    SupportiveWorkTime = 9,
+    [Display(Name = "Unused Time")]
+    UnusedTime = 10
 }

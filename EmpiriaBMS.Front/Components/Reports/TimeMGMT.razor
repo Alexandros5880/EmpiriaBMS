@@ -27,10 +27,11 @@
 
         <!-- Filters -->
         <div class="col-6">
-            <FluentStack Orientation="Orientation.Horizontal"
+            <FluentStack Wrap="true"
                          HorizontalAlignment="HorizontalAlignment.Start"
-                         HorizontalGap="8"
-                         VerticalAlignment="VerticalAlignment.Center">
+                         VerticalAlignment="VerticalAlignment.Top"
+                         HorizontalGap="4"
+                         VerticalGap="4">
 
                 <!-- Date Range -->
                 <DateRangePicker class="form-control"
@@ -76,17 +77,33 @@
             </FluentStack>
         </div>
 
-        <!-- Export to PDF -->
+        <!-- Change Hours / Export to PDF -->
         <div class="col-6">
-            <FluentStack Orientation="Orientation.Horizontal"
+            <FluentStack Wrap="true"
                          HorizontalAlignment="HorizontalAlignment.End"
-                         HorizontalGap="8"
-                         VerticalAlignment="VerticalAlignment.Center">
+                         VerticalAlignment="VerticalAlignment.Top"
+                         HorizontalGap="4"
+                         VerticalGap="4">
+
+                <!-- Change Hours -->
+                @if (canChangeEverybodyHours)
+                {
+                    <FluentButton Appearance="Appearance.Outline"
+                                  OnClick="@_openChangeHoursDialog">
+                        <FluentIcon Value="@(new Icons.Regular.Size24.Clock())"
+                                    Color="Color.Accent"
+                                    Slot="start" />
+                        Change Hours
+                    </FluentButton>
+                }
+
                 <FluentButton Appearance="Appearance.Outline"
                               Loading="@exporting"
                               OnClick="@(async () => await _exportToPdf())">
                     Export
-                    <FluentIcon Value="@(new Icons.Regular.Size32.DocumentPdf())" Color="Color.Error" Slot="start" />
+                    <FluentIcon Value="@(new Icons.Regular.Size32.DocumentPdf())"
+                                Color="Color.Error"
+                                Slot="start" />
                 </FluentButton>
             </FluentStack>
         </div>
@@ -153,30 +170,6 @@
             </div>
         </div>
 
-        <!-- Change Everybody Hours -->
-        @if (canChangeEverybodyHours)
-        {
-            <div class="col-12 mt-2 mb-2">
-                <FluentAccordion>
-                    <FluentAccordionItem Expanded="true">
-                        <HeadingTemplate>
-                            <div class="accordion-header">
-                                <FluentStack Orientation="Orientation.Horizontal"
-                                             HorizontalAlignment="HorizontalAlignment.Start"
-                                             HorizontalGap="20">
-                                    <FluentIcon Value="@(new Icons.Regular.Size48.Clock())" />
-                                    <h3>Edit Hours</h3>
-                                </FluentStack>
-                            </div>
-                        </HeadingTemplate>
-                        <ChildContent>
-                            <EditUsersHours DisplayTitle ="false"/>
-                        </ChildContent>
-                    </FluentAccordionItem>
-                </FluentAccordion>
-            </div>
-        }
-
     </div>
 
 }
@@ -187,3 +180,27 @@ else
         No Data!
     </span>
 }
+
+
+
+<!-- On "Press Work End" Button Dialog -->
+<FluentDialog @ref="_changeHoursDialog"
+              Hidden="@(!_isChangeHoursDialogOdepened)"
+              Modal="false"
+              DialogType=@DialogType.Panel
+              style="--dialog-width: auto !important;
+              --dialog-height: auto !important;">
+
+        <div class="modal-body row mb-1">
+
+            <div class="col-12 dialog-header">
+            <span class="carbon--close-outline float-end" @onclick="_closeChangeHoursDialog"></span>
+            </div>
+
+            <div class="col-12 justify-content-center">
+                <EditUsersHours DisplayTitle="true" OnEnd="_closeChangeHoursDialog" />
+            </div>
+
+        </div>
+
+</FluentDialog>
